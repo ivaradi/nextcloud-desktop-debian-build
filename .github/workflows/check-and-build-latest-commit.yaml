@@ -1,0 +1,56 @@
+name: 'Check for and build a new commit'
+
+on:
+  schedule:
+    - cron: '21 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  check-and-build-commit:
+    name: Check for and build a new commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Up Git
+        id: setup-git
+        run: |
+          set -e -u -x
+
+          token=$(echo -n "x-access-token:${{ secrets.GITHUB_TOKEN }}" | base64)
+          git config --global http.https://github.com/.extraHeader "Authorization: Basic ${token}"
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.nflink.com"
+
+      - name: Checkout
+        id: checkout
+        env:
+          GH_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -e -u -x
+
+          git clone "https://github.com/${GH_REPOSITORY}" "${GITHUB_WORKSPACE}/debian-build"
+          cd "${GITHUB_WORKSPACE}/debian-build"
+
+          git branch --remote | \
+              grep --extended-regexp "origin/debian/dist/.+/master" | \
+              sed 's:origin/::' | \
+              xargs -I {} git checkout -b {} origin/{}
+          git checkout master
+
+      - name: Check for and build a new commit
+        id: check-and-build
+        run: |
+          "${GITHUB_WORKSPACE}/debian-build/check-and-build-latest-commit.sh" "${GITHUB_WORKSPACE}"
+      - name: Cleanup
+        id: cleanup
+        run: |
+          set -e -u -x
+
+          git config --global --unset http.https://github.com/.extraHeader
