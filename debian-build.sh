@@ -8,7 +8,8 @@ scriptdir="$(readlink -f "$(dirname "${0}")")"
 WORKSPACE="${1}"
 COMMIT="${2}"
 BRANCH="${3:-master}"
-REPOSITORY="${4:-https://github.com/nextcloud/desktop}"
+BRANCH_TYPE="${4:-master}"
+REPOSITORY="${5:-https://github.com/nextcloud/desktop}"
 
 PPA=ppa:nextcloud-devs/client
 PPA_ALPHA=ppa:nextcloud-devs/client-alpha
@@ -17,11 +18,17 @@ PPA_BETA=ppa:nextcloud-devs/client-beta
 OBS_PROJECT=home:ivaradi
 OBS_PROJECT_ALPHA=home:ivaradi:alpha
 OBS_PROJECT_BETA=home:ivaradi:beta
+OBS_PROJECT_STABLE_ALPHA=home:ivaradi:stable-alpha
+OBS_PROJECT_NEXT_STABLE_ALPHA=home:ivaradi:next-stable-alpha
 
 UBUNTU_DISTRIBUTIONS="jammy noble questing resolute"
 DEBIAN_DISTRIBUTIONS="bookworm trixie testing"
 
 declare -A DIST_TO_OBS=(
+    ["jammy"]="xUbuntu_22.04"
+    ["noble"]="xUbuntu_24.04"
+    ["questing"]="xUbuntu_25.10"
+    ["resolute"]="xUbuntu_26.04"
     ["bookworm"]="Debian_12"
     ["trixie"]="Debian_13"
     ["testing"]="Debian_Testing"
@@ -99,23 +106,37 @@ done
 cd ..
 ls -al
 
-if test "$kind" = "alpha"; then
-    PPA=$PPA_ALPHA
-    OBS_PROJECT=$OBS_PROJECT_ALPHA
-elif test "$kind" = "beta"; then
-    PPA=$PPA_BETA
-    OBS_PROJECT=$OBS_PROJECT_BETA
+if test "${BRANCH_TYPE}" = "master"; then
+    PPA_DISTRIBUTIONS="${UBUNTU_DISTRIBUTIONS}"
+    OBS_DISTRIBUTIONS="${DEBIAN_DISTRIBUTIONS}"
+    if test "$kind" = "alpha"; then
+        PPA=$PPA_ALPHA
+        OBS_PROJECT=$OBS_PROJECT_ALPHA
+    elif test "$kind" = "beta"; then
+        PPA=$PPA_BETA
+        OBS_PROJECT=$OBS_PROJECT_BETA
+    fi
+else
+    PPA_DISTRIBUTIONS=""
+    OBS_DISTRIBUTIONS="${UBUNTU_DISTRIBUTIONS} ${DEBIAN_DISTRIBUTIONS}"
+    if test "${BRANCH_TYPE}" = "stable"; then
+        OBS_PROJECT="${OBS_PROJECT_STABLE_ALPHA}"
+    else
+        OBS_PROJECT="${OBS_PROJECT_NEXT_STABLE_ALPHA}"
+    fi
 fi
 
+
+
 if test "${has_ppa_keys}" = "yes"; then
-    for distribution in ${UBUNTU_DISTRIBUTIONS}; do
+    for distribution in ${PPA_DISTRIBUTIONS}; do
         changes=$(ls -1 nextcloud-desktop_*"~${distribution}1_source.changes")
         if test -f "${changes}"; then
             dput $PPA "${changes}" > /dev/null
         fi
     done
 
-    if test -n "${DEBIAN_DISTRIBUTIONS}"; then
+    if test -n "${OBS_DISTRIBUTIONS}"; then
         package="nextcloud-desktop"
         OBS_SUBDIR="${OBS_PROJECT}/${package}"
 

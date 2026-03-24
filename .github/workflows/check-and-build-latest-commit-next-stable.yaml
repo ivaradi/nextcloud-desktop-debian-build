@@ -1,0 +1,18 @@
+name: 'Check for and build a new commit on the next stable branch'
+
+on:
+  workflow_call:
+  schedule:
+    - cron: '43 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  call-check-and-build-latest-commit:
+    if: ${{ vars.BRANCH_STABLE != vars.BRANCH_NEXT_STABLE }}
+    uses: ./.github/workflows/check-and-build-latest-commit.yaml
+    with:
+      branch-type: next-stable

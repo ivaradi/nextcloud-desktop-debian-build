@@ -1,0 +1,17 @@
+name: 'Check for and build a new commit on the stable branch'
+
+on:
+  workflow_call:
+  schedule:
+    - cron: '32 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  call-check-and-build-latest-commit:
+    uses: ./.github/workflows/check-and-build-latest-commit.yaml
+    with:
+      branch-type: stable

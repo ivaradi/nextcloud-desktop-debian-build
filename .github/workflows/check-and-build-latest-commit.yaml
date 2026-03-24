@@ -1,16 +1,16 @@
 name: 'Check for and build a new commit'
 
 on:
-  schedule:
-    - cron: '21 * * * *'
-  workflow_dispatch:
-
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: true
+  workflow_call:
+    inputs:
+      branch-type:
+        required: true
+        type: string
 
 env:
   GH_TOKEN: ${{ github.token }}
+  BRANCH_STABLE: ${{ vars.BRANCH_STABLE }}
+  BRANCH_NEXT_STABLE: ${{ vars.BRANCH_NEXT_STABLE }}
 
 jobs:
   check-and-build-commit:
@@ -47,7 +47,7 @@ jobs:
       - name: Check for and build a new commit
         id: check-and-build
         run: |
-          "${GITHUB_WORKSPACE}/debian-build/check-and-build-latest-commit.sh" "${GITHUB_WORKSPACE}"
+          "${GITHUB_WORKSPACE}/debian-build/check-and-build-latest-commit.sh" "${GITHUB_WORKSPACE}" ${{ inputs.branch-type }}
       - name: Cleanup
         id: cleanup
         run: |
