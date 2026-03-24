@@ -151,7 +151,7 @@ if test "${has_ppa_keys}" = "yes"; then
 
         ln ../nextcloud-desktop*.orig.tar.* ${OBS_SUBDIR}/
 
-        for distribution in ${DEBIAN_DISTRIBUTIONS}; do
+        for distribution in ${OBS_DISTRIBUTIONS}; do
             pkgvertag="~${distribution}1"
             obs_dist="${DIST_TO_OBS[${distribution}]}"
 
