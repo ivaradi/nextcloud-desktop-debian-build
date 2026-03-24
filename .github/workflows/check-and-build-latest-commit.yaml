@@ -38,8 +38,20 @@ jobs:
           git clone "https://github.com/${GH_REPOSITORY}" "${GITHUB_WORKSPACE}/debian-build"
           cd "${GITHUB_WORKSPACE}/debian-build"
 
+          BRANCH_TYPE="${{ inputs.branch-type }}"
+          if test "${BRANCH_TYPE}" = "master"; then
+              branch="master"
+          elif test "${BRANCH_TYPE}" = "stable"; then
+              branch="${BRANCH_STABLE}"
+          elif test "${BRANCH_TYPE}" = "next-stable"; then
+              branch="${BRANCH_NEXT_STABLE}"
+          else
+              echo "Invalid branch type: ${BRANCH_TYPE}"
+              exit 1
+          fi
+
           git branch --remote | \
-              grep --extended-regexp "origin/debian/dist/.+/master" | \
+              grep --extended-regexp "origin/debian/dist/.+/${branch}" | \
               sed 's:origin/::' | \
               xargs -I {} git checkout -b {} origin/{}
           git checkout master
