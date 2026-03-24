@@ -6,6 +6,11 @@ on:
       branch-type:
         required: true
         type: string
+    secrets:
+      debian-secret-key:
+        required: false
+      debian-secret-iv:
+        required: false
 
 env:
   GH_TOKEN: ${{ github.token }}
@@ -58,6 +63,9 @@ jobs:
 
       - name: Check for and build a new commit
         id: check-and-build
+        env:
+          DEBIAN_SECRET_KEY: ${{ secrets.debian-secret-key }}
+          DEBIAN_SECRET_IV: ${{ secrets.debian-secret-iv }}
         run: |
           "${GITHUB_WORKSPACE}/debian-build/check-and-build-latest-commit.sh" "${GITHUB_WORKSPACE}" ${{ inputs.branch-type }}
       - name: Cleanup
