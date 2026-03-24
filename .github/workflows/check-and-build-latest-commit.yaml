@@ -22,6 +22,15 @@ jobs:
     name: Check for and build a new commit
     runs-on: ubuntu-latest
     steps:
+      - name: Install packages
+        id: install
+        run: |
+          set -e -u -x
+
+          sudo /usr/bin/env DEBIAN_FRONTEND=noninteractive \
+              apt-get install --no-install-recommends --yes \
+              devscripts \
+              osc
       - name: Set Up Git
         id: setup-git
         run: |
