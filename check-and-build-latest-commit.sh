@@ -40,5 +40,7 @@ if test "${exists}" = "no" -o "${commit}" != "$(cat "${commitfile}")"; then
     git -C "${scriptdir}" push
 
     "${scriptdir}/debian-build.sh" "${WORKSPACE}" \
-                                   "${commit}" "${branch}" "${REPOSITORY}"
+                                   "${commit}" \
+                                   "${branch}" "${BRANCH_TYPE}" \
+                                   "${REPOSITORY}"
 fi
