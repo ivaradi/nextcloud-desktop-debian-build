@@ -79,6 +79,7 @@ jobs:
         run: |
           "${GITHUB_WORKSPACE}/debian-build/check-and-build-latest-commit.sh" "${GITHUB_WORKSPACE}" ${{ inputs.branch-type }}
       - name: Cleanup
+        if: ${{ always() }}
         id: cleanup
         run: |
           set -e -u -x
