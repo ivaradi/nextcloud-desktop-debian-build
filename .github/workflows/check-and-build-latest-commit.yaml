@@ -34,6 +34,7 @@ jobs:
           sudo /usr/bin/env DEBIAN_FRONTEND=noninteractive \
               apt-get install --no-install-recommends --yes \
               devscripts \
+              dput \
               osc
       - name: Set Up Git
         id: setup-git
