@@ -1,4 +1,4 @@
-name: 'Check for and build a new commit on the master branch'
+name: 'Build new commit: master'
 
 on:
   workflow_call:

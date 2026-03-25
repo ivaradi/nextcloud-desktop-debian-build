@@ -1,4 +1,4 @@
-name: 'Check for and build a new commit on the stable branch'
+name: 'Build new commit: stable'
 
 on:
   workflow_call:
