@@ -27,6 +27,7 @@ jobs:
         run: |
           set -e -u -x
 
+          sudo apt-get update --yes
           sudo /usr/bin/env DEBIAN_FRONTEND=noninteractive \
               apt-get install --no-install-recommends --yes \
               devscripts \
