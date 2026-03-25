@@ -37,5 +37,13 @@ if test ! -f "${commitfile}" -o "${commit}" != "$(cat "${commitfile}")"; then
     git -C "${scriptdir}" commit \
         --message "Updated latest commit for branch ${branch}" \
         "${commitfile}"
-    git -C "${scriptdir}" push
+
+    attempts=3
+    while ! git -C "${scriptdir}" push; do
+        if test ${attempts} -le 0; then
+            exit 1
+        fi
+        attempts=$((attempts - 1))
+        git -C "${scriptdir}" pull --rebase
+    done
 fi
