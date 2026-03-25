@@ -1,0 +1,21 @@
+name: 'Build new tag: stable'
+
+on:
+  workflow_call:
+  schedule:
+    - cron: '10 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  call-check-and-build-latest-commit:
+    uses: ./.github/workflows/check-and-build-latest-commit.yaml
+    with:
+      branch-type: stable
+      what: tag
+    secrets:
+      debian-secret-key: ${{ secrets.DEBIAN_SECRET_KEY }}
+      debian-secret-iv: ${{ secrets.DEBIAN_SECRET_IV }}

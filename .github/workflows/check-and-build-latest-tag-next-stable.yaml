@@ -1,0 +1,22 @@
+name: 'Build new tag: next stable'
+
+on:
+  workflow_call:
+  schedule:
+    - cron: '55 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  call-check-and-build-latest-commit:
+    if: ${{ vars.BRANCH_STABLE != vars.BRANCH_NEXT_STABLE }}
+    uses: ./.github/workflows/check-and-build-latest-commit.yaml
+    with:
+      branch-type: next-stable
+      what: tag
+    secrets:
+      debian-secret-key: ${{ secrets.DEBIAN_SECRET_KEY }}
+      debian-secret-iv: ${{ secrets.DEBIAN_SECRET_IV }}
