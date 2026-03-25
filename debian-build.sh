@@ -11,15 +11,16 @@ BRANCH="${3:-master}"
 BRANCH_TYPE="${4:-master}"
 REPOSITORY="${5:-https://github.com/nextcloud/desktop}"
 
-PPA=ppa:nextcloud-devs/client
+PPA_RELEASE=ppa:nextcloud-devs/client
 PPA_ALPHA=ppa:nextcloud-devs/client-alpha
 PPA_BETA=ppa:nextcloud-devs/client-beta
 
-OBS_PROJECT=home:ivaradi
-OBS_PROJECT_ALPHA=home:ivaradi:alpha
-OBS_PROJECT_BETA=home:ivaradi:beta
-OBS_PROJECT_STABLE_ALPHA=home:ivaradi:stable-alpha
-OBS_PROJECT_NEXT_STABLE_ALPHA=home:ivaradi:next-stable-alpha
+OBS_PROJECT_HOME=home:ivaradi
+OBS_PROJECT_RELEASE="${OBS_PROJECT_HOME}"
+OBS_PROJECT_ALPHA="${OBS_PROJECT_HOME}:alpha"
+OBS_PROJECT_BETA="${OBS_PROJECT_HOME}:beta"
+OBS_PROJECT_STABLE_ALPHA="${OBS_PROJECT_HOME}:stable-alpha"
+OBS_PROJECT_NEXT_STABLE_ALPHA="${OBS_PROJECT_HOME}:next-stable-alpha"
 
 UBUNTU_DISTRIBUTIONS="jammy noble questing resolute"
 DEBIAN_DISTRIBUTIONS="bookworm trixie testing"
@@ -53,7 +54,7 @@ cd nextcloud-desktop
 
 git init .
 git remote add origin "${REPOSITORY}"
-git fetch origin "${COMMIT}"
+git fetch --tags origin "${COMMIT}"
 git checkout FETCH_HEAD
 
 for distribution in ${UBUNTU_DISTRIBUTIONS} ${DEBIAN_DISTRIBUTIONS}; do
@@ -71,6 +72,37 @@ done
 cd "${WORKSPACE}"
 
 echo "$kind" > kind
+
+if [[ "${BRANCH_TYPE}" = "master" ||
+          ( "${BRANCH_TYPE}" = "stable" && "${kind}" = "release" ) ||
+          ( "${kind}" = "beta" &&
+                ( "${BRANCH_TYPE}" = "next-stable" ||
+                      ( "${BRANCH_TYPE}" = "stable" &&
+                            "${BRANCH_STABLE}" = "${BRANCH_NEXT_STABLE}" ))) ]]; then
+    PPA_DISTRIBUTIONS="${UBUNTU_DISTRIBUTIONS}"
+    OBS_DISTRIBUTIONS="${DEBIAN_DISTRIBUTIONS}"
+    if test "$kind" = "release"; then
+        PPA=$PPA_RELEASE
+        OBS_PROJECT=$OBS_PROJECT_RELEASE
+    elif test "$kind" = "alpha"; then
+        PPA=$PPA_ALPHA
+        OBS_PROJECT=$OBS_PROJECT_ALPHA
+    elif test "$kind" = "beta"; then
+        PPA=$PPA_BETA
+        OBS_PROJECT=$OBS_PROJECT_BETA
+    else
+        echo "Not handled kind: ${kind}"
+        exit 1
+    fi
+else
+    PPA_DISTRIBUTIONS=""
+    OBS_DISTRIBUTIONS="${UBUNTU_DISTRIBUTIONS} ${DEBIAN_DISTRIBUTIONS}"
+    if test "${BRANCH_TYPE}" = "stable"; then
+        OBS_PROJECT="${OBS_PROJECT_STABLE_ALPHA}"
+    else
+        OBS_PROJECT="${OBS_PROJECT_NEXT_STABLE_ALPHA}"
+    fi
+fi
 
 mv nextcloud-desktop "nextcloud-desktop_${basever}-${revdate}"
 tar cjf "nextcloud-desktop_${basever}-${revdate}.orig.tar.bz2" \
@@ -105,28 +137,6 @@ for distribution in ${UBUNTU_DISTRIBUTIONS} ${DEBIAN_DISTRIBUTIONS}; do
 done
 cd ..
 ls -al
-
-if test "${BRANCH_TYPE}" = "master"; then
-    PPA_DISTRIBUTIONS="${UBUNTU_DISTRIBUTIONS}"
-    OBS_DISTRIBUTIONS="${DEBIAN_DISTRIBUTIONS}"
-    if test "$kind" = "alpha"; then
-        PPA=$PPA_ALPHA
-        OBS_PROJECT=$OBS_PROJECT_ALPHA
-    elif test "$kind" = "beta"; then
-        PPA=$PPA_BETA
-        OBS_PROJECT=$OBS_PROJECT_BETA
-    fi
-else
-    PPA_DISTRIBUTIONS=""
-    OBS_DISTRIBUTIONS="${UBUNTU_DISTRIBUTIONS} ${DEBIAN_DISTRIBUTIONS}"
-    if test "${BRANCH_TYPE}" = "stable"; then
-        OBS_PROJECT="${OBS_PROJECT_STABLE_ALPHA}"
-    else
-        OBS_PROJECT="${OBS_PROJECT_NEXT_STABLE_ALPHA}"
-    fi
-fi
-
-
 
 if test "${has_ppa_keys}" = "yes"; then
     for distribution in ${PPA_DISTRIBUTIONS}; do
