@@ -16,6 +16,7 @@ jobs:
     uses: ./.github/workflows/check-and-build-latest-commit.yaml
     with:
       branch-type: next-stable
+      what: commit
     secrets:
       debian-secret-key: ${{ secrets.DEBIAN_SECRET_KEY }}
       debian-secret-iv: ${{ secrets.DEBIAN_SECRET_IV }}

@@ -6,6 +6,9 @@ on:
       branch-type:
         required: true
         type: string
+      what:
+        required: true
+        type: string
     secrets:
       debian-secret-key:
         required: false
@@ -77,7 +80,7 @@ jobs:
           DEBIAN_SECRET_KEY: ${{ secrets.debian-secret-key }}
           DEBIAN_SECRET_IV: ${{ secrets.debian-secret-iv }}
         run: |
-          "${GITHUB_WORKSPACE}/debian-build/check-and-build-latest-commit.sh" "${GITHUB_WORKSPACE}" ${{ inputs.branch-type }}
+          "${GITHUB_WORKSPACE}/debian-build/check-and-build-latest-${{ inputs.what }}.sh" "${GITHUB_WORKSPACE}" ${{ inputs.branch-type }}
       - name: Cleanup
         if: ${{ always() }}
         id: cleanup
