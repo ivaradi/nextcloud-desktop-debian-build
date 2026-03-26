@@ -1,3 +1,2262 @@
+nextcloud-desktop (33.0.0) jammy; urgency=medium
+
+  [ Claudio Cambra ]
+  * Initial commit
+  * Add LICENSE
+  * Add starter package files
+  * Add LocalFilesUtils
+  * Add logger extension
+  * Fix LocalFileUtils logging
+  * Remove unused NFPK file
+  * Add account struct
+  * Add dependencies and platforms to package def
+  * Add metadata database types
+  * Add files database manager
+  * Fix logging string
+  * Remove unused import
+  * Add NKError extension
+  * Add FileProviderItem
+  * Add Enumerator class
+  * Add MaterialisedEnumerationObserver
+  * Fix visibility of FileProviderItem
+  * Rename FileProviderItem to Item
+  * Add ThumbnailFetching utility file
+  * Rename LocalFileUtils to LocalFiles
+  * Add convenience root container init for Item
+  * Add convenience static method to Item to retrieve if it exists from database
+  * Use storedItem in thumbnail fetching
+  * Make fileProviderError in NKError extension optional, return type for successful error
+  * Add delete for item
+  * Add progress extension
+  * Add fetch contents item operation
+  * Add create operation to Item
+  * Remove unneeded parameter from createFile
+  * Adjust formatting
+  * Add default arguments to create item
+  * Add method to move item
+  * Add modify operation to item
+  * Fix item modify not properly targetting new locations
+  * Shadow item's parentItemIdentifier in modify routine, as the subject item's parentItemIdentifier is not meant to be used here at all
+  * Improve logging in modification operations
+  * Do not emit error on unsupported directory modification
+  * Improve logging in item operations
+  * Fix bad propagation of renaming in database
+  * Improve logging in parentItemIdentifierFromMetadata
+  * Fix setting of account on newly created item's metadata
+  * Improve logging in createFile
+  * Fix broken account string when creating new items
+  * Make item content modification a bit more straightforward, pull more details from existing metadata
+  * Fix log string in content modification op for item
+  * Reorganise repository, split up Item operations into separate files
+  * Move core thumbnail fetching functionality to Item+Fetch
+  * Remove uneeded workaround for account string
+  * Register folder creation task with nsfileprovidermanager
+  * Correctly set modification and creation dates for new files
+  * Register post-create folder server read task with file provider manager
+  * Add ability to register readfileorfolder tasks when enumerating
+  * Improve error logging in item ops
+  * Improve error handling in possible collision situations
+  * Also report unauthorised errors as unauthenticated
+  * Add NexcloudCapabilitiesKit dependency
+  * Add a remote change observer using notify push
+  * Poll when websocket is not available in changeobserver
+  * Mark remote change observer as public
+  * Improve error logging in remote change observer
+  * Signal working set rather than root container in change observer
+  * Improve error handling around failure to get capabilities
+  * Fix nkcommondelegate authentication challenge handling in remote change observer
+  * Fix logging in item+fetch
+  * Create swift.yml
+  * Update swift.yml to xcodebuild.yml
+  * Update xcodebuild.yml with debug typo fixes
+  * Update xcodebuild.yml with folder path fixes
+  * Update xcodebuild.yml with derived data path fix
+  * Update xcodebuild.yml with fixed coverage data gathering
+  * Update xcodebuild.yml with fixed cd step
+  * Update xcodebuild.yml with new path fixes
+  * Fix visionOS build
+  * Bump up versions for iOS, add visionOS
+  * Use specific NCFPKAppGroupIdentifier bundle object instead of desktop client-only SocketApiPrefix
+  * Fix crash caused by using active directory metadata object after it is deleted in db
+  * Remove need for domain in fetchContents, use normal temp dir
+  * Remove localPathForNCFile, no longer used
+  * Use inactive item metadata copy as return value for sync engine
+  * Simplify syntax for getting enumerated item info
+  * Safeguard against active db items in fp item
+  * Fix handling of root container metadata
+  * Make sure to close connection when resetting socket in notifypush
+  * Fix retain loop created in websocket ping
+  * Fix root container item file name
+  * Add RemoteInterface protocol
+  * Add RemoteRequestOptions struct
+  * Add convenience extension to convert request options to NKRequestOptions
+  * Add RemoteFileMetadata protocol
+  * Add conformance to RemoteFileMetadata in NKFile
+  * Add abstracted types in RemoteInterface
+  * Add conformance to RemoteInterface in NextcloudKit
+  * Remove unused NextcloudKit import in files database manager
+  * Add remote error type enum
+  * Use remote error type enum in NKError extension
+  * Use NSFileProviderError rather than default Error in RemoteInterface
+  * Fix error code in enumerator sync engine
+  * Use await/async for enumerator
+  * Stop with the unnecessary abstractions
+  * Use RemoteInterface in Enumerator SyncEngine extension
+  * Add move method to RemoteInterface protocol
+  * Remove getInternalType method from RemoteInterface protocol
+  * Use RemoteInterface in items
+  * Use RemoteInterface in Enumerator
+  * Use RemoteInterface in item creation
+  * Add fetchCapabilities to RemoteInterface
+  * Add setDelegate to RemoteInterface
+  * Use RemoteInterface in RemoteChangeObserver
+  * Remove unused getInternalType method
+  * Register capabilities fetch task
+  * Add basic MockRemoteItem
+  * Add placeholder starter MockRemoteInterface
+  * Make MockRemoteItem equatable
+  * Add method to fetch item in MockRemoteInterface within node tree
+  * Add a test for MockRemoteInterface
+  * Add convenience method to get a path string's parent path
+  * Add a test for the parent path convenience method
+  * Better handle edge cases in getting item within MockRemoteInterface
+  * Add convenience method to generate random item identifiers
+  * Fix arg in remote path test for MockRemoteInterface
+  * Add convenience method to get a the item for a parent from a given remote path
+  * Implement MockRemoteInterface's createFolder method
+  * Add test for getting the root item
+  * Add test for getting root path's parent
+  * Handle trailing slashes in folder paths in MockRemoteInterface
+  * Add test for MockRemoteInterface createFolder
+  * Properly handle bad parent in MockRemoteInterface createFolder
+  * Handle trailing slash in parentPath convenience method
+  * Add convenience method to get file/folder name from a remote path
+  * Add test for remoteInterface.name(from: )
+  * Keep data in MockRemoteItem
+  * Use convenience name method in createFolder
+  * Implement upload in MockRemoteInterface
+  * Add test for MockRemoteInterface Upload
+  * Make name and modification date modifiable on MockRemoteItem
+  * Implement move in MockRemoteInterface
+  * Add test for MockRemoteInterface move
+  * Implement download method in MockRemoteInterface
+  * Add test for MockRemoteInterface download
+  * Add property to get NKFile from MockRemoteItem
+  * Implement enumerate in MockRemoteInterface
+  * Add test for MockRemoteInterface enumerate
+  * Implement delete in MockRemoteInterface
+  * Add test for MockRemoteInterface delete
+  * Handle realistic server url paths for remote paths in MockRemoteInterface
+  * Make it possible to specify database manager in item creation procedure
+  * Add starter test for item creation process
+  * Remove unused test file
+  * Add test for creating file
+  * Add test for creating file into folder
+  * Add ability to set dbmanager for item delete procedure
+  * Add basic test for item delete
+  * Remove useless bundle fetch procedure in ItemCreateTests
+  * Add test for deleting folder and children
+  * Add test for database test after create folder test
+  * Check database state in create file test
+  * Integrate remote path into mockremoteitem, fixing issues with serverUrl tests
+  * Test database test in create file into folder test
+  * Test database changed correctly when deleting a file
+  * Test database state after deleting directory with subitems
+  * Add ability to set non-default dbManager on Item fetch contents
+  * Enable switching out dbManager in Item
+  * Add basic test for item content fetch
+  * Return modification date in upload procedure
+  * Make data property modifiable in mockremoteitem
+  * Fix handling of uploaded items that already exist in mock remote interface
+  * Add some logging for moves in MockRemoteInterface
+  * Add ability to use custom dbManager on Item modification tasks
+  * Add test for item modification
+  * Fix handling of creation and modification dates on item modification
+  * Add ability to use a specific dbManager in enumerator
+  * Add a MockEnumerationObserver
+  * Add account details to MockRemoteItem
+  * Add test for enumeration of root container
+  * Add test for enumerating a non-root folder
+  * De-duplicate setup for enumerator tests
+  * Fix concurrency issues in testFolderEnumeration
+  * Add test for enumerating file
+  * Use inactive item metadata copy as return valye for sync engine
+  * Use static dbManager in testenumeratefile
+  * Add MockChangeObserver
+  * Add a test for enumerating changes on a folder and its contents
+  * Add test ensuring moves are correctly recognised as item changes
+  * Properly check state of database item c in change enumeration test
+  * Fix testing of remote item move child items
+  * Add tests for FilesDatabaseManagerTests
+  * Add directory tests for files database manager
+  * Regenerate mock items on each enumerator test, fixing issues
+  * Fix reliability issues with content modification date in enumerator tests
+  * Add tests for working set enumeration and fast vs slow enumeration
+  * Add capabilities to mock remote interface
+  * Add a ChangeNotificationInterface
+  * Implement a FileProvider change notification interface
+  * Use the changeNotificationInterface in RemoteChangeObserver
+  * Add a MockChangeNotificationInterface
+  * FIx mock capabilities json
+  * Expose capabilities on mock remote interface as property
+  * Post a notification when notify push is authenticated
+  * Add a mock notigy push server
+  * Add a basic test for remote change observer
+  * Make some members of RemoteChangeObserver more public
+  * Add ability to inject delay in mock notify push server response
+  * Add reset method in mocknotifypushserver
+  * Add test for authentication retry with remotechangeobserver
+  * Increase interval between pings for remote change observer
+  * Add delay before reconfiguration attempts for remote change observer
+  * Make timeouts and failure counts configurable in remote change observer
+  * Add property indicating if websockettask is active
+  * Add some logging to mock notify push server
+  * Test that the remote change observer stops trying after limit
+  * Add ability to send message through to connected clients in mocknotifypushserver
+  * Test that remote change observer properly notifies changes
+  * Add test to ensure non file notifications are ignored by remote change observer
+  * Add property to remote change observer to check if polling is active
+  * Allow setting of poll interval for remote change observer
+  * Improve polling test for remote change observer
+  * Allow resetting of credentials independently of other variables in mock notify push server
+  * Add ability to close connections in mock notify push server
+  * Do not trigger double reconnect attempts in remote change observer when connection closed
+  * Add method to manually trigger connection attempt in remote change observer
+  * Add test for remote change observer reconnecting on socket close
+  * Add tests for account
+  * Add ability to refuse conection to MockNotifyPushServer
+  * Use file manager to get temporary dir
+  * Test that temp path is writeable in mock remote interface tests
+  * Skip mock remote interface download test if temp is not writeable
+  * Set filesystem flags correctly if specific item is locked
+  * Do not present a file provider item as not user writeable if the lock time has expired
+  * Add lock state to mock remote items
+  * Add a test for correct lock state enumeration
+  * Add explanatory comments for filename properties on itemmetadatas
+  * Add explanatory comments on item metadata's lock properties
+  * Improved explanatory comment about server url
+  * Added explanation for various user properties on item metadata
+  * Ensure item never returns an empty filename as this triggers crash in File Provider Extension
+  * Add test to ensure stored items are not returned with empty filename
+  * Improve root enumeration test
+  * Add .DS_Store files to git ignore
+  * Lock realm dep to 10.49.0
+  * Run web socket pings and reconnections on ping handling as detached tasks
+  * Remove auth change TODO as authentication details are read-only in remote change observer
+  * Run socket pinging as detached tasks stored to a property on RemoteChangeObserver
+  * Make sure to cancel ping socket task when resetting socket
+  * Add ping handler to mock notify push server
+  * Add test for correct pinging of notify push server websocket
+  * Raise ping interval to be more lenient on exactitude of ping count in pinging test for remote change observer
+  * Implement NKCommonDelegate networkReachabilityObserver in RemoteChangeObserver
+  * Set networkReachability property to be private set only
+  * Stop all websocket tasks and polling timer when new reachability state is unreachable
+  * Add test for correct handling of network reachability
+  * Check notification handling in remote change observer tests after connection state changes
+  * Add enumeration listener protocol
+  * Support use of EnumerationListener in Enumerator
+  * Simplify EnumerationListener and improve its method names
+  * Actually set listener from initialiser on property to enumerator
+  * Add a MockEnumerationListener
+  * Add a test for enumerator listener invocations in enumerator
+  * Treat bundle content types as directories
+  * Check for directory conformance as method of ensuring directories are handled correctly (and simply)
+  * Add method to handle upload of bundle and package internal contents
+  * Also handle upload of internal dirs within bundle
+  * Deduplicate error handling in handle bundle
+  * Check final server state and record all internal files for bundle or package in db
+  * Handle bundles in root create method of item
+  * Improve logging in bundle handling
+  * Fix URLs used for folder and file creation procedures in bundle
+  * Rather than recursively call create bundle, manually record and scan each inner directory created as final check-in
+  * If we have a set content type and the item is a directory, provide that as the item content type
+  * Add test for bundle creation
+  * Remove unused rootRequest parameter in Item create for bundle
+  * Add method to brute-force modify bundle or package
+  * If target item is a bundle, use bundle modifying method
+  * Fix modification logging
+  * Improve database renaming logging
+  * Fix folder move serverUrl
+  * Fix used dbManager in bundle modification creation stage
+  * Add test for bundle modificatiob
+  * Check internally deleted files in bundle are gone post modify
+  * Add basic test for getting content type from metadata in item
+  * Make sure to only try to get uttype from contenttype of metadata in item if contenttype is not empty
+  * Add test for metadata content type from extension
+  * Add test for correct getting of contenttype of directory (if no content type acquired)
+  * Add test for getting correct contenttype of packages and bundles in item
+  * Properly rename remote path recursively when moving items in mock remote interface
+  * Improve debug logging in mock remote interface
+  * Add granular algorithm for modifying contents of a bundle or package
+  * Remove workarounds for bundle modification test, add more test conditions
+  * Clarify private method name in item+create for bundles
+  * Fix etags in bundle modify metadatas tests
+  * Simplify and concise-ify stopAtMatchingEtags handling in enumerator readServerUrl
+  * Simplify bundle post-modify scan by using enumerator's readserverurl
+  * Add method to get an item metadata from its specific serverurl
+  * Fix (and clarify) behaviour of itemMetadatas method to get metadatas under a given server url
+  * Make itemMetadatas under a server url test more exhaustive to ensure correct behaviour including child paths of a server url
+  * Simplify post-create bundle remote scan by using enumerator method
+  * Simplify metadata renaming in directory move
+  * Fix directories being displayed as files
+  * Add test to ensure https unixd dirs are properly shown as folders
+  * Fix failing enumerator tests, caused by in-memory database going out of scope
+  * Do not mark bundle root as stale
+  * Do not abort creation attempt for bundle or package if root bundle/package folder exists
+  * Do not abort creating of internal bundle stuff if folder inside already exists
+  * Properly handle progress accounting for bundle creating
+  * Correctly check error type at folder creation time of bundle
+  * Fetch metadata for newly-created bundle or package whose root folder already exists remotely
+  * Improve unfound bundle item metadata post creation logging
+  * Log that already existing folder in bundle creation error is being ignored
+  * Add a sanity-check test to see if item metadata fetching error is working correctly
+  * Improve added metadata logging
+  * Remove overwrought directorymetadata method, use item metadatas at remote url method
+  * Ensure removal of percent encoding in url string for item metadatas remote url parsing
+  * Test for percent encoding bugs in item metadata tests
+  * Do not apply current uploading item's state to progress of entire bundle being created
+  * Apply correct content type post creation of bundle
+  * Avoid "activation" of added item metadatas at source
+  * Fix handling of remotely fetched iWork bundles' content types
+  * Test handling of iWork content types
+  * Add explainer comments to specific bundle folder handling
+  * Fix progress handling in bundle modify process
+  * Revert "Apply correct content type post creation of bundle"
+  * Remove unnecessary copy in syncengine now that we fixed activation of metadatas at database manager level
+  * Fix folder download procedure in mock remote interface
+  * Add method to download the internal contents of a directory when downloading a directory type item
+  * Update child content metadata status when fetching directory contents
+  * When fetching content of a directory, trigger the fetching of its contents
+  * Fix progress handling for directory fetching
+  * Properly set account in item metadata in file fetch test
+  * Add a test for fetching directory contents
+  * Accept success NKError type as acceptable when downloading directory contents
+  * Apply directory fetch content task to actual item
+  * Do not abort on 200 error code
+  * Do not add local file metadata for downloaded directories
+  * Download each directory item as independent calls to fetchDirectoryContents
+  * Handle directories during fetch by simply creating them locally during download, rather than trying to download them remotely
+  * 200 is not a valid error code in this context
+  * Add a basic README
+  * Remove use of ncaccount in enumerator sync engine methods
+  * Remove use of ncaccount entirely in enumerator
+  * Remove unneeded use of ncaccount in create bundle or package procedure
+  * Remove unneeded use of ncaccount in item create
+  * Remove unused ncaccount in modify bundle contents
+  * Remove unnecessary use of ncaccount in item modify
+  * Format logging in enumerator
+  * Update README with current state of APIs
+  * Provide locking state in item's userinfo
+  * Test the reported lockability in item's userinfo
+  * Refactor locking in item userinfo to presence or lack thereof of locked key
+  * Check lock ownership based on remote interface username
+  * Do not lock if the lock type is that of a user
+  * Add fetchUserProfile to RemoteInterface(s)
+  * Add small basic test for fetchUserProfile in mockremoteinterface
+  * Add method to try authentication to remote interface(s)
+  * Add small simple test to try authentication attempt in mri
+  * Add id property to Account type
+  * Stop excessive logging of accessed items from storage
+  * Refactor directory capabilities reporting to avoid duplication
+  * Allow reparenting directories
+  * Allow excluding directory from sync
+  * Fix user id not being set in the account dictionary
+  * Check for user id in account tests
+  * Use user id to construct base dav files url
+  * Add userId property to MockRemoteItem
+  * Set account id as profile user id in MockRemoteItem
+  * Compare against account id un userId checks of enumerator tests
+  * Fix userId in item metadatas within ItemFetchTests
+  * Remove LocalFileMetadata type
+  * Remove unused waitDownload and waitUpload enum values
+  * Replace downloaded and uploaded status enum value with booleans
+  * Refactor itemmetadata to nkfile conversion as NKFile extension method
+  * Change creation and upload date variable to be less aggressively confusing
+  * Correctly migrate upload/download status into ItemMetadata
+  * Upgrade NextcloudKit minimum version to 5.0.1
+  * Adapt to upstream NextcloudKitDelegate changes
+  * Add account argument now required by several upstream functions
+  * Adapt to removal of getPreview, use downloadPreview instead
+  * Adapt to new return signatures upstream
+  * Dirtily adapt to new nk sessions implementation upstream
+  * Use develop branch rather than 5.0.1 as this version was broken on macOS
+  * Add convenience method to construct ncKitAccountString in Account
+  * No longer use account defined in remote interface, take in accounts as parameter
+  * Fix migration to schema 2.0.0
+  * Check authentication via a propfind on root, matching desktop client
+  * Do not refresh realm on every access
+  * Formatting of some stuff in database manager
+  * Add metadatasToAdd in one go
+  * Modify modified items and create new items
+  * More formatting
+  * Still create copies of item metadatas when adding to db
+  * Bring back refresh on access to revert test failures
+  * Add extension to results to easily convert a results to unmanaged array
+  * Do not sort retrieved item metadatas, just convert to unmanaged array
+  * Fix warning on files database manager tests
+  * Simplify by adding an itemMetadatas property
+  * Avoid creating copies during metadata deletion in update
+  * Do not do add on managed item update in set item status metadata
+  * Format logging in filesdatabasemanager
+  * Avoid using copies during deletion in recursive directory delete
+  * Make itemMetadatas a computed property
+  * Return unmanaged deleted metadatas from update method
+  * Do not create copy of directory needing rename, not needed
+  * Polish off remaining logging in database manager
+  * Avoid generating copies of child items
+  * Remove unused childDirectoriesForDirectory
+  * Remove unused directoryMetadatas methods
+  * Remove unused itemMetadatas fetcher with status
+  * Bring itemMetadata method in line with naming conventions
+  * Use self-contained metadata to retrieve upload/download status in item
+  * Add extension to NKTrash to convert to an itemmetadata
+  * Use fileId for item identifier if we are dealing with a trashed item
+  * Add convenience method to get trashed item metadatas in files database manager
+  * Add trash url to account
+  * Test new account trash url property
+  * Add convenience static func to generate metadata for trash container
+  * Provide special item for trash container
+  * Temporarily switch to feature/trash-ocid branch for NextcloudKit
+  * Add ocId to NKTrash conversion
+  * Log trashbinFileName when adding new item metadatas
+  * When we detect a metadata is a trashed item, return the trash container
+  * Add account-relevant data to metadata when converting nktrash to itemmetadata
+  * Use better detection method for detecting trash parent item identifier
+  * Just return ocId as item identifier for trashed items too
+  * Set trashbinFileName as fileNameView for NKTrash converted items
+  * Add convenience isTrashed property to ItemMetadata
+  * Return trash container as parent item identifier if item is trashed
+  * Add trashedItems method to RemoteInterface and implementers
+  * Un-private some convenience methods in enumerator
+  * Add a completeEnumerationObserver that takes an NKTrash array
+  * Implement working initial enumeration of the trash container
+  * Implement a completeChangesObserver that takes an NKTrash array
+  * Implement working changes enumeration for trash container
+  * Add a trash item enumeration test
+  * Fix existing trash item index handling
+  * Ensure deletion of deleted trash item metadatas
+  * Add convenience method to reset mock change observer
+  * Add test for trash change enumeration
+  * Address NCFPK 2 changes to account handling as arguments
+  * Switch to NextcloudKit develop branch now that trach ocid change is merged
+  * Allow item deletions to be handled as "trashing" rather than direct deletions
+  * Introduce special handling for item modifications that are actually trashings
+  * Provide trash bin filename if the item is trashed
+  * Fix trash bin details not being set after trashing item
+  * Add test for deleting an item in trashing mode
+  * Add convenience method to MockRemoteItem to convert to an NKTrash type
+  * Provide the error description when post trashing remote scan failed
+  * Fix conventional delete test
+  * Refactor MockRemoteInterface to handle trash as an item tree, like the default remote items
+  * Ensure we are returning the right root item in mock remote interface item method
+  * Ensure we are returning the right parent path in mock remote interface
+  * Move items to trash when deleting them in remote interface
+  * Remove debug logging in mock remote interface
+  * Provide root trash item in item delete tests
+  * Fix tested trashed item rough name
+  * Fix remote interface delete test
+  * Fix modify bundle content test
+  * Defer to item's filename property rather than the metadata filename property in moves
+  * Move trashing procedures into their own function, fix remote scan for trashed item
+  * Rename the file if necessary before trashing procedures
+  * Ensure use of modifiedItem in item modify
+  * Set parent item server url to trash if relevant
+  * Set trash bin properties when converting nkfile to itemmetadata
+  * Make nkfile property into a converter function in MockRemoteItem
+  * Use trash-specific properties when trashing MockRemoteItem
+  * Add a test for moving an item to the trash
+  * Correctly reproduce server behaviour in mockremoteinterface trashbinOriginalLocation
+  * Fix isTrashed property for item metadatas that are not at the trash root
+  * Fix setting of trash-related properties for children of trashed item during trashing in mock remote interface
+  * Also test trashing of child item in move to trash test
+  * Add test for rename/trashing procedure
+  * Add extension to Substring for method converting to string
+  * Delete trashbinFileName property from MockRemoteItem, not necessary
+  * Test trashing behaviour in mock remote interface delete test
+  * Add convenience method to convert a MockRemoteItem into an ItemMetadata
+  * Add test for moving just one target item to trash
+  * Use convenience metadata converter method in modify tests
+  * Add test for rename before trash
+  * Use account properties directly for urls
+  * Remove redundant logging in modify
+  * Add trash restore URL to account
+  * Add trash restore url to account tests
+  * Add default arg to trashedItems in mock remote interface
+  * Add basic starter test for trash listing from mock remote interface
+  * Incorporate trashbinOriginalLocation into equality and constructor funcs of MockRemoteItem
+  * Account for original location name in MockRemoteItem converter to NKTrash
+  * Match original locations to what would be provided by actual server in trash item listing test
+  * Add restoreFromTrash convenience method to remote interfaces
+  * Nilify trashbinOriginalLocation when moving trashbin child files out with parent in mock remote interface
+  * Add basic restore from trash test for mock remote interface
+  * Fix trashbinOriginalLocation on root deleted items in mock remote interface
+  * Use convenience remote item to item metadata convenience method in more modify tests
+  * Match rough trashbinOriginalLocation to something akin to what the server would provide
+  * Recover an item from the trash during item modification if this is required
+  * Add basic test for restoring an item from the trash
+  * Re-fix item trashing deletion rough metadata update
+  * Extract item restore from trash during modification to separate function
+  * Remove unnecessary logging during item modification move
+  * Handle post-trash-restore case where scanned restore path returns different file
+  * Fix post-rebase changes (move of nkfile to item metadata conversion)
+  * Set up standard trash state with an item in it in item modify tests
+  * Imitate remote server behaviour regarding restore from trash in mock remote interface
+  * Fix metadata server url conversion for mock remote item
+  * Add test for moving trashed file out of the trash
+  * Properly check for new contents size match in item modification
+  * Add test for modified item size
+  * Add test for moving trashed file out of trash, rneaming it, and modifying contents
+  * Improve naming of important variables in item modification
+  * Fix check of documentSize in item create
+  * Properly handle conflicting moves with overwrite/non-overwrite in mock remote interface
+  * Gracefully handle case where restored item from trash was renamed remotely due to filename clash with another file in restore folder
+  * Do not move item back to its original name if renamed remotely during trash restore
+  * Add test for file restored from trash and subsequently renamed by server
+  * Add convenience functions to apply certain info to an item metadata
+  * Add test for moving folder
+  * Set up a trashed folder in item modify tests
+  * Add a test for moving a folder out of the trash
+  * Fix database renaming of directory child items when the target item is a trashed directory
+  * Ensure folders restored from trash also have their child items in the database "moved" accordingly
+  * Add remoteTrashFolderChildItem to item modify tests
+  * Test for proper handling of trashed folder child items when restoring trashed folder
+  * Check for remote state in restore and rename item from trash test
+  * Add test for moving a folder out of the trash and renaming it
+  * Emit unsynced edits when things go wrong trying to see what happened after restoring an item from the trash
+  * Allow trashing items
+  * Do not even pretend to handle paging in item enumeration
+  * Improve error logging when dealing with post trashing errors
+  * Fix trashbinOriginalLocation in MockRemoteItem to NKTrash conversion
+  * Retrieve post-trashing remote state via trash listing rather than standard enumerate
+  * Also check for file existence in trash via fileId and not just ocId
+  * Ensure we never provide an empty filename for item
+  * Use actual filename in trash instead of presented filename in restore
+  * Fix tests after modifying role of fileName and trashbinFileName
+  * Provide post delete metadatas with their original ocIds
+  * Adapt trash changes to rebased changes with database
+  * Fix testTrashedItems test
+  * Remove broken handling of trashbinFileName in rename of dir
+  * Search for trashed item metadatas by checking serverUrl, which is more reliable
+  * Enable overwrite on trash restore move
+  * Use proper filename in debug logging of modification
+  * Imitate need for overwrite to be set to true in MockRemoteInterface
+  * Add test to verify restore behaviour on server
+  * Add test to ensure we cannot move items directly from trash without restore first in mock remote interface
+  * Fix ocId for received trashed directory children during trashing
+  * Intentionally mangle identifiers for items when trashing them in mock remote interface
+  * Amend item modify tests' trashing-related identifier checks
+  * Add test that checks that trashing mangles identifiers
+  * Check identifier mangling with child folder items
+  * Check for fileId of post-trashing items in mock remote interface tests
+  * Do not support content modification of items in trash
+  * Do not try to re-trash items that are already trashed
+  * Fix filter query for post-trashing children finding
+  * Make dirty item children unmanaged, fixing crash
+  * Fix CI build failure in MockRemoteItem
+  * Add basic MockEnumerator
+  * Allow setting a custom dbManager on MaterialisedEnumerationObserver
+  * Add basic MaterialisedEnumerationObserverTests
+  * Make MockEnumerator enumeratorItems modifiable
+  * Add a test for the expected deleted ocIds in the materialised enumeration observer tests
+  * Only fetch downloaded file metadatas when handling enumerated materialised items
+  * Address and fix materialised enumeration observer test
+  * Simplify conversion of nkfiles to metadatas, remove massive async group creation
+  * Move nkfile from dir read conversion procedure to NKFile extension
+  * Simplify and de-concurrencify conversion of item metadatas to file provider items
+  * Add array extension to chunk an array
+  * Add array extension method to map over a chunked array
+  * Add array extension method to perform concurrent map over chunked array
+  * Make concurrentChunkedMap support nil returning transforms, return flat array
+  * Convert metadatasToFileProviderItems into async method using chunked conversion
+  * Move metadatasToFileProviderItems into extension method for ItemMetadata array
+  * Add concurrentChunkedForEach
+  * Set default chunk size for chunked methods
+  * Defer to default chunk size in item metadata array conversion
+  * Perform chunked conversion of directory read nkfiles to metadata
+  * Add a test suite for the chunked array methods
+  * Use an actor to correctly apply concurrent conversion of directory read nkfiles
+  * Bring in immutable variables in enumerator when converting metadatas to fp items
+  * Ensure we get the first item first in directory read avoiding concurrency issues
+  * Pull in metadatas variable as immutable reference in async task
+  * Set Account as a sendable struct
+  * Make subsystem for logging immutable
+  * Report received metadata as update or new when enumerating a file
+  * More easily instantiate metadata values by using value init
+  * Add RemoteFileChunk type
+  * Add chunkedUpload method to RemoteInterface protocol
+  * Implement chunkedUpload in nextcloudkit extension
+  * Make the progressHandler for chunked upload match other methods
+  * Add simple starter test for upload result struct
+  * Add basic chunked upload implementation for mock remote interface
+  * Add logging when no valid root item on mock remote interface
+  * Fix remaining file size in chunked upload implementation of MRI
+  * Fix warning about unused response var
+  * Add convenience method to get a root mock remote item
+  * Use convenience root item method in tests
+  * Add convenience method to create root trash item
+  * Use convenience method to create root trash item in tests
+  * Add UploadResult convenience struct
+  * Add starter convenience upload function to perform standard/chunked upload automatically
+  * Add basic test to check standard upload in upload convenience func
+  * Use correct chunkSize value in uplaod convenience func
+  * Add simple test for upload convenience func chunked upload
+  * Start chunk name from 1 imitating the real server
+  * Make chunk upload id an argument in convenience upload func
+  * Set chunks at initialisation time in MRI
+  * Call chunkUploadStartedHandler in MRI
+  * Pass all relevant arguments to inner upload during chunk upload in MRI
+  * Call chunkUploadCompleteHandler in MRI
+  * Allow passing in chunkUploadCompleteHandler
+  * Only call chunkUploadCompleteHandler once in MRI
+  * Add RemoteFileChunk database object type
+  * Remove previous RemoteFileChunk typealias
+  * Add convenience to get array of remotefilechunk from the nckit file chunk tuples
+  * Add convenience init for remotefilechunk based on nckit tuple
+  * Add convenience converted from remotefilechunk to nckit tuple
+  * Add convenience converter from array of nckit chunk tuples to remote file chunks
+  * Add method to convert array of managed remotefilechunks to unmanaged
+  * Register RemoteFileChunk in database init
+  * Fix uses of remotefilechunk in nckit remoteinterface
+  * Require remoteChunkStoreFolderName for remote file chunk
+  * Fix handling of remote file chunks in nckit remote interface, again
+  * Keep track of uploaded and yet to upload chunks in chunked upload
+  * Make methods in RemoteFileChunk public
+  * Rename uses of uploadUuid to new remoteChunkFolder property
+  * Fix and clean up chunk creation in MRI
+  * Ensure chunks stay unmanaged in upload procedure
+  * Pass test database in upload tests into upload func
+  * Remove UploadResult struct as it is not necessary
+  * Fix remainingFileSize calculation in MRI
+  * Simulate resumed chunk upload in MRI
+  * Enhance testing of chunked uploads by testing for correct chunk handling
+  * Add test for resuming interrupted chunked uploads
+  * Fix expected chunk size in normal chunked upload test
+  * Take fileLocatedAt in upload func as a string
+  * Convert chunk bool property in itemmetadata to a chunkUploadId
+  * Apply appropriate chunkUploadId state when setting upload state in FilesDatabaseManager
+  * Only reset chunkUploadId if old metadata state was upload
+  * Use new upload function in new item file creation
+  * Also use new upload function for bundle inner item creation
+  * Use new upload function when uploading updated item files
+  * Use new upload function to upload inner bundle files
+  * Use URLs to do splicing during chunk upload procedure
+  * Actually return ocId post chunk upload
+  * Add test for chunked file create upload
+  * Do not double generate test data for chunked item creation
+  * Track expected transfer size of completed chunked uploads, not counting present chunks, in MRI
+  * Add test for resumed chunked upload of newly created item
+  * Modify RemoteInterface to directly take a local path and a remote path for chunked uploads
+  * Delete unused ItemUploadTests
+  * Add a test for chunked upload of modified item contents
+  * Add test for modified item chunked upload, resumed
+  * Properly employ remainingChunks argument in mock remote interface
+  * Add expected remaining chunks to database in upload tests for resumed chunked upload
+  * Fix state of remaining chunks in database in resumed chunked upload of modified item contents
+  * Fix state of remaining chunks in database in resumed chunked upload of newly created file
+  * Add test for chunked upload of MRI
+  * Temporarily use nckit branch with chunk destination changes
+  * Add some logging for chunked upload
+  * Ensure we remove illegal chars from file provider item id used as chunk upload id
+  * Update item create test with chunked upload to check handling of illegal chunk upload ID
+  * Remove period from upload logging
+  * Set custom file chunks directory when using nckit chunked upload
+  * Add additional logging when starting nckit chunked upload
+  * Ensure chunk upload using nckit occurs on non-main queue
+  * Fix issues with urls used in nckit extension for chunked uploads
+  * Remove over-active chunk progress logging
+  * Simplify returns for upload function
+  * Use setStatusForItemMetadata when setting post-upload metadata state in Item content modification
+  * Do not add chunks to database if we have chunkes logged in db
+  * Switch back to develop NextcloudKit branch
+  * Use type-safe filtering when retrieving trashedItemMetadatas
+  * Use type-safe filtering in FilesDatabaseManager
+  * Use type-safe filtering in FilesDatabaseManager method handling metadatas for directories
+  * Prefer use of "where" over filter
+  * Go back to using toUnmanagedResults where applicable
+  * Filter itemMetadatas once rather than twice when accessing in MaterialisedEnumerationObserver
+  * Upgrade to NextcloudCapabilitiesKit 2.1.0
+  * Increase default file chunk size to 100MB
+  * Upgrade to NextcloudCapabilitiesKit 2.1.2
+  * Use max chunk size provided in server capabilities (if available)
+  * Use actual server default of 100 MiB, not MB
+  * Add chunked upload capabilities info to MRI mock capabilities
+  * Add test for use of server capabilities' chunk size in chunked upload
+  * Add a test for use of fallback/default chunk size
+  * Add option to force the chunk size in item creation
+  * Fix chunked item create tests
+  * Add option to force chunk size in item content modification
+  * Fix chunked item modify tests by using forced chunk size
+  * Remove unnecessary completion handler in setStatusForItemMetadata
+  * Fix license in README
+  * Replace apply with just taking metadata on init in DirectoryReadConversionActor
+  * Mark completionHandler for thumbnailFetching as sendable
+  * Make directory read NKFile to ItemMetadata conversion Sendable approved
+  * Exclusively use SendableItemMetadata outside of the database manager
+  * Only use sendable item metadata as argument/return type for public database methods
+  * Rename ItemMetadata to RealmItemMetadata
+  * Ensure more public db manager methods return sendable item metadata
+  * Just use Item rootContainer method to get the root container metadata
+  * When modifying property values of metadatas, declare the variable using "var"
+  * Move Status and SharePermissions enum out of RealmItemMetadata
+  * Allow return of nil in toDirectoryReadMetadatas
+  * Split RealmItemMetadata and SendableItemMetadata
+  * Rename RealmItemMetadata.swift to ItemMetadata.swift
+  * Remove unused properties in ItemMetadata
+  * Add default arguments for frequently placeholdered values in SendableItemMetadatata init
+  * Use MockRemoteItem-s toItemMetadata where applicable
+  * Make testing SendableItemMetadata constructor more convenient
+  * Make FilesDatabaseManager sendable
+  * Properly apply lock state values on conversion of MockRemoteItem
+  * Apply more default values in sendableitemmetadata constructor, for locking
+  * Further default arguments for SendableItemMetadata
+  * Make lock related properties optional if no lock is available
+  * Make chunkUploadId a nullable property
+  * Make session related properties nullable
+  * Add missing properties to ItemMetadata
+  * Store share permissions cloud mesh
+  * Mark RealmItemMetadata as internal
+  * Use stable NextcloudKit version 5.0.4
+  * Update Realm to 20.0.1
+  * Fix build on non-macOS platforms, do not use unavailable type
+  * Ensure File Provider change notification interface is signalling enumerator correctly
+  * Remove overly-verbose unneeded realm refresh logging
+  * Log more when using polling for changes
+  * Start and stop polling timer on main thread
+  * Use dispatch source timer for polling timer instead
+  * Use scheduled timer in main actor
+  * Default to setting uploaded state to true in enumerated metadatas
+  * Workaround incorrectly enumerated items' uploaded state
+  * Log uploaded/downloaded state for added item metadatas
+  * Expose download state in userInfo for fp items
+  * Add tests for userInfo downloaded state
+  * Also set uploaded state correctly for NKTrash items
+  * Set uploaded state to true for trash and root containers
+  * Set uploaded to true for MockREmoteItem conversions
+  * Formatting in NKFile extension
+  * Test uploaded state in enumeration
+  * Let-ify some unchanging vars in enumerator tests
+  * Verify uploaded state in item fetch tests
+  * Require passing dbManager into Item, do not provide default within Item
+  * Remove db manager singleton
+  * Require passing account into FilesDatabaseManager
+  * Migrate to using per-account databases
+  * Make database relative path customisable
+  * Fix creation of migrated files by using Realm.create instead of Realm.add
+  * Add test for migration from old unified database file to separate database files
+  * Remove trailing comma in FilesDatabaseManager init arg
+  * Do not delete old values when migrating to per account db
+  * Only attempt migrate if the per account db does not exist
+  * Fix test behaviour to ensure non-destructive migrate
+  * Test database not being migrated twice
+  * Split up various item metadata types into own files
+  * Add starter IgnoredFilesMatcher
+  * Add test for IgnoredFilesMatcher
+  * Fix handling of paths in IgnoredFilesMatcher
+  * Add ignored files handling into item creation procedure
+  * Add test that creation of ignored file is not propagated
+  * Add ignored files handling to deletion procedure
+  * Add test for ignored file handling in deletion
+  * Ensure created ignored files are not marked as uploaded
+  * Add ignored files handling into item creation procedure
+  * Add test for ignored file handling in item modification
+  * Fix parsed filename in mock remote interface
+  * Add test for mock remote interface correct handling of uploaed filename
+  * Handle modified item that is no longer in ignore list
+  * Add test for handling of now unignored modified item when contents url is provided
+  * Be better about filling out metadata upon file creation
+  * Be more careful with setting download state post-creation
+  * Add option to enforce keeping existing download state during database metadata update
+  * Expand item update database testing
+  * Ensure downloaded state is respected during enumeration
+  * Also check download state when handling now unignored modified files
+  * Properly get all existing account items in update item metadatas procedure of FilesDatabaseManager
+  * Test correct directory update metadata procedure in db manager
+  * Add test checking items in transit are not updated
+  * Add test checking items that are remotely deleted are propagated to in transit items too
+  * Clear up my own confusion regarding what db manager's updateItemMetadatas does (I had forgotten) and fix it
+  * Move modification of unuploaded files to own method
+  * Move ignored file creation to own file
+  * Upgrade to Xcode 16.2 in CI
+  * Add function to check if a filename is for a lock file
+  * Add function to get the original file's filename from a lock file filename
+  * Add setLockStateForLockFile for RemoteInterface
+  * Handle lock files in item creation step by instead locking the target file
+  * Clean up original filename function declaration
+  * Store a metadata of a lock file
+  * Add test for lock file creation handling
+  * Unlock target file on lock file deletion
+  * Add test for lock file deletion handling
+  * Make sure to correctly handle metadata deletion for lock file deletion
+  * Reformat mock capabilities, add locking
+  * Do not attempt to lock file on lock file creation if locking not in capabilities
+  * Do not attempt to unlock file on lock file deletion if locking not in capabilities
+  * Add test for lock file creation not handling locking when capabilities unavailable
+  * Add test for lock file deletion not handling unlocking when capabilities unavailable
+  * Verify that upload state for lock file is false
+  * Prevent trashing of lock files
+  * Test that lock file items are untrashable
+  * Do not do anything when lock file is modified
+  * Test nothing is done when lock file is modified
+  * Move lock file creation handling to own static method
+  * Handle progress in lock file creation
+  * Fill in more of the metadata for the lock file
+  * Fix visibility of create methods
+  * Move lock file deletion to separate method
+  * Properly handle lock file metadata modification
+  * More completely test lock file modification
+  * Handle lock files no longer becoming lock files after modification
+  * Test handling of lock file no longer becoming a lock file
+  * Fix AccountTests declaration
+  * Fix AccountTests wrongly checking for user instead of userId in various URLs
+  * Add URL extension to make it easy to get a nice sanitised filename from a given url
+  * Add a convenience filename property to account
+  * Test safe filename generation from URL
+  * Ensure user ID is also sanitised for filename
+  * Test filename is properly sanitised for account
+  * Take account into db manager constructor, use expected account strings internally
+  * Clarify nil capabilities-related messages
+  * Modify NextcloudKit remote interface adapter into a full class
+  * Now that we can do so, define delegate as a proper property
+  * Add capabilities as property of RemoteInterface
+  * Return Capabilities directly via the fetchCapabilities method of remote interface
+  * Cache fetched capabilities
+  * Add currentCapabilities method to remote interface
+  * Use currentCapabilities instead of fetchCapabilities internally
+  * Address capabilities change in logging
+  * Revert "Cache fetched capabilities"
+  * Revert "Add capabilities as property of RemoteInterface"
+  * Revert "Now that we can do so, define delegate as a proper property"
+  * Revert "Modify NextcloudKit remote interface adapter into a full class"
+  * Reimplement stored capabilities by using a global actor
+  * Add some more logging when locking files due to lock file
+  * Check for lock file modification before doing ignored files check
+  * Comments on not working
+  * Add method to get local URL for contents of an item if possible
+  * Use item's localUrlForContents in modifyUnuploaded
+  * Try to handle the system requesting a fetch of a lock file
+  * Notify system with excludedFromSync if possible for lock files
+  * Do not mark ignored/lock files as deleted after enumerating remote state
+  * Fix privacy of lock file logging component
+  * Set proper uploaded/downloaded state where relevant in FilesDatabaseManagerTests
+  * Add test for proper handling of unuploaded items during depth1 update handling
+  * Check for correct error types in item create and modify tests involving lock files
+  * Emit excludedFromSync error when modifying ignored file
+  * Rename modify unuploaded method to more accurately describe its task
+  * Improve logging in createUnuploadedRemotely
+  * Add modifyUnuploaded method that just modified items locally
+  * Use modifyUnuploaded in modifyLockFile
+  * Move createUnuploaded to own file
+  * Check for correct error type in item modify tests for ignored files
+  * Return correctly modified item when modifying ignored item
+  * Fix crashing in MockRemoteInterfaceTests by ensuring remoteInterface is retained
+  * Inform system if an item is shared
+  * Inform system if file is shared by current user
+  * Try to inform system of shared file owner's name
+  * Ensure isSharedByCurrentUser only true when isShared is true
+  * Use more widely available person name formatter approach
+  * Add ShareType enum matching Nextcloud values
+  * Add test for item shared-related properties
+  * Use more representative error when failing to get enumerator for bundle contents
+  * Properly build noSuchItem error during fetches
+  * Properly build noSuchItem errors during modifications
+  * Properly build noSuchItem errors during thumbnail fetching
+  * Properly build noSuchItem errors during item deletions
+  * Improve error reporting around item creation
+  * Also handle collision in NKError conversion
+  * Correctly build no such item error in enumeration
+  * Just rely on fileProviderError for collision related errors
+  * Add fileProviderError function that handles errors that involve noSuchItem
+  * Use proper noSuchItem construction where relevant in item fetch
+  * Use proper noSuchItem construction where relevant in item deletion
+  * Use proper noSuchItem construction where relevant in enumerator
+  * Keep account property for database manager
+  * Add NKError adapter to handle collision errors
+  * Build collision errors properly in creation step
+  * Build collision errors properly during modification
+  * Properly account for (non-error) collision errors during bundle create/modify
+  * Update README with correct error construction
+  * Collapse lock file files into one
+  * Collapse unuploaded files into one
+  * Rename ignored file
+  * Move trashing procedures to own file
+  * Split delete method for readability
+  * Explain trashing in delete method
+  * Add a synchronous currentCapabilities method to RemoteInterface
+  * Only allow trashing when capabilities show trashing is enabled
+  * Check if trashing is enabled in the server capabilities before attempting trashing during modify
+  * Check for trashing support in server via capabilities before trying to enumerate trash
+  * Return directoryNotEmpty error when attempting non recursive delete of non-empty directory
+  * Add test for failure on non-recursive delete on non-empty dir
+  * Add test for item trashability when trash disabled in capabilities
+  * Add test to check trashing fails when trash is not present in capabilities
+  * Add test for expected fail of trash item enumeration when no trash in capabilities
+  * Add test for trash change enumeration fail when trash is missing in capabilities
+  * Fix isComplete not being marked as true when enumeration finishes with error
+  * Add ability to mark metadatas as keepOffline
+  * Change contentPolicy depending on keepOffline for Item metadata
+  * Add method on item to toggle keep offline
+  * Add convenience toggle keepOffline method
+  * Add error related properties to files database manager
+  * Move keepOffline database method to own file, make throwing
+  * Use database's keepOffline setter method
+  * Add test for set keepOffline in database manager
+  * Change downloaded userInfo state to displayEvict, do not set to true if keepOffline is true
+  * Add userInfo entries for displaying keep offline enable/disable actions
+  * Add test for impact of keepOffline on displayEvict userInfo prop
+  * Add test for keepOffline related userInfo properties
+  * Add test for contentPolicy of items
+  * Rename keepOffline to keepDownloaded
+  * Do not try to evict an item on disabling keep downloaded
+  * Log NKError's error description
+  * Constify unmodified rootMetadata value
+  * Unconstify manipulated NKFile variables
+  * Do not enumerate server-side MS Office/LibreOffice lock files
+  * Add test checking no enumeration of lock files
+  * Use better fileId based thumbnail endpoint
+  * If available, use safer URL-based thumbnail url construction
+  * Simplify thumbnail url constructions
+  * Add test for item metadata thumbnail url
+  * Add method to begin implementation of attempt invalid parent item identifier mitigation
+  * Make concurrent chunked array processing methods throwing by default
+  * Add convenience method to easily generate errors for files database manager
+  * Add errors for parent metadata not found
+  * Throw error in sendable item metadata conversion when parent item metadata not found
+  * Adapt to db error changes
+  * Attempt handling of invalid parent item identifier when enumerating
+  * Remove unnecessary double-fetch of parent directory metadata
+  * Add fallback method in db manager that remotely retrieves parent item metadata if necessary
+  * Add test for db manager parent item identifier procedure with fallback
+  * Improve error handling and logging around invalid parent recovery in enumerator
+  * Add enumerate file test with missing parent in database
+  * Some more comments and logging in enumerator invalid parent handling
+  * Use fallback parent item identifier method during trashing
+  * Use parent item identifier with fallback method during item fetch
+  * Make stored item retrieval async to leverage fallback parent item identifier method
+  * Rectify logging in sendable item metadata array conversion
+  * Purge currentCapabilitiesSync
+  * Add convenience remote interface extension func to get if remote interface supports trash
+  * Add bypass method to mock interface to directly, synchronously acquire capabilities
+  * Require MockRemoteInterface in MockEnumerator
+  * Require providing if remote supports trash in Item constructor
+  * Properly set up realm in Item property tests
+  * Add tests for trashability properties when using Item.storedItem
+  * Prevent concurrent capabilities checks for a given account, instead wait for ongoing requests to finish before proceeding
+  * Standardise current capabilities implementation
+  * Move capabilities actor into its own file
+  * Add tests for RetrievedCapabilitiesActor
+  * Upgrade to NextcloudCapabilitiesKit 2.3.0
+  * Add reset method to retrieved capabilities actor
+  * Add test suite for the remote interface extension methods
+  * Fix CI nitpick failing the entire pipeline
+  * Return AFDataResponse from enumerate in remote interface
+  * Add EnumeratorPageResponse
+  * Add EnumeratorPageResponseTests
+  * Add convenience NKRequestOptions extension for paginated requests
+  * Provide some form of valid response data for MockRemoteInterface enumerate request
+  * Give Enumerator's readServerUrl ability to perform paginated propfind
+  * Perform paginated enumeration
+  * Properly implement pagination support in MockEnumerationObserver
+  * Implement pagination simulation in MockRemoteInterface
+  * Do not pass in NSFileProviderPage default pages as NC pagination tokens
+  * Make enumerator page item count customisable
+  * Better track page count in mock enumeration observer
+  * Fix expected state of mock enumeration observer
+  * Fix page item count in response for mock remote interface
+  * Properly handle paginated reads in enumerator read methods
+  * Add test for paginated enumeration
+  * Add warning comment
+  * Purge fast enumeration
+  * Extract paged read result handling into separate method
+  * Handle infinite depth paged read results
+  * Perform full depth enumeration for working set
+  * Fix now invalid error type with latest NextcloudKit
+  * Upgrade to NextcloudKit 6.0.9
+  * Fix MockRemoteInterface paginate total returned
+  * Add userInfo entry for items if they are shareable
+  * Add test for displayShare in userInfo of Item
+  * Add init to EnumeratorPageResponse for next server url to scan
+  * Nuke enumeration listening
+  * Enumerate items for working set on a depth 1 basis, implement queue system and custom pagination tokens for this
+  * Apply serverUrl at the object instance level if necessary in enumerator when handling working set folders
+  * Add assert checking for used indices in mock remote interface paginated propfinds
+  * Add new tests for paginated working set enumeration
+  * Add further tests for non-working set enumeration
+  * Apply pageNum directly onto object property
+  * Properly handle all aspects of permissions in relation to item capabilities
+  * Add further tests for permissions and their effects on capabilities of items
+  * Use formUnion rather than insert for capabilities set
+  * Avoid repetition of metadata.lock check in each if
+  * Retain download state for paginated enumeration target too
+  * Maintain download state for paged enumeration target directory
+  * Add convenience method to check match with a given url string for an NKFile
+  * Properly handle root metadata in paged read results handling
+  * Match expected empty name for root items received from real server in MockRemoteItem
+  * Ensure root item is not enumerated in paged enumeration test
+  * Ensure root container URL is not treated as a file during initial paginated read
+  * Add test for follow up pagination handling
+  * Add test for paged read results handling
+  * More carefully guard against the returned root folder NKFile returned after server url read
+  * Match mock remote item root item filename to NKFile for it
+  * More NKFile handling for root directory
+  * Add some additional logging around pagination
+  * Log if added item metadata is a directory or not
+  * Log page
+  * Add further logging around next page behaviour
+  * Add logging to enumerator page response
+  * Log page information in the enumerator's readServerUrl
+  * Log nil page token in enumerator
+  * Further enumerator page response logging
+  * Further log next page state through enumerator
+  * Fix log typo
+  * Log the specific error occurring during auth check
+  * Only instantiate logger once in NextcloudKit RemoteInterface
+  * Add conformity to Codable for EnumeratorPageResponse
+  * Add next server URL and server url queue properties to page response struct, make token optional
+  * Move all pagination related state into a JSON-encoded representation of the EnumeratorPageResponse
+  * Add ability to independently enumerate a single page on MockEnumerationObserver
+  * Add test for paginated enumeration using separate enumerator instances
+  * Give soft non-error return when handling case where server provides no items
+  * Count on total to stop making paged requests to server
+  * Add toggle to MockRemoteInterface to imitate buggy real server behaviour
+  * Add test to check handling of empty remote page return
+  * Remove codecov from workflow
+  * Pin NextcloudKit to 6.0.9
+  * Add materialisation-relevant property to item metadatas for folders
+  * Add method to retrieve all materialised items from database
+  * Add method to test retrieval of all materialised files from database
+  * Observe both newly unmaterialised and newly materialised items
+  * Fix visitedDirectory state in conversions to RealmItemMetadata
+  * Check corrected state in FilesDatabaseManager
+  * Add logging to MaterialisedEnumerationObserver
+  * Improve tests for MaterialisedEnumerationObserver
+  * Log visitedDirectory state
+  * Modify readServerUrl to mark directories as visited where relevant AND TO RETURN TARGET ITEM
+  * Amend Item fetch behaviour to account for new readServerUrl behaviour
+  * Amend Item pakcage/bundle modify to account for new readServerUrl behaviour
+  * Modify database manager handling of depth 1 read and account for readServerUrl changes
+  * Make MockRemoteItem versionIdentifier modifiable
+  * Return 404 when enumerating non-existent item URL in MockRemoteInterface
+  * Modify working set enumeration to only return materialised items
+  * Modify change enumeration for working set to only check for materialised items
+  * Remove unused recursive scan components from sync engine
+  * Remove unused components of EnumeratorPageResponse
+  * Address readServerUrl related changes in enumerator tests
+  * Avoid scanning materialised children of materialised parents we have confirmed have no updates
+  * Imitate NextcloudKit behaviour in MockRemoteItem conversion to NKFile
+  * Try to clean up received path a bit in MockRemoteInterface
+  * Prevent bad trimming of serverUrl for root item in MockRemoteItem conversion to SendableItemMetadata
+  * Fix up mangling of root container metadata performed by NextcloudKit
+  * Ingest metadata for the root container
+  * Do not create fake root metadata for working set enumeration
+  * Exclude root container from child metadata change calculation
+  * Fix sorting of filenames
+  * Improve deleted metadata log formatting
+  * Mark moved metadatas as updated and not deleted in working set change enumeration
+  * Explain optimisation with examined urls
+  * Also catch non-bungled root metadata metadatas
+  * Make sure to check for root container metadata after changing target ocId
+  * Make chunkedConcurrentMap compatible with all random access collections
+  * Ensure we do not repeat the target metadata in the child metadatas during nkfile conversions
+  * Add tests for nkfile conversions
+  * Move root correction to nkfile conversion
+  * Add test verifying directories enumerated as files is server bug
+  * Quickly and dirtily disable pagination
+  * Add syncTime and deleted properties to item metadata
+  * Add method to get items modified since a given date in files database manager
+  * Add test for database pending working set changes database method
+  * Return all modified items since sync anchor date for changes enumeration
+  * Do not actually delete deleted metadatas
+  * Use simpler syntax for going to last array index
+  * During depth 1 read handling, mark deleted files as deleted
+  * Fix changed folder enumerator test
+  * Adapt FIlesDatabaseManagerTests to deleted item changes
+  * Add passable anchor to enumeate changes in mock change observer
+  * Amend testWorkingSetEnumerateChanges to test current behaviour of working set
+  * Perform a check of the working set's items via the remote change observer
+  * Implement tests for new behaviour in remote change observer
+  * Store deletion state in db
+  * Assert database state in remote change observer test
+  * Expand remote change observer detected change test
+  * Add more logging regarding parent missing in enumerator
+  * Add sync anchor logging
+  * Complete change enumeration with correct sync anchor
+  * Add more logging to remote change observer change calculation
+  * Log sync time on items
+  * Mark items as deleted, do not delete actual db items
+  * In pending working set changes also return children to updated/deleted folders
+  * Improve testPendingWorkingSetChanges
+  * Improve new item metadata creation during update logging
+  * Ensure sync time is updated during deletion
+  * TEMP: Debug logging
+  * Properly handle root item server url
+  * Fix handling of visitedDirectory state
+  * Handle deleted files properly in pending working set retrieval
+  * Ensure marking of deleted files in depth1 handling
+  * Fix crash from improper metadata modification
+  * Fix tests to conform to new item metadata deletion approach
+  * Improve testPendingWorkingSetChanges
+  * Test for updated sync time on deleted item during remote change observation change check
+  * Test for visitedDirectory state in enumerator tests
+  * Add method to invalidate the RCO
+  * Use weak self in websocket reconnect task
+  * Also handle invalidation after server read
+  * Ensure unchanged directories don't get examined even if they are materialised
+  * Add RCO optimisation test
+  * Remove duplicate dbManager from RCO tests, just use one
+  * Target item should be enumerated
+  * Do not check page count in enumerator tests
+  * Retain keep downloaded state when metadata updates are done
+  * Test that keepDownloaded is kept on depth 1 read handling in db manager
+  * More database keep downloaded checks
+  * Add test for keepDownloaded returned on enumeration
+  * feat: Use upstream extra cmake modules
+  * fix: Mark nextcloudcmd as non gui executable
+  * fix: Fix ecm_add_app_icon calls
+  * fix: Update upstream URL for Extra CMake Modules
+
+  [ Rello ]
+  * Update README.md to the new repo name
+  * fix: use NOT for account migration option
+  * chore: New Files according to design team
+  * chore: Update REUSE.toml
+  * feat: Add Busy status icon handling in UserStatus
+  * Modify theme paths in REUSE.toml
+  * Update branding option for state icons
+  * Update theme.qrc.in
+  * Create state-warning.svg
+  * Add files via upload
+  * Create state-warning.svg
+  * Add files via upload
+  * Create state-warning.svg
+  * Add files via upload
+  * Update theme.qrc.in
+  * Delete theme/neutral directory
+  * Remove 'neutral' from STATE_ICONS_COLORS
+  * Update REUSE.toml
+  * Refactor branding logic for state icons
+  * Add files via upload
+  * Add files via upload
+  * Add files via upload
+  * Update theme.qrc.in resource file structure
+  * Fix layout and color for CurrentAccountHeaderButton
+  * Refactor UserLine.qml for layout and accessibility
+  * Change folder state indicator background color to white
+  * Update Sharee Type enum to include Team
+  * Change Circle type to Team in sharee.cpp
+  * Rename TypeCircle to TypeTeam in ShareType enum
+  * Rename 'Circle share' to 'Team share' in Localizable strings
+  * Update NKShare+Extensions.swift
+  * Replace circleShare outlet with teamShare outlet
+  * Replace ShareTypeCircle with ShareTypeTeam
+  * Update shareeTypes to include 'teams'
+  * Update share type checks to include Team type
+  * Modify Sharee type handling in testshareemodel
+  * Replace Share::TypeCircle with Share::TypeTeam
+  * Rename circleShare to teamShare in ShareOptionsView
+  * Modify shareeTypes to include 'circles'
+  * fix scrollbar
+  * Add files via upload
+  * Delete theme/white/neutral directory
+  * Add files via upload
+  * Delete theme/black/neutral directory
+  * Add files via upload
+  * Add files via upload
+  * Add files via upload
+  * Delete theme/colored/neutral directory
+  * Add files via upload
+  * Update CMakeLists.txt
+  * Update REUSE.toml
+  * Rename 'circle' case to 'team' in ShareType
+  * Update BUG_REPORT.yml to warn about sensitive data
+  * Remove folder state indicator from TrayFoldersMenuButton
+  * Change encryption message icon to info icon
+  * Add files via upload
+  * Update paths in REUSE.toml annotations
+  * Add info.svg to theme.qrc resource file
+  * Add files via upload
+  * Add files via upload
+  * Update theme.qrc.in
+  * Update REUSE.toml
+  * Update activitylistmodel.cpp
+  * fix: Vinding loop detected
+  * fix: log - BasicControls for better customization.
+  * bugfix: deprecation warning
+  * fix: Add writing capability for directories with CK permission
+  * Neutral folder state icons
+  * Add folderStateIcon method to theme.h
+  * Update folderstatusmodel.cpp
+  * Refactor folderStateIcon and remove folderDisabledIcon
+  * Remove folderDisabledIcon property from theme.h
+  * Refactor folder status icon logic for clarity
+  * Remove folderDisabledIcon from theme.h
+  * Update folderstatusmodel.cpp
+  * Add new themed icons for various statuses
+  * Add neutral icons for in-app status
+  * Update sync icons for various sync states
+  * Add methods for offline, ok, error, sync, pause, and warning icons
+  * fix: restore user status message type import
+  * fix: correct emoji button bindings
+  * fix: show account label in tray hover
+  * Refactor addAccountButton properties for icon sizing
+  * fix: remove "nextcloud" from debug log filenames
+  * Neutral sync icon in VFS sync status
+  * fix: Update minimum supported Nextcloud server version to 20
+  * fix(typo): Fix typo in debug log message for original file
+  * fix: activity tray is not refreshed
+  * fix: Re-establish connection for systray mono icons
+  * fix: align qml value type registration with lowercase names
+  * fix(log): Improve log messages for client status reporting
+  * Change log level from warning to debug for timestamps
+  * fix(creds): Handle server maintenance error in flow2auth
+  * fix(wizard): Reset error label on status update
+  * Implement signing for Sparkle Installer and Autoupdate
+  * Update version to 5.0.0 alpha and year to 2026
+  * Escaping various strings
+  * Escape filenames in deletion confirmation message
+  * Escape file name in error message for opening file
+  * Escape warnings and folder path in folderwizard
+  * Update owncloudsetupwizard.cpp
+  * Escape host in SSL error message for security
+  * Escape display path using Utility::escape
+  * Update usermodel.cpp
+  * Update usermodel.cpp
+  * fix: Enhance update status message for valid subscriptions
+  * Update generalsettings.cpp
+  * fix: Change destination encoding to percent encoding
+  * Update testchunkingng.cpp
+  * Add directory creation and file insertion in test
+  * string concatenation issue
+  * adjust update text
+  * fix: respect auto update toggle on macOS
+  * feat: show tray sync warnings for errored accounts
+  * refactor: drop automatic bandwidth calculations
+  * adjust test
+  * fix int()
+  * fix: align global tray warning with account status
+  * fix: correct tray warning banner braces
+  * fix: refresh global warning when tray opens
+  * fix: move tray warning banner above search
+  * fix: move sync error indicator into account row
+  * fix: simplify tray warning banner presentation
+  * change color to red
+  * change status backgrounds
+  * remove status background in the header
+  * header back to white frame around user status
+  * statis icon frames
+  * color fix
+  * Add parentBackgroundColor to UserLine component
+  * color fix
+  * color fix
+  * fix: use branded user agent for flow v2 login request
+  * namespace correction
+  * background color of the online status icon
+  * feat: add assistant tray prompt
+  * fix: align connection settings background
+  * fix: send assistant chat history
+  * fix: avoid overriding assistant loader implicit height
+  * fix: include assistant system prompt
+  * fix: always send assistant history
+  * fix: send assistant history as json list
+  * make the role in normal coloring
+  * Assistant conversation bubble
+  * Assistant UI to icon
+  * Add signal for featured app button click
+  * Remove NcAssistant feature check from user model
+  * Refactor history handling in ocsassistantconnector
+  * Re-add AI input field
+  * Refactor clearAssistantResponse for better clarity
+  * Restore MainWindow.qml file with original content
+  * Restore original MainWindow.qml content
+  * Featured icon will become AI-only icon
+  * featured icon will become AI only icon
+  * scrollbar adjustment
+  * no auto scrolling required
+  * hide other warnings when AI is active
+  * Refactor MainWindow.qml for improved structure
+  * make AI Text select-able by mouse
+  * align scrollbar
+  * Layout fix
+  * Add files via upload
+  * add send button
+  * better reset dialog
+  * Update MainWindow.qml
+  * Update usermodel.cpp
+
+  [ Iva Horn ]
+  * fix(ios): compiler errors and build.
+  * Added logo to README as existent in NextcloudKit and SwiftNextcloudUI packages.
+  * fix: Added Package.resolved to .gitignore
+  * feat(doc): Xcode documentation catalog with deployment to GitHub pages.
+  * fix(tests): Replaced constant time delays with expectations.
+  * feat(doc): Added documentation about the special handling of lock files created by third-party apps.
+  * feat(doc): Another small method documentation block comment.
+  * fix(doc): Correct Xcode scheme to build documentation from.
+  * fix(doc): Correct hosting base path.
+  * fix(doc): Suggested fix by GitHub Copilot.
+  * fix(doc): Fixed case of hosting base path for documentation.
+  * feat(doc): Added root redirect.
+  * feat(mac-crafter): Added time measurement of build phases to improve on.
+  * feat(l10n): Set up string catalogs for file provider and file provider UI extensions.
+  * fix(doc): Extended logged information about file provider domains.
+  * fix(l10n): Enabled localization of additional text in macOS file provider.
+  * feat(l10n): Enabled macOS file provider localizations available in Transifex.
+  * fix(shell_integration): Added Package.resolved of NextcloudIntegration project to version control.
+  * fix(mac-crafter): Do not strip get-task-allow entitlement from developer builds of extensions during code signing.
+  * feat(logger): Also log to stderr (appears in Xcode) from macOS debug builds.
+  * fix(l10n): Deleted all AI translations for file provider for one time upload to Transifex to prepare proper community translations.
+  * fix: Do not report file provider items as shared.
+  * fix: Updated NextcloudFileProviderKit reference.
+  * fix: Ensure existence of required file provider extension database directory.
+  * fix: Use dedicated container of file provider extension bundle for application support data like database files.
+  * fix: Not creating unnecessary "Database" subdirectory in file provider extension container.
+  * fix: Updated NextcloudFileProviderKit reference to include change of database file location.
+  * feat: Dedicated directories for file provider domain support files.
+  * fix: Updated NextcloudKit dependency to version 7.1.3 and updated file headers to comply with REUSE policy.
+  * fix: Updated NextcloudFileProviderKit reference.
+  * feat: Implemented reauthentication in file provider UI extension (#8617).
+  * fix: Disabled interceptor for authentication attempt.
+  * feat: NextcloudKit update and UUID db names.
+  * feat: Configured NextcloudKit based on file provider domain identifier.
+  * fix: Added clearance of NextcloudKit account error state on injection of credentials.
+  * fix: Initial file provider domain status in settings window.
+  * feat: Replaced Unified Logging System with Custom Solution.
+  * feat: Replaced Unified Logging System with Custom Solution.
+  * feat: Supporting file lock types.
+  * feat: Updated NextcloudFileProviderKit reference to 7.1.5
+  * feat: Updated NextcloudFileProviderKit reference.
+  * feat: Improved logging of file provider extension implementation.
+  * fix: Lock file handling.
+  * feat: Nextcloud Developer Build from Integration Project
+  * fix: Source mapping for extensions in Xcode debugger.
+  * fix: Improved one logging call.
+  * fix: Updated NextcloudFileProviderKit reference.
+  * fix: Updated NextcloudFileProviderKit to 3.2.1
+  * fix: Added some macOS-specific items to .gitignore
+  * feat: Branded file provider extension SF Symbol.
+  * feat(file-provider): Integrated localizations from Transifex.
+  * fix: Log details.
+  * fix: Moved isLockFileOfLocalOrigin.
+  * fix: Retaining the lock token during synchronization.
+  * fix: Adapting to the changes of c0ee0c3 in NextcloudKit.
+  * fix: Maintaining associated lock data.
+  * fix: Refactored logging calls in Item+Modify.swift
+  * fix: Conditionally adding HTTP header for token lock.
+  * fix: Capabilities and file system flags taking token lock into account.
+  * fix: Refactored logging calls.
+  * fix: Code readability improvements.
+  * fix: Retain lock token during metadata updates from remote.
+  * fix: Accept lock file modifications without returning a semantically incorrect error.
+  * fix: Unit tests.
+  * fix: Correct value for logging details.
+  * fix: Restored removed property initializer for lock token.
+  * fix(file-provider): Updated logging calls in extension implementation.
+  * fix(file-provider): Updated NextcloudKit and NextcloudFileProviderKit dependencies.
+  * fix: Log only account identifier instead of the whole struct.
+  * fix: Directory enumeration.
+  * fix: Updated NextcloudFileProviderKit reference to 9d3a90e
+  * fix: Added missing log formatting support for Date and URL.
+  * fix(file-provider): Updated dependencies.
+  * fix: Updated documentation.
+  * fix: Removed dead code.
+  * feat(logging): Added support for NSFileProviderRequest.
+  * feat(file-provider): Updated NextcloudFileProviderKit from 3.2.5 to 3.2.6
+  * feat: Introduced SwiftFormat.
+  * feat: Applied SwiftFormat.
+  * fix: Resolved Xcode code warnings.
+  * fix: Exclude lock files from synchronization in case server is missing the required capability.
+  * fix(file-provider): Updated dependencies.
+  * fix(file-provider): Updated dependencies.
+  * fix: Removed redundant NextcloudCapabilitiesKit reference from Xcode project.
+  * fix(file-provider): Updated dependencies.
+  * fix(swiftformat): Enforced omission of trailing commas.
+  * feat: Logging NSFileProviderRequest.
+  * fix(file-provider): Adjusted log level of a less important message to debug.
+  * fix(file-provider): Updated dependencies.
+  * fix(file-provider): Removed obsolete settings features in main app.
+  * fix: Crash when disabling file provider for account with UUID as name.
+  * chore: Added "gui" source code folder to Xcode project.
+  * fix(file-provider): Fix #8914 by omitting the faulty NSFileProviderRequest argument on enumerator request.
+  * chore: Changed casting switch in unified logging implementation.
+  * fix(file-provider): Missing application of localized strings to share user interface.
+  * fix(file-provider): Pulled updated localizations from Transifex.
+  * fix(file-provider): Added missing translation keys to catalog.
+  * chore(file-provider): Removed obsolete README section.
+  * fix(file-provider): Share permissions.
+  * fix(file-provider): Updated dependencies.
+  * fix: NextcloudKit compatibility.
+  * fix(file-provider): Dependency update.
+  * fix(l10n): Update translations from Transifex
+  * feat(file-provider): Include Realm databases in debug archives (close #9007).
+  * fix: Metadata lookup for items with hashtag in name.
+  * fix: Tests.
+  * chore(file-provider): Updated dependencies.
+  * fix(file-provider): Fix button title in item locking user interface.
+  * chore(file-provider): Improved locking overlay layout in Finder.
+  * fix: Do not compare item lock property like it is an optional.
+  * fix(file-provider): Legacy extension folder cleanup.
+  * fix: Added missing handling of root container identifier in enumeration of materialized items.
+  * chore: Applied SwiftFormat.
+  * fix: Tests.
+  * chore: Applied SwiftFormat.
+  * chore: Pinned NextcloudKit dependency to 7.2.2 for now.
+  * chore: Removed unnecessary convenience property.
+  * fix: Compiler warnings about Swift 6 compatibility and Sendable conformance.
+  * chore(macOS): Replaced "gui" with "src" folder reference in Xcode project.
+  * fix(file-provider): Root container enumeration to process remote updates correctly.
+  * chore(file-provider): Dependency updates.
+  * chore: Updated comment.
+  * chore: Updated NextcloudKit dependency to version 7.2.3.
+  * feat: Migrated to Swift 6.2
+  * fix: Updated GitHub action job labels.
+  * feat: Introduced REUSE compliance check.
+  * fix: Removed code coverage collection from GitHub action.
+  * fix: Updated NextcloudCapabilitiesKit dependency from 2.3.0 → 2.4.0
+  * chore: Outsourced AuthenticationAttemptResultState and EnumerateDepth into dedicated source code files.
+  * Work in progress: Required Sendable conformances.
+  * fix: Tests.
+  * chore: Applied SwiftFormat.
+  * fix: Refactored failing test.
+  * Fix: Resolving file provider services based on security-scoped URL access.
+  * fix: Proper sandbox support.
+  * fix(file-provider): Signal enumerator for working set after file (un)lock.
+  * chore(file-provider): Moved NextcloudFileProviderKit into subdirectory.
+  * fix(file-provider): Sync state for excluded lock files.
+  * fix(macOS): Enforce valid app group identifier.
+  * chore(macOS): Updated Xcode build settings.
+  * fix(macOS): Updated signing settings for all targets.
+  * feat(macOS): Enabled app sandbox and network client entitlements for main app.
+  * fix(macOS): Relocated socket files into sandboxed containers.
+  * fix(macOS): Added container migration manifest.
+  * chore(macOS): Removed obsolete values from Info.plist
+  * chore(macOS): Outsourced some build settings from Xcode project into file.
+  * chore(macOS): Updated bundle identifier in Xcode project to Nextcloud.
+  * chore(macOS): Creating build settings file on demand from template.
+  * chore(macOS): Added default values to build settings file.
+  * fix(macOS): NextcloudDesktopClientSocketKit signing.
+  * fix(macOS): Added missing user selected read-write entitlement to main app sandbox.
+  * fix(macOS): Writable check on debug archive destination directory.
+  * fix(macOS): Accessing target of debug archive as a security scoped URL.
+  * fix(file-provider): App group container lookup API change in NextcloudFileProviderKit.
+  * fix(macOS): File provider path assembly for debug archive.
+  * fix(macOS): Debug archive creation in a sandbox.
+  * fix(macOS): Development team group identifier prefix.
+  * fix(macOS): Defined "FileProviderUIExt" as target dependency to "desktopclient".
+  * fix: Define default DEVELOPMENT_TEAM for main app.
+  * fix: Restored NCFPKAppGroupIdentifier in main app Info.plist
+  * fix: Fixed too long socket paths (max 104 characters).
+  * chore(macOS): Made whole "src" instead of just "gui" folder accessible conveniently from Xcode.
+  * fix(macOS): Synchronization folder selection.
+  * fix(file-provider): Consolidated support and log directories.
+  * chore(file-provider): Updated to NextcloudFileProviderKit 4.0.0
+  * fix(macOS): Signing identity.
+  * fix(file-provider): File provider domains reset on app sandbox migration.
+  * chore(macOS): Xcode removed an orphaned reference from the project file.
+  * fix(file-provider): Synchronous file provider domain removals.
+  * chore(macOS): Removed obsolete compatibility switches for no longer supported macOS 11.
+  * chore(file-provider): Logging improvements.
+  * chore(file-provider): Renamed fileproviderdomainmanager_mac.mm to fileproviderdomainmanager.mm
+  * chore(file-provider): Simplified FileProviderDomainManager.
+  * fix(file-provider): Made addFileProviderDomain and removeFileProviderDomain synchronous.
+  * fix(file-provider): Made findExistingFileProviderDomains synchronous.
+  * chore(file-provider): Consolidated account to domain mapping.
+  * FIXUP: Improved logging.
+  * FIXUP: Removing domain completely.
+  * FIXUP: Crash due to dangling pointer.
+  * chore(file-provider): Improved logging.
+  * fix(file-provider): Authentication calls via XPC by file provider domain identifier instead of account identifier.
+  * fix(file-provider): Actually enable or disable file provider domain in settings.
+  * chore(ci): macOS build and test action now uses latest macOS and latest Xcode.
+  * fix(file-provider): Resolved circular object initializer dependency.
+  * fix(CI): Disabling code signing for macOS by default.
+  * chore(CI): Removed obsolete environment variables from CI.
+  * feat(mac-crafter): Significantly accelerated signing with mac-crafter by signing whole bundles at once and concurrently.
+  * chore(mac-crafter): Removed obsolete method argument.
+  * chore(macOS): Replaced NextcloudFileProviderKit GitHub reference with local reference.
+  * fix(macOS): Added missing reference to NextcloudFileProviderKit in FileProviderUIExt target.
+  * chore(macOS): Removed references to no longer existing files in Xcode project.
+  * chore(macOS): Migrated GitHub actions workflows of NextcloudFileProviderKit.
+  * fix(CI): Updated NextcloudFileProviderKit trigger branch name.
+  * fix(mac-crafter): Check for existence of a directory to remove before attempting to do so.
+  * feat(mac-crafter): New logging.
+  * fix(NextcloudFileProviderKit): Lowered Swift package version to 6.1
+  * chore(mac-crafter): Added MARK comments for navigation.
+  * fix(mac-crafter): Updated codesign command arguments.
+  * fix(mac-crafter): Propagate signing verification errors.
+  * chore(macOS): Added log messages to Craft.sh
+  * fix(mac-crafter): Include dynamic libraries of frameworks directory in signing.
+  * fix(mac-crafter): Include dynamic libraries from binaries directory in singing.
+  * fix(mac-crafter): Removed parallelized code signing tasks.
+  * fix(mac-crafter): Also sign nextcloudcmd in app bundle executables directory.
+  * fix(mac-crafter): Also sign nextclouddevcmd in app bundle executables directory.
+  * fix(macOS): Enabled hardened runtime in code signing.
+  * fix(mac-crafter): Signing additional binaries.
+  * fix(file-provider): Removed user option for trash deletion.
+  * fix(file-provider): Trash enumerates only locally trashed items.
+  * fix(macOS): Removed unnecessary headline in file provider settings.
+  * fix(file-provider): Handle remote paths with special characters correctly.
+  * fix(file-provider): Escape dots in display names (affects #7979)
+  * fix(macOS): Explicitly allow insecure HTTP connections.
+  * fix(file-provider): Report synchronization status through XPC.
+  * fix(file-provider): Do not report an error for files excluded from synchronization.
+  * chore: Updated AGENTS.md
+  * feat(doc): Added first test case documentation.
+  * fix(file-provider): Remote Change Discovery
+  * feat(NextcloudFileProviderKit): Added testChildDirectoriesOfAnUnchangedServerDirectoryShouldNotBeEnumerated
+  * chore(NextcloudFileProviderKit): Applied SwiftLint
+  * fix(NextcloudFileProviderKit): Adaption to chunked upload API changes in NextcloudKit.
+  * chore(NextcloudFileProviderKit): Applied SwiftLint
+  * fix(l10n): Manually updated file provider extension translations from Transifex
+  * chore(macOS): Moved TransifexStringCatalogSanitizer
+  * fix(TransifexStringCatalogSanitizer): Improved error handling.
+  * chore(NextcloudIntegration): Updated README.
+  * feat(TransifexStringCatalogSanitizer): Added support for recognition of new keys.
+  * feat(TransifexStringCatalogSanitizer): Added support for removal of stale keys.
+  * fix(l10n): Updated file provider extension string catalogs
+  * chore(NextcloudIntegration): Updated README.
+  * fix(l10n): A typographic mistake found by Copilot
+  * fix(l10n): Updated file provider extension string catalogs
+  * fix(reuse): Updated REUSE.toml
+  * fix(l10n): Always pull everything as it is from Transifex for file provider localizations.
+  * fix(NextcloudFileProviderKit): Removed dead code and applied SwiftFormat
+  * fix(file-provider): Also set up signals for legacy push support (#9428)
+  * fix(macOS): Persistent access to security scoped synchronization folders
+  * fix(file-provider): Preserve dirty user data on domain removal (#9417)
+  * feat(file-provider): Added file, function and line information to logging in debug builds.
+  * fix: Mention iOS and Android as irrelevant in AGENTS.md
+  * chore(macOS): Increased NextcloudFileProviderKit requirement for macOS to 12.
+  * feat(macOS): Added instructions to AGENTS.md which explain how to verify specific targets of the client still build successfully after source code changes.
+
+  [ Jyrki Gadinger ]
+  * chore: bump version to 3.17.50
+  * fix(wizard): show VFS option during account setup when using a mac-VFS build
+  * chore: remove useless "else if"
+  * fix(msi): display external version string in installer
+  * fix(macOS): fix initial VFS activation step
+  * chore: remove obsolete and unused testfolder.cpp
+  * fix(folder): use the remotePath for the sidebar display name
+  * fix(macOS): report `Success` as the initial sync state for VFS
+  * fix(cfapi): set up connections before requesting hydration
+  * fix(cfapi): only log process info if it's present
+  * fix(cfapi): check for valid ProcessInfo in cfApiFetchDataCallback
+  * fix(msi): ensure the same ProductCode is used for embedded transforms
+  * fix(wizard): avoid creating useless folders when setting up a VFS connection on Mac
+  * fix(FileProviderExt): do not report syncing state when trying to delete trash items
+  * fix(test): implement virtual method
+  * fix(theme): add user-status-busy.svg to qrc
+  * fix(ci): separate workflow for creating a PR comment for built AppImages
+  * fix(ci): use correct parameter for fetching the PRs of a branch
+  * ci(needsinfohelper): update usernames
+  * ci(stale): align message and matching labels with nextcloud/server
+  * ci(stale): simplify handling of needsinfo label
+  * chore(deps): bump cpp-linter/cpp-linter-action from 2.16.0 to 2.16.1
+  * ci(needsinfohelper): pin action commit to 1.3.0
+  * fix(needsinfohelper): use correct not-equals operator in expression
+  * fix(userstatusselector): avoid setting default emoji when only setting a message
+  * feat(gui): inform the user about untrusted certs with HSTS
+  * fix(FileProviderSyncStatus): disable rotation of status icon
+  * feat(wizard): automatically set up macOS-VFS when available
+  * fix(syncstatussummary): do not attempt to fetch VFS state for accounts without VFS enabled
+  * fix(macOS): use correct ID for VFS enabled checks
+  * fix(needsinfohelper): use correct single-quote string literals
+  * chore: add @Aiiaiiio to CODEOWNERS
+  * fix(build): allow building on macOS Tahoe
+  * fix(usermodel): do not display quota warning if no quota is set
+  * refactor(usermodel): clean up notification-related slots
+  * refactor(activity): ensure activity IDs are int64
+  * style(activitylistmodel): fix typos and remove unused lists
+  * fix(activitylistmodel): avoid duplication of server notifications
+  * chore(build): revert now-obsolete local workaround for builds on macOS 26
+  * fix(test): return the canonical file path of the temp dir
+  * fix(test): manually keep track of the canonical local path of tempDir
+  * ci(macOS): split up jobs to allow retrying from a specific step
+  * ci(macOS): do not abort entire matrix build if one job fails
+  * ci(macOS): only check if the cache exists, no need to redownload it if it exists
+  * fix(mac-crafter): use correct Craft parameter for appbundleless builds
+  * chore(mac-crafter): default to `next` blueprint ref by default
+  * fix(folderstatusdelegate): improve rendering of icons on HiDPI screens
+  * chore(folderstatusdelegate): remove broken warning icon overlay
+  * fix(gui): do not set fallback QML style ourselves
+  * fix(NKFile+Extensions): prevent `__NC_ROOT__` from appearing
+  * fix(asyncimageresponse): fetch remote resources in the same thread as Account
+  * fix(filesystembase): log correct ACL errors
+  * fix(test): adapt updated error message strings
+  * chore: remove unused NCToolTip
+  * fix(tray): use native tooltips when available
+  * fix(tray): use Item popupType on Windows
+  * fix(file-provider): report a different error if database is not ready
+  * fix(discovery): remove extra check for valid server entry
+  * fix(discoveryphase): remove additional setting of folderQuota
+  * fix(quota): parse quota values from servers as double
+  * chore: change the extra quota logging to debug level
+  * chore: set xcode target to `Debug` only for dev builds
+  * fix(tests): expect a different NSFileProviderError depending on availability
+  * refactor(metadata): provide a single method for assembling the full remote path
+  * chore(ci): use Xcode 16.3
+  * fix: ignore directory listing entry for the iterated directory
+  * fix(account): do not consider URLs with a trailing slash as public links
+  * fix(network): fall back to unlimited bandwidth in case the legacy global limit is still set
+  * fix(win32): embed correct app icons again
+  * fix(file-provider): use correct FP domain identifier for sync status check
+  * fix(vfs/cfapi): avoid creating invalid db entries when using a different sync root
+  * style(filesystembase): use explicit *W function variant
+  * fix(filesystem): use UNC paths in setFileReadOnly
+  * fix(win32): ensure setting modtime works on longer path
+  * refactor(filesystem): use QString::utf16 instead of creating a temporary std::wstring
+  * fix(checksums): avoid crash on aborted checksum calculation job
+  * fix(gui): initialise e2e()->account() from Account
+  * chore(test): exclude AccountSettings test from CI/ctest runs when building a VFS client
+  * fix(win32): use file handles for checking/modifying DACLs
+  * refactor(win32): add specialised unique_ptr variants for HANDLEs and Win32 buffers
+  * fix(download): allow highly compressed responses up to a known file size
+  * chore: add test for response decompression threshold check
+  * fix(win32): try to set ACLs without propagating them
+  * chore: remove unused parameter
+  * fix(win32): avoid displaying certificate warning on first connection
+  * chore: remove undocumented socketapi commands
+  * fix(socketapi): avoid crash when receiving invalid commands
+  * chore(tests): remove obsolete source files
+  * fix(tests): copy correct fixture
+  * fix(checksums): wait for the checksum to be calculated before deletion
+  * feat: support `notify_file_id` push notifications
+  * fix: use prepared query for fileid presence check
+  * chore: add test for fileId check via sync journal
+  * chore: add test for syncing specific folders on fileid notification
+  * chore(test): return more realistic oc:id/oc:fileid values in fake responses
+  * chore(test): add test for receiving the root file ID during sync
+  * style: drop const qualifier from qint64 arguments
+  * chore(folderman): swap folder/account position in logs
+  * style(pushnotifications): use more descriptive variable names
+  * chore: remove unused build scripts
+  * fix(accessmanager): manually handle redirects
+  * refactor: move custom attribute to base class
+  * fix: ensure redirect targets are trusted
+  * chore(usermodel): remove redundant checks for nonexistent files
+  * fix(usermodel): create a copy of the original notification errors list
+  * fix(accessmanager): only handle manual redirects unless specified otherwise
+  * test(updater): add test for redirect handling when downloading updates
+  * chore: do not specify versions in link targets
+  * fix(networksettings): get rid of uic warning
+  * chore(test): use Qt::StringLiterals and clean up includes
+  * fix(activitydata): use parameter validation regex from server
+  * chore: remove now-unused qtsingleapplication sources
+  * chore: use new appimage builder base
+  * chore(mac-crafter): default to `master` blueprint ref by default
+  * fix(tray): do not show sync error button when assistant is active
+  * fix(tray): display assistant chat even if unified search is in progress
+  * fix(utility): allow creation of fav links with paths containing spaces
+  * chore(release): bump version to 32.0.50
+  * chore: bump version to 33.0.0-rc1
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Josh ]
+  * fix(logger): Set narrower permissions on temporaryFolderLogDirPath
+
+  [ Matthieu Gallien ]
+  * fix(db): optimize SQL qeury for updating encryption status
+  * fix: better name for an enum value to make it easier to read the code
+  * fix: rename enum FileInfo::Etags to get a more unique name
+  * feat: checks Qt managed translations for tripple dots instead of elipsis
+  * fix: catch exceptions when using std::filesystem APIs
+  * chore: fix compilation by using an existing method
+  * chore: force use of self hosted runners for sonarcloud workflow
+  * feat(wizard): allow to set proxy settings when setting up a new account
+  * feat(wizard): makes entering proxy settings feasible for new accounts
+  * feat(wizard): improve design of new account wizard
+  * feat(proxy): store and modify proxy settings for use with new account
+  * fix: fix typo in dialog title
+  * fix: ensure up to date proxy settings dialog when opening it
+  * fix: ensure proxy settings are visible only when needed
+  * chore: always produces systemd service and install it when possible
+  * fix(logger): brings back crash dump on fatal log output
+  * fix(windows): remove our hack to crash on windows for fatal logs
+  * fix:(logs): add a missing category for one fatal log line
+  * chore: modernize and clean bulk download job code
+  * fix: remove bulk virtual file job code to dehydrate files
+  * chore: remove deprectaed use of Q_REQUIRED_RESULT
+  * chore: fix warning about implicit capture of this in a lambda
+  * feat(vfs): add a new API to create a list of placeholders at once
+  * feat(windows/vfs): use the new batch create API for placeholder files
+  * feat(vfs/windows): use a single call to CfCreatePlaceholders for all
+  * fix(nodiscard): remove duplicated nodiscard annotation
+  * fix: handle errors when createPlaceholders report errors
+  * fix(vfs/cfapi): skip inserting new placeholder items with invalid mtime
+  * fix: fix small issues from review on bulk download job
+  * fix: remove duplicated useless code in single item download job
+  * fix: bulk download job is a child job, update state accordingly
+  * chore(log): use proper log level when the Qt client side is disconnected
+  * fix(vfs/windows): ensure new virtual files item have a proper status
+  * feat(login): use stored credential user ID when authenticating again
+  * fix(applicationName): ensure correct application name is shown to users
+  * fix(accessibility): improve one accessibility title
+  * fix(cloudprovider): add open main dialog action
+  * fix: better user facing action name to open the client
+  * fix(staticCodeChecks): fix warnings reported by clang or clazy
+  * chore(encryption): remove unused qml component for certificate selection
+  * fix(encryption): certificate discovery dialog will show full text
+  * feat(craft): use newer craft blueprints and newer Qt version
+  * chore: use a branch called next for upcoming release craft settings
+  * feat(craft): use our next craft cache
+  * feat(craft): straight go to Qt 6.9.2 for compatibility with newer macOS
+  * fix(macOS): replace deprecated Q_OS_MAC by Q_OS_MACOS platform detection
+  * chore(encryption): store account as a member of encryption class
+  * feat(encryption/token): retry after error when new token init is needed
+  * chore(encryption): better error detection for USB secure token
+  * fix(encryption): destroy all pkcs#11 resources before the context
+  * feat(vfs/folders): enable on demand fetch of folder content
+  * feat(vfs/folders): enable on demand fetch of folder content
+  * fix: once a folder has been populated, disable it
+  * fix: code style fix
+  * fix(vfs/folders): track state of folders using a new blacklist type
+  * fix: makes sure we do fetch empty folders again
+  * fix(vfs/folders-on-demand): do not black list virtual folders
+  * fix(vfs/folders-on-demand): use proper item type for virtual folders
+  * fix(vfs/windows): handle virtual directories as virtual directories
+  * fix(vfs/windows): update folder type when populated
+  * fix(vfs/windows): virtual folders are folders
+  * fix(vfs/windows): properly update DB record when folder is not virtual
+  * chore(vfs/windows): more logs for fetch placeholders callback
+  * fix(vfs/windows): fix creation of items inside virtual folders
+  * fix(vfs/xattr): fix compilation of vfs xattr experimental plug-in
+  * fix(db): assert if we insert a DB record with empty path
+  * fix(tests): ensure we do not access items in empty QList
+  * fix(propagator): do not create invalid records when propagating
+  * fix(vfs/discovery): do not recurse inside a virtual folder
+  * chore(webdav): makes webdav proprty parsing code into reusable method
+  * chore(db): do not create db records with invalid mtime
+  * fix(vfs/windows): fix issues with folders on-demand DB records
+  * fix(vfs): fix regressions with folders on-demand tests
+  * chore(ci/linux): update the CI images for linux CI compilation and tests
+  * chore(vfs/windows): log items pattern when fetching placeholders
+  * chore(vfs/windows): expect failed tests on windows VFS
+  * chore(vfs/windows): common method for WebDAV proprties list
+  * chore: fix common issue with one wrong variable name
+  * chore: simplify code
+  * feat: allow usage of public link to shared folders as an account URL
+  * fix: ignore Qt6 WebEngineCore PDB file that is too big for Wix Toolset 3
+  * fix: fix syntax issues in main dialog to have it work again
+  * chore: prepare for 4.1 release
+  * fix(sync/publicShareLinks): fix public share link detection
+  * fix: fix typo in log message
+  * fix: do not show share ID for sidebar entries of public share links
+  * fix(reuse): remove no longer needed BSD-2 license
+  * fix(test/csync): make sure the test executable can be found to be run
+  * fix: proper use of ecm_add_app_icon
+  * chore(ci): use a docker linux image for CI which has extra-cmake-modules
+  * chore: fix all occurence of range-loop-detach clazy warning
+  * fix: folder delete/new conflict will be "delete"
+  * feat(propagation): flexible way to configure special actions on items
+  * chore: adjust logs level and clazy warnings for permanent deletions
+  * feat(conflict): use local device trashbin for delete/new conflicts
+  * feat(conflict): use local device trashbin for delete/new conflicts
+  * chore(autotests): folders on-demand breaks the new test: skip it
+  * chore(chunk-upload): always sent the total size header
+  * fix(editLocally): properly handle URL for server installed in a suffix
+  * fix(editLocally): fix modification parsing from WebDAV properties
+  * fix(tests): ensure we compare remote state against local state
+  * fix(vfs/windows): test cannot use currentLocalState() with virtual files
+  * feat(update): allow to manually skip a pending update
+  * chore(vfs/windows): add automated tests for folders on-demand
+  * fix(vfs/windows): test for extra files being added when they should not
+  * fix(vfs/windows): fix tests regressions with folders on-demand
+  * fix(performance): fix a small performance issue
+  * chore(vfs/windows): test migration from VFS to classic sync on windows
+  * fix(vfs/windows): properly delete virtual folders to switch to classic
+  * fix: avoid detecting permissions to be invalid on linux NTFS file system
+  * fix: detect NTFS file system type to avoid permissions check
+  * chore(logs): add an explicit log entry for the permissions test
+  * chore: make the permissions reading compatible with windows API
+  * fix: do not fetch user info twice during start of teh client
+  * fix(encryption): allow encrypting a new folder if it was synced
+  * fix(linux/crash): fix crash in cloud provider integration
+  * fix(AppImage): include an extra library for nss3 to prevent a crash
+  * chore(log): try to print the file name of the crash log
+  * chore: use clazy static code checker to improve the code
+  * chore: do not ignore returned value of KZip::open
+  * fix(vfs/windows): we need all properties for new DB records
+  * fix(windows): ensure proper path conversion on Windows
+  * fix(windows): inode property may be missing for some entries: add it
+  * chore(logs): use proper error lovel for encryption error: not info
+  * fix(secureFileDrop): fix wrong conversion between or from base64
+  * fix(logs): reduce verbosity when deleting a folder content
+  * fix(logs): reduce verbosity when deleting folders on vfs Windows
+  * fix(vfs/windows): avoid calling handleForPath without an existing file
+  * fix(folderWatcher): do not print warnings for deleted files
+  * fix(logs): only print changed path that we do not ignore
+  * fix(logs): reduce log level for detected file system changes
+  * feat(craft): update craft commit that we are using
+  * feat(craft): select Qt 6.10.1 to build desktop client
+  * chore: use Qt 6.9.3
+  * feat(craft): makes use of the new stable 4.0 craft cache
+  * feat(craft): add craftmaster target for linux amd64 gcc ABI
+  * chore: use newer build image with Qt 6.9.3 release as expected
+  * chore: fix unity build for AppImage
+  * chore: use hash instead of version for github actions
+  * fix(debugArchive): ensure proper path for destination file name
+  * fix(appimage): ensure more libraries are bundled in the AppImage
+  * fix(AppImage): bundle OpenGL drivers in the AppImage
+  * fix(AppImage): fix broken empty web engine rendering
+  * chore: add platform name in about information
+  * chore: pin correctly some github actions still using the old way
+  * fix(AppImage): bundle less libraries to improve compatibility
+  * fix(whiteIcons): fix state icons for white monochrome theme
+  * chore: use std::make_unique to improve memory management
+  * chore: makes CI use the proper craft settings with all dependencies
+  * feat(singleInstance): switch to use KDSingleApplication
+  * chore: sets the python custom path for clang tidy pr action
+  * fix(clang-tidy): use newer CI image to fix clang-tidy CI check
+  * chore: fix compilation for missing string literals
+  * fix: use taskprocessing OCS API to submit prompt to AI
+  * chore: properly handle completed tasks (success or error)
+
+  [ Camila Ayres ]
+  * fix(syncjournal): add folder quota bytes used/available columns to metadata table.
+  * fix(syncfileitem): save folder bytes available and bytes used to database.
+  * fix(discovery): check for db cached folder quota during discovery for some items.
+  * test(syncenginetestutils): add function helper to set FileInfo::FileInfoQuota quota.
+  * test(localdiscovery): add function for quota check from db when syncing.
+  * refactor(quota): rename Quota struct to FolderQuota.
+  * fix(quota): do not prevent upload when quota info are not available.
+  * fix(quota): wrong conversion from bytes available to int64_t.
+  * chore(quota): change log level and fix comment in test.
+  * fix(quota): add constexpr property names and server entry valid enum to FolderQuota struct.
+  * test(syncengine): add enum for Etags Validate/Invalidate.
+  * refactor(abstractnetworkjob): rename var.
+  * fix(abstractnetworkjob): display user friendly http errors.
+  * fix(abstractnetworkjob): always display the user friendly error message.
+  * style(owncloudpropagator): add {} to if else condition.
+  * fix(discovery): use user friendly messages when server responses are not successful.
+  * fix(TestDownload): update test to match new error string.
+  * fix(TestRemoteDiscovery): extend the http error messages in the test.
+  * style(abstractnetwork): remove chain of if else.
+  * fix(quota): return unlimited free space for type changes.
+  * feat(syncjournaldb): add default value to quotaBytesAvailable and quotaBytesUsed columns.
+  * test(syncjournaldb): folder quota default values.
+  * feat(quota): add default value to metadata column if it doesn't exist.
+  * refactor(syncjournaldb): move removeColumn lambda to a function.
+  * refactor(syncjournaldb): move hasDefaultValue lambda to a function.
+  * refactor(syncjournaldb): refactor logic before updating the list of columns when removing one.
+  * test(syncjournaldb): add test for migrating folder quota columns.
+  * test(syncjournaldb): use QCOMPARE_GT.
+  * fix(utility): change sync folder display name when migrating.
+  * feat(utility): adjust setupDesktopIni function to set LocalizedResourceName.
+  * feat(issue_template): add macOS virtual files.
+  * feat: search db for matching original filename based on the lock filename.
+  * ref(FilesDatabaseManager): simplify calling to return an empty array instead of nil.
+  * ref(originalFileName): return nil if database search fails instead of string.
+  * style(LocalFiles): rename FileProviderLogger category to the file name.
+  * fix(proxy): only clean legacy proxy settings after migrating all accounts.
+  * fix(accountsettings): do not to initialize e2ee if account is disconnected.
+  * fix(NextcloudDev): add missing template file.
+  * fix(quota): return unlimited quota if server query is invalid or file is in folder root.
+  * chore: print sync information when checking quota.
+  * fix(folderman): skip folder import from legacy config when migration is disabled.
+  * feat(AccountsRestoreResult): add AccountsNotFound option to enum.
+  * refactor(application): rewrite setupAccountsAndFolders function.
+  * style(file-provider): improve text displayed when user resets virtual files setup.
+  * fix(discovery): display more user friendly message when data is missing from server response.
+  * fix(test): update error string expected when etga is missing.
+  * fix: use /usr/bin/open to show a file/folder in finder (#12379)
+  * fix(migration): set all settings from the previous version of the client.
+  * fix(migration): check for legacy app name group for updater setting.
+  * fix(migration): migrate proxy global setting to user when there is no user proxy.
+  * feat(migration): add helper functions to handle migration/upgrade.
+  * fix(credentials): check for certificate existence before setting the keychain key name.
+  * feat(credentials): use the app name or the unbranded name to retrieve the keychain keys.
+  * fix(test): update function fetchFromKeychain signature.
+  * refactor(configfile): use migration helper functions to track migration steps.
+  * fix(credentials): add Q_UNUSED.
+  * feat(migration): track migration phases with an enum.
+  * style(account): modernize account functions.
+  * fix(credentials): when legacy creds are found, save it with new app name.
+  * fix(migration): set use new big folders correctly.
+  * fix(migration): make sure the checkbox are consistent with the previous version of the client.
+  * refactor(credentials): use member function to change keychain key name.
+  * fix(migration): set the use of mono icons.
+  * fix(migration): do not ovewrite account settings with global ones.
+  * fix(migration): check status of migration when fetching proxy password from keychain.
+  * fix(migration): overwrite account settings only if it was using global settings.
+  * fix(upgrade): set the previous client version after the upgrade check.
+  * fix(migration): return correct migration state if no accounts were found.
+  * style: modernize ServerNotificationHandler::slotNotificationsReceived.
+  * fix(notifications): add delete action to notifications.
+  * fix(abstractnetworkjob): make 503 error string more generic.
+  * fix(creds): use user friendly auth errors.
+  * fix(macOS): use relative path to src in xcodeproj.
+  * fix: detect upgrade only scenario.
+  * feat(socketapii): add file actions option to list of options for files.
+  * feat(declarativeui): style file actions window.
+  * feat(declarativeui): improve the looks of the file actions Window.
+  * fix(declarativeui/fileactions): file actions context menu.
+  * feat(declarativeui): add logging category to FileActionsModel.
+  * feat(declarativeui/fileactions): return default icon when server doesn't have one.
+  * fix(declarativeui/fileactions): parse response with declarative UI elements like url.
+  * refactor(declarativeui): remove unused DeclarativeUi class.
+  * fix(declarativeui): files license.
+  * refactor(declarativeui): remove Declarative UI menu item.
+  * fix(capabilities): update capabilities with new json key + adjust mimetype check.
+  * fix(declarativeui): use EnforcedPlainTextLabel instead of Label.
+  * fix(capabilities): an empty mimetype_filters means the action is available to all mimetypes.
+  * fix(declarativeui/fileactions): handle the new params format.
+  * style(integration): rename from declarativeui to integration.
+  * fix(integratio): return true if there isn't an empty client_integration map.
+  * feat(integration): do not list file actions if the server doesn't support it.
+  * style(tray): modernize ActivityListModel::data.
+  * fix(integration): use ActivityData function to retrieve server icon.
+  * refactor(tray): modernize Activity::relativeServerFileTypeIconPath.
+  * feat(integration): align icons and make sure they all have the same size.
+  * fix(integration): address review's comments.
+
+  [ Joas Schilling ]
+  * fix(l10n): Don't sync xcstrings for now
+
+  [ copilot-swe-agent[bot] ]
+  * fix(l10): Add proper translations for macOS File Provider extensions
+  * feat: add busy status support with capabilities checking and UI integration
+  * fix: add missing Busy status handling in switch statements and string mappings
+  * feat: use dedicated user-status-busy.svg icon for busy status
+  * feat: implement build-time switch for neutral state icons
+  * fix: correct IS_BRANDED_CLIENT option logic and defaults
+  * feat: make emojis larger and add tooltips with names in emoji picker
+  * feat: implement UUID-based file provider domain identifiers with backward compatibility.
+  * fix: handle single quotes in file paths for conflict and case clash dialogs
+  * fix: properly HTML-escape URLs to handle both single and double quotes
+  * fix: prevent crash when changing proxy settings with logged out account
+  * docs: update progress checklist
+  * chore: remove codeql artifact and update gitignore
+  * fix(file-provider): Reenabled Pagination
+
+  [ dependabot[bot] ]
+  * chore(deps): Bump actions/cache from 4.2.3 to 4.2.4
+  * chore(deps): Bump actions/checkout from 4.2.2 to 5.0.0
+  * chore(deps): Bump cpp-linter/cpp-linter-action from 2.15.0 to 2.16.0
+  * chore(deps): Bump cpp-linter/cpp-linter-action from 2.16.1 to 2.16.2
+  * chore(deps): Bump actions/stale from 9.1.0 to 10.0.0
+  * chore(deps): Bump actions/setup-python from 5.6.0 to 6.0.0
+  * chore(deps): Bump actions/github-script from 7.0.1 to 8.0.0
+  * chore(deps): Bump cpp-linter/cpp-linter-action from 2.16.2 to 2.16.3
+  * chore(deps): Bump actions/cache from 4.2.4 to 4.3.0
+  * chore(deps): Bump cpp-linter/cpp-linter-action from 2.16.3 to 2.16.4
+  * chore(deps): Bump fsfe/reuse-action from 5.0.0 to 6.0.0
+  * chore(deps): Bump actions/stale from 10.0.0 to 10.1.0
+  * chore(deps): Bump cpp-linter/cpp-linter-action from 2.16.4 to 2.16.5
+  * chore(deps): Bump actions/upload-artifact from 4.6.2 to 5.0.0
+  * chore(deps): Bump cpp-linter/cpp-linter-action from 2.16.5 to 2.16.6
+  * chore(deps): Bump actions/checkout from 5.0.0 to 5.0.1
+  * chore(deps): Bump actions/checkout from 5.0.1 to 6.0.0
+  * chore(deps): Bump actions/setup-python from 6.0.0 to 6.1.0
+  * chore(deps): Bump actions/checkout from 6.0.0 to 6.0.1
+  * chore(deps): Bump actions/stale from 10.1.0 to 10.1.1
+  * chore(deps): Bump actions/cache from 4.3.0 to 5.0.1
+  * chore(deps): Bump actions/upload-artifact from 5.0.0 to 6.0.0
+  * chore(deps): Bump actions/checkout from 4 to 6
+  * chore(deps): Bump cpp-linter/cpp-linter-action from 2.16.6 to 2.16.7
+  * chore(deps): Bump actions/setup-python from 6.1.0 to 6.2.0
+  * chore(deps): Bump actions/checkout from 6.0.1 to 6.0.2
+  * chore(deps): Bump webiny/action-conventional-commits from 1.3.0 to 1.3.1
+  * chore(deps): Bump actions/cache from 5.0.1 to 5.0.2
+  * chore(deps): Bump actions/cache from 5.0.2 to 5.0.3
+
+  [ István Váradi ]
+  * ci: Remove Debian Bullseye, add Trixie
+  * ci: Remove Ubuntu Plucky, add Resolute
+
+  [ rakekniven ]
+  * fix(i18n): Fix grammar
+  * fix(i18n): Use SI symbol for minute
+  * fix(i18n): Use SI symbol for minute
+  * fix(i18n): Fixed grammar
+
+  [ Andy Scherzinger ]
+  * style(icons): Use outline variant
+  * style(icons): Use proper icons for sharing details screen
+  * style(icons): Update user status icons to latest design
+  * fix(icon): Set width/height in px not percent
+  * docs(reuse): Update license info
+  * fix(icon): Opacity 70%
+  * style(icon): make status icon cutouts white-colored and online unified green
+  * style(icon): Remove white background for status icons and update colors to match server
+
+  [ Baris ]
+  * fix(generalsettings): change remote pollinterval spinBox-minimum from 30 to 5 seconds, to align with configfile
+  * fix(AcitivityList): fix scrollbar on the right Co-authored-by: Mike Mengjie Huang <mike0609king@gmail.com>
+  * fix(ActivityList): set minimum width and thumb-size for vertical ScrollBar
+  * refactor: introduce minimumScrollBarWidth and minimumScrollBarThumbSize as part of the style
+  * fix(activityItemContent): make text color light on activityItem activeFocus Co-authored-by: Mike Mengjie Huang <mike0609king@gmail.com>
+  * fix(folderstatusmodel): 32 bit int overflow in current item progress fixed
+
+  [ Daniel ]
+  * chore: update transifex link
+
+  [ kramo ]
+  * fix: Tweak status icons
+  * feat: Update generic icons
+  * fix: Tweak status icons further
+
+  [ Mike Mengjie Huang ]
+  * feat: Add more prominent quota warnings
+  * fix: Change code formatting and description string
+  * feat: Add more prominent quota warnings
+  * fix: Change code formatting and description string
+  * perf: Use existing quota info instead of polling
+  * fix: Apply suggested change and modify quota warning tool tip
+  * feat: Add more prominent quota warnings
+  * perf: Use existing quota info instead of polling
+  * fix: Typo in function parameter
+
+  [ mike0609king ]
+  * style: Apply suggestions from code review
+
+  [ Heiko Becker ]
+  * fix(ECMAddAppIcon): Avoid warning with cmake >= 4.1
+  * fix: Drop Qt6GuiPrivate dependency to fix the build with Qt 6.10
+
+  [ Tamás Bari ]
+  * fix(shell): replaced icons with no-padding versions
+  * fix(shell): in Nautilus the "shared" state is now indicated by a second emblem
+  * chore(shell): removed no longer used emblems
+  * fix(shell): including new file in REUSE
+  * fix: Clicking the copy share link button breaks it.
+  * fix: Removing conditional icon source statement for copy link button.
+  * fix: removing non-existent property
+  * feat: Adding an option to disable username prefill on Windows
+  * fix: Check the option first
+  * fix: resolving variable name shadowing
+  * fix: Removing non-existent properties
+  * fix: Tweaking account dropdown menu style
+  * fix: Adding elide to menuitems
+  * fix: add account menuitem height and padding
+  * fix: accounts menu width adapting to it's contents
+  * fix: ensuring contrasting text color for highlighted menuitems
+  * fix: ignore windows for highligted menuitem styling
+  * fix: status message color and reaction to model changes
+  * fix: user more menu height (especially on Windows)
+  * fix: disabling menu items instead of hiding them
+  * fix: correcting text color for user name
+  * fix: handling messagebox choice correctly
+  * fix: check file permission reliability with a test
+  * fix: Enforce enterprise update channel
+  * fix: Set the current update channel together with the enterprise channel
+  * fix: Do not overwrite the update channel with enterprise
+  * fix: proper update channels
+  * fix: Per-account enterprise update channel
+  * fix: Making UpdateChannel more consistent
+  * fix: Taking branded clients into account when selecting the update channel.
+  * chore: Adding a test case to test update channel selection
+  * fix: Moving default update channel lists and constants to UpdateChannel
+  * fix: consider enterprise update channel only if the account's server has a valid subscription
+  * fix: Removing debug log clutter
+  * fix: Fixing license header in new files
+  * fix: Using FakePayloadReply in unit test
+  * fix: adding missing export directive
+  * fix: Fixing the license in testupdatechannel.cpp
+  * fix: Restore server subscription per account from config.
+  * fix: Fixing selectable message bubbles.
+  * feature: more conventional chat window
+  * fix: Fixing the new conversation confirmation dialog geometry and style
+  * fix: Removing dim effect from modal Dialog
+  * fix: fixing dialog background color + re-add dimming
+  * fix: Removing header background color from dialog
+  * fix: Fixing reset dialog aligment issues
+
+  [ Elsie Hupp ]
+  * fix: allow settings window to enter full screen or be minimized
+
+  [ Melroy van den Berg ]
+  * fix: add official PPA as an option of the package type
+
+  [ Carl Schwan ]
+  * refactor: Use correct string overload
+
+  [ Dmytro Syzov ]
+  * feat: preserve the last selected account between runs
+
+  [ dsyzov ]
+  * fix: initialize user list when first acc is added
+
+  [ Findlay Feng ]
+  * fix(application): Correcting the loading of translation files
+
+  [ Geoffrey “Frogeye” Preud'homme ]
+  * fix(cmd): don't open the database twice with --unsyncedfolders
+
+  [ rbran ]
+  * fix: Client side TLS with Strict-Transport-Security
+  * chore: Remove unnecessary const from function signature
+
+  [ tobiasKaminsky ]
+  * test fix for mac-vfs
+
+  [ Tobias Kaminsky ]
+  * Revert "test fix for mac-vfs"
+
+ -- István Váradi <ivaradi@varadiistvan.hu>  Thu, 26 Mar 2026 20:05:00 +0000
+
 nextcloud-desktop (3.17.0) jammy; urgency=medium
 
   [ Matthieu Gallien ]
