@@ -594,7 +594,7 @@ index c061eff726..2a0751b07c 100644
                  }
              }
 diff --git a/src/gui/folderman.cpp b/src/gui/folderman.cpp
-index dd6cc4579d..419f855e7f 100644
+index 3b6330dde9..4eeb20f780 100644
 --- a/src/gui/folderman.cpp
 +++ b/src/gui/folderman.cpp
 @@ -16,6 +16,7 @@
@@ -722,7 +722,7 @@ index d70dd35817..585a86502e 100644
      }
      return true;
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
-index 0895c49c97..9298856952 100644
+index eabd26f097..615df8d512 100644
 --- a/src/gui/settingsdialog.cpp
 +++ b/src/gui/settingsdialog.cpp
 @@ -15,6 +15,7 @@
@@ -979,6 +979,19 @@ index 20ece0431a..96469c8ce6 100644
  
  #include <QtCore>
  #include <QAbstractListModel>
+diff --git a/src/gui/tray/asyncimageresponse.cpp b/src/gui/tray/asyncimageresponse.cpp
+index 875a2d16eb..58969f7546 100644
+--- a/src/gui/tray/asyncimageresponse.cpp
++++ b/src/gui/tray/asyncimageresponse.cpp
+@@ -10,6 +10,8 @@
+ #include <QPainter>
+ #include <QSvgRenderer>
+ 
++#include "common/qtcompat.h"
++
+ #include "accountmanager.h"
+ 
+ using namespace Qt::StringLiterals;
 diff --git a/src/gui/tray/notificationhandler.cpp b/src/gui/tray/notificationhandler.cpp
 index cf0624367a..cde9cec563 100644
 --- a/src/gui/tray/notificationhandler.cpp
@@ -1079,7 +1092,7 @@ index 10429efe18..90dec2633a 100644
      PRIVATE
          cxx_std_17
 diff --git a/src/libsync/abstractnetworkjob.cpp b/src/libsync/abstractnetworkjob.cpp
-index 514983390f..1cf4ba1833 100644
+index 199f7c0546..588dc8ad3b 100644
 --- a/src/libsync/abstractnetworkjob.cpp
 +++ b/src/libsync/abstractnetworkjob.cpp
 @@ -5,6 +5,7 @@
@@ -1197,7 +1210,7 @@ index 693c1bcee1..ef16ee34be 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 0ba5089880..811bb2ff40 100644
+index 103518e8a7..3bf8c843a8 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1221,7 +1234,7 @@ index b95683590e..97bbc837be 100644
  #include <csync_exclude.h>
  #include "vio/csync_vio_local.h"
 diff --git a/src/libsync/filesystem.cpp b/src/libsync/filesystem.cpp
-index 3e65aed6b4..1b114de614 100644
+index e27301c035..762d93a25c 100644
 --- a/src/libsync/filesystem.cpp
 +++ b/src/libsync/filesystem.cpp
 @@ -7,6 +7,7 @@
@@ -1675,7 +1688,7 @@ index 850e9c919c..fc0371170e 100644
  using namespace OCC;
  
 diff --git a/test/testfilesystem.cpp b/test/testfilesystem.cpp
-index d3e5dc20b8..f734de9307 100644
+index 37abf3784f..57ae135aee 100644
 --- a/test/testfilesystem.cpp
 +++ b/test/testfilesystem.cpp
 @@ -12,6 +12,7 @@
