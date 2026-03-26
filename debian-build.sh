@@ -5,6 +5,8 @@ shopt -s extglob
 
 scriptdir="$(readlink -f "$(dirname "${0}")")"
 
+source "${scriptdir}/config.sh"
+
 WORKSPACE="${1}"
 COMMIT="${2}"
 BRANCH="${3:-master}"
@@ -21,9 +23,6 @@ OBS_PROJECT_ALPHA="${OBS_PROJECT_HOME}:alpha"
 OBS_PROJECT_BETA="${OBS_PROJECT_HOME}:beta"
 OBS_PROJECT_STABLE_ALPHA="${OBS_PROJECT_HOME}:stable-alpha"
 OBS_PROJECT_NEXT_STABLE_ALPHA="${OBS_PROJECT_HOME}:next-stable-alpha"
-
-UBUNTU_DISTRIBUTIONS="jammy noble questing resolute"
-DEBIAN_DISTRIBUTIONS="bookworm trixie testing"
 
 declare -A DIST_TO_OBS=(
     ["jammy"]="xUbuntu_22.04"
