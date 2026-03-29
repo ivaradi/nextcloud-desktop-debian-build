@@ -131,7 +131,7 @@ for distribution in ${UBUNTU_DISTRIBUTIONS} ${DEBIAN_DISTRIBUTIONS}; do
     dpkg-genchanges -S -sa > "../nextcloud-desktop_${fullver}_source.changes"
 
     if test "${has_ppa_keys}" = "yes"; then
-        debsign -k2265D8767D14AA7B -S
+        debsign -k31458E6300179D72 -S
     fi
 done
 cd ..
