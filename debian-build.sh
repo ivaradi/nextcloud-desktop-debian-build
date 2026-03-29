@@ -37,7 +37,7 @@ declare -A DIST_TO_OBS=(
 set +x
 has_ppa_keys="no"
 if test "${DEBIAN_SECRET_KEY:-}" -a "${DEBIAN_SECRET_IV:-}"; then
-    openssl aes-256-cbc -K "${DEBIAN_SECRET_KEY}" -iv "${DEBIAN_SECRET_IV}" -in "${scriptdir}/signing-key.txt.enc" -d | gpg --import
+    openssl aes-256-cbc -K "${DEBIAN_SECRET_KEY}" -iv "${DEBIAN_SECRET_IV}" -in "${scriptdir}/signing-key.txt.enc" -d | gpg --batch --no-tty --import
 
     openssl aes-256-cbc -K "${DEBIAN_SECRET_KEY}" -iv "${DEBIAN_SECRET_IV}" -in "${scriptdir}/oscrc.enc" -out ~/.oscrc -d
 
