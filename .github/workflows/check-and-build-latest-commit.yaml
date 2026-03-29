@@ -88,4 +88,5 @@ jobs:
         run: |
           set -e -u -x
 
-          git config --global --unset http.https://github.com/.extraHeader
+          rm -rf ~/.gitconfig
+          rm -rf ~/.gnupg
