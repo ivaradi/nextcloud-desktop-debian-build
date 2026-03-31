@@ -72,8 +72,9 @@ done
 cd "${WORKSPACE}"
 
 if [[ "${BRANCH_TYPE}" = "master" ||
-          ( "${BRANCH_TYPE}" = "stable" && "${kind}" = "release" ) ||
-          ( "${kind}" = "beta" &&
+          ( "${BRANCH_TYPE}" = "stable" && "${kind}" = "release" &&
+            "${TRIGGER}" = "tag") ||
+          ( "${kind}" = "beta" && "${TRIGGER}" = "tag" &&
                 ( "${BRANCH_TYPE}" = "next-stable" ||
                       ( "${BRANCH_TYPE}" = "stable" &&
                             "${BRANCH_STABLE}" = "${BRANCH_NEXT_STABLE}" ))) ]]; then
