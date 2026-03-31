@@ -29,7 +29,7 @@ if test ! -f "${commitfile}" -o "${commit}" != "$(cat "${commitfile}")"; then
     "${scriptdir}/debian-build.sh" "${WORKSPACE}" \
                                    "${commit}" \
                                    "${branch}" "${BRANCH_TYPE}" \
-                                   "${REPOSITORY}"
+                                   "${REPOSITORY}" "commit"
 
     mkdir -p "${commitfiledir}"
     echo "${commit}" > "${commitfile}"

@@ -12,6 +12,7 @@ COMMIT="${2}"
 BRANCH="${3:-master}"
 BRANCH_TYPE="${4:-master}"
 REPOSITORY="${5:-https://github.com/nextcloud/desktop}"
+TRIGGER="${6:-commit}"
 
 PPA_RELEASE=ppa:nextcloud-devs/client
 PPA_ALPHA=ppa:nextcloud-devs/client-alpha
@@ -80,6 +81,11 @@ if [[ "${BRANCH_TYPE}" = "master" ||
                             "${BRANCH_STABLE}" = "${BRANCH_NEXT_STABLE}" ))) ]]; then
     PPA_DISTRIBUTIONS="${UBUNTU_DISTRIBUTIONS}"
     OBS_DISTRIBUTIONS="${DEBIAN_DISTRIBUTIONS}"
+
+    if test "${TRIGGER}" = "commit"; then
+        kind="alpha"
+    fi
+
     if test "$kind" = "release"; then
         PPA=$PPA_RELEASE
         OBS_PROJECT=$OBS_PROJECT_RELEASE

@@ -50,7 +50,7 @@ if test ! -f "${tagfile}" -o "${tag}" != "$(cat "${tagfile}")"; then
     "${scriptdir}/debian-build.sh" "${WORKSPACE}" \
                                    "${tag}" \
                                    "${branch}" "${BRANCH_TYPE}" \
-                                   "${REPOSITORY}"
+                                   "${REPOSITORY}" "tag"
 
     mkdir -p "${commitfiledir}"
     echo "${tag}" > "${tagfile}"
