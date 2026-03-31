@@ -71,8 +71,6 @@ done
 
 cd "${WORKSPACE}"
 
-echo "$kind" > kind
-
 if [[ "${BRANCH_TYPE}" = "master" ||
           ( "${BRANCH_TYPE}" = "stable" && "${kind}" = "release" ) ||
           ( "${kind}" = "beta" &&
