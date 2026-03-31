@@ -38,7 +38,7 @@ tags.sort(key=lambda t: version.parse(t.lstrip('v')))
 for tag in tags: print(tag)
 " | tail -n 1)
 
-if ! curl --fail "${REPOSITORY}/releases/tags/${tag}"; then
+if ! curl --fail "${REPOSITORY/github.com/api.github.com/}/releases/tags/${tag}"; then
     echo "No release for tag ${tag} yet, skipping"
     exit 0
 fi
