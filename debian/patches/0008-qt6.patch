@@ -425,7 +425,7 @@ index ab99460a0f..6d911b7217 100644
  // SQL expression to check whether path.startswith(prefix + '/')
  // Note: '/' + 1 == '0'
 diff --git a/src/csync/csync_exclude.cpp b/src/csync/csync_exclude.cpp
-index b92cfa08e4..38f3d462ec 100644
+index 72e585aea7..9bf2a8c344 100644
 --- a/src/csync/csync_exclude.cpp
 +++ b/src/csync/csync_exclude.cpp
 @@ -21,6 +21,7 @@
@@ -436,7 +436,7 @@ index b92cfa08e4..38f3d462ec 100644
  #include "../version.h"
  
  #include <QString>
-@@ -300,7 +301,7 @@ void ExcludedFiles::loadExcludeFilePatterns(const QString &basePath, QFile &file
+@@ -309,7 +310,7 @@ void ExcludedFiles::loadExcludeFilePatterns(const QString &basePath, QFile &file
          if (line.isEmpty() || line.startsWith('#'))
              continue;
          const auto patternStr = QString::fromUtf8(line);
@@ -445,7 +445,7 @@ index b92cfa08e4..38f3d462ec 100644
              continue;
          }
          csync_exclude_expand_escapes(line);
-@@ -462,10 +463,10 @@ CSYNC_EXCLUDE_TYPE ExcludedFiles::traversalPatternMatch(const QString &path, Ite
+@@ -471,10 +472,10 @@ CSYNC_EXCLUDE_TYPE ExcludedFiles::traversalPatternMatch(const QString &path, Ite
          QRegularExpressionMatch m;
          if (filetype == ItemTypeDirectory
              && _bnameTraversalRegexDir.contains(basePath)) {
@@ -734,7 +734,7 @@ index f703f8eaf4..d3a513823e 100644
  #include <QLabel>
  #include <QStandardItemModel>
 diff --git a/src/gui/sharemanager.cpp b/src/gui/sharemanager.cpp
-index e4287d8f17..0fc17178be 100644
+index 42b61a5d84..ac29fbf181 100644
 --- a/src/gui/sharemanager.cpp
 +++ b/src/gui/sharemanager.cpp
 @@ -11,6 +11,7 @@
@@ -746,7 +746,7 @@ index e4287d8f17..0fc17178be 100644
  #include <QUrl>
  #include <QJsonDocument>
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index 4410426161..e466d4aa0d 100644
+index 39949ea206..f8c1058b7a 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
 @@ -18,6 +18,7 @@
@@ -1116,7 +1116,7 @@ index 199f7c0546..588dc8ad3b 100644
                  }
  
 diff --git a/src/libsync/account.cpp b/src/libsync/account.cpp
-index 0a7ad51ea8..030b6bd54d 100644
+index bc09419b66..3bf4a99f65 100644
 --- a/src/libsync/account.cpp
 +++ b/src/libsync/account.cpp
 @@ -24,6 +24,7 @@
@@ -1127,9 +1127,9 @@ index 0a7ad51ea8..030b6bd54d 100644
  #include "clientsideencryption.h"
  #include "ocsuserstatusconnector.h"
  
-@@ -1284,7 +1285,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
-                                           serverHasMountRootProperty() ? RemotePermissions::MountedPermissionAlgorithm::UseMountRootProperty : RemotePermissions::MountedPermissionAlgorithm::WildGuessMountedSubProperty,
-                                           newEntry);
+@@ -1289,7 +1290,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
+             newEntry.size = 0;
+         }
  
 -        promise->emplaceResult(itemFileName, itemFileName.toStdWString(), absoluteItemPathName, newEntry);
 +        QPromiseEmplaceResult(promise, OCC::PlaceholderCreateInfo,
@@ -1211,7 +1211,7 @@ index cc8c83cd54..d618fc3acd 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 103518e8a7..3bf8c843a8 100644
+index e6b68acc48..cdd4bf353c 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1223,7 +1223,7 @@ index 103518e8a7..3bf8c843a8 100644
  #include "csync.h"
  
 diff --git a/src/libsync/discoveryphase.cpp b/src/libsync/discoveryphase.cpp
-index b95683590e..97bbc837be 100644
+index 602ded6293..fd805dbe93 100644
 --- a/src/libsync/discoveryphase.cpp
 +++ b/src/libsync/discoveryphase.cpp
 @@ -17,6 +17,7 @@
@@ -1487,7 +1487,7 @@ index a70088034e..4943ccd79c 100644
  #include <networkjobs.h>
  
 diff --git a/src/libsync/propagateuploadng.cpp b/src/libsync/propagateuploadng.cpp
-index 261b6e5dd3..ff33970a81 100644
+index 0582611616..617a0b5381 100644
 --- a/src/libsync/propagateuploadng.cpp
 +++ b/src/libsync/propagateuploadng.cpp
 @@ -18,6 +18,7 @@
