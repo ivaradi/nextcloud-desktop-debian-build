@@ -35,7 +35,8 @@ jobs:
               apt-get install --no-install-recommends --yes \
               devscripts \
               dput-ng \
-              osc
+              osc \
+              python3-paramiko
       - name: Set Up Git
         id: setup-git
         run: |

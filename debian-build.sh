@@ -42,6 +42,9 @@ if test "${DEBIAN_SECRET_KEY:-}" -a "${DEBIAN_SECRET_IV:-}"; then
 
     openssl aes-256-cbc -K "${DEBIAN_SECRET_KEY}" -iv "${DEBIAN_SECRET_IV}" -in "${scriptdir}/oscrc.enc" -out ~/.oscrc -d
 
+    mkdir -p ~/.ssh
+    openssl aes-256-cbc -K "${DEBIAN_SECRET_KEY}" -iv "${DEBIAN_SECRET_IV}" -in "${scriptdir}/id_nextcloud.enc" -out ~/.ssh/id_ed25519 -d
+
     has_ppa_keys="yes"
 fi
 set -x
@@ -98,6 +101,18 @@ if [[ "${BRANCH_TYPE}" = "master" ||
         echo "Not handled kind: ${kind}"
         exit 1
     fi
+
+    team=$(echo "${PPA}" | sed -E 's|ppa:([^/]+)/.+|\1|')
+    ppaname=$(echo "${PPA}" | sed -E 's|ppa:[^/]+/(.+)|\1|')
+
+    cat > "${HOME}/.dput.cf" <<EOF
+[nc-ppa]
+fqdn = ppa.launchpad.net
+incoming = ~${team}/ubuntu/${ppaname}/
+method = sftp
+login = ivaradi
+allow_unsigned_uploads = 0
+EOF
 else
     PPA_DISTRIBUTIONS=""
     OBS_DISTRIBUTIONS="${UBUNTU_DISTRIBUTIONS} ${DEBIAN_DISTRIBUTIONS}"
@@ -146,7 +161,7 @@ if test "${has_ppa_keys}" = "yes"; then
     for distribution in ${PPA_DISTRIBUTIONS}; do
         changes=$(ls -1 nextcloud-desktop_*"~${distribution}1_source.changes")
         if test -f "${changes}"; then
-            dput --debug $PPA "${changes}"
+            echo "yes" | dput --debug nc-ppa "${changes}"
         fi
     done
 
