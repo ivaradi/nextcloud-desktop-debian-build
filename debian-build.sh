@@ -146,7 +146,7 @@ if test "${has_ppa_keys}" = "yes"; then
     for distribution in ${PPA_DISTRIBUTIONS}; do
         changes=$(ls -1 nextcloud-desktop_*"~${distribution}1_source.changes")
         if test -f "${changes}"; then
-            dput $PPA "${changes}" > /dev/null
+            dput --debug $PPA "${changes}"
         fi
     done
 
