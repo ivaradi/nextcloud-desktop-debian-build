@@ -55,7 +55,21 @@ jobs:
         run: |
           set -e -u -x
 
-          git clone "https://github.com/${GH_REPOSITORY}" "${GITHUB_WORKSPACE}/debian-build"
+          attempts=3
+          ok=no
+          while test ${attempts} -gt 0; do
+              rm -rf "${GITHUB_WORKSPACE}/debian-build"
+              if git clone "https://github.com/${GH_REPOSITORY}" "${GITHUB_WORKSPACE}/debian-build"; then
+                  ok=yes
+                  break
+              fi
+              attempts=$(( attempts - 1 ))
+          done
+
+          if test "${ok}" = "no"; then
+              exit 1
+          fi
+
           cd "${GITHUB_WORKSPACE}/debian-build"
 
           BRANCH_TYPE="${{ inputs.branch-type }}"
