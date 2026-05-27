@@ -63,6 +63,7 @@ jobs:
                   ok=yes
                   break
               fi
+              sleep 10
               attempts=$(( attempts - 1 ))
           done
 
