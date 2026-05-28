@@ -59,7 +59,7 @@ jobs:
           ok=no
           while test ${attempts} -gt 0; do
               rm -rf "${GITHUB_WORKSPACE}/debian-build"
-              if git clone "https://github.com/${GH_REPOSITORY}" "${GITHUB_WORKSPACE}/debian-build"; then
+              if git clone --verbose "https://github.com/${GH_REPOSITORY}" "${GITHUB_WORKSPACE}/debian-build"; then
                   ok=yes
                   break
               fi
