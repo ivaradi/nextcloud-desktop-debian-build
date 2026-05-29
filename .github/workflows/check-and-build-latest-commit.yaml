@@ -42,7 +42,7 @@ jobs:
         run: |
           set -e -u -x
 
-          token=$(echo -n "x-access-token:${{ secrets.GITHUB_TOKEN }}" | base64)
+          token=$(echo -n "x-access-token:${{ secrets.GITHUB_TOKEN }}" | base64 --wrap 0)
           git config --global http.https://github.com/.extraHeader "Authorization: Basic ${token}"
 
           git config --global user.name "github-actions[bot]"
