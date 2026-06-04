@@ -67,10 +67,10 @@ index 0000000000..ccded5d62e
 +#include "qtcompat.h"
 diff --git a/src/common/qtcompat.h b/src/common/qtcompat.h
 new file mode 100644
-index 0000000000..0d43628b6e
+index 0000000000..9b633f0027
 --- /dev/null
 +++ b/src/common/qtcompat.h
-@@ -0,0 +1,341 @@
+@@ -0,0 +1,357 @@
 +
 +#pragma once
 +
@@ -408,6 +408,22 @@ index 0000000000..0d43628b6e
 +
 +//-----------------------------------------------------------------------------
 +
++#if QT_VERSION<QT_VERSION_CHECK(6, 7, 0)
++#include <QNetworkReply>
++inline bool QNetworkReplyHasRawHeader(QNetworkReply *reply, const char *header)
++{
++    return reply->hasRawHeader(QByteArray(header));
++}
++#else
++#include <QNetworkReply>
++inline bool QNetworkReplyHasRawHeader(QNetworkReply *reply, const char *header)
++{
++    return reply->hasRawHeader(header);
++}
++#endif
++
++//-----------------------------------------------------------------------------
++
 +#endif // QT_NETWORK_LIB
 +
 +//-----------------------------------------------------------------------------
@@ -459,7 +475,7 @@ index 72e585aea7..9bf2a8c344 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index 736d8bc3cc..8ba9181651 100644
+index 93ec2da180..6dd07d009d 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -471,7 +487,7 @@ index 736d8bc3cc..8ba9181651 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -535,10 +535,17 @@ target_link_libraries(nextcloudCore
+@@ -500,10 +500,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -490,7 +506,7 @@ index 736d8bc3cc..8ba9181651 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -759,3 +766,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -724,3 +731,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -526,7 +542,7 @@ index f49410d6ea..db71b8e12d 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index fe7c66e315..be9eb6ee83 100644
+index fffc028c7f..dbca36fe8f 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -618,18 +634,18 @@ index 5c3504674f..b58163fa23 100644
  #include "folderstatusdelegate.h"
  #include <account.h>
 diff --git a/src/gui/folderwizard.cpp b/src/gui/folderwizard.cpp
-index 4af65b37ce..ba3fc2982a 100644
+index 9208814e36..074c6fd519 100644
 --- a/src/gui/folderwizard.cpp
 +++ b/src/gui/folderwizard.cpp
 @@ -15,6 +15,7 @@
  #include "creds/abstractcredentials.h"
- #include "wizard/owncloudwizard.h"
+ #include "guiutility.h"
  #include "common/asserts.h"
 +#include "common/qtcompat.h"
  
  #ifdef Q_OS_MACOS
  #include "common/utility_mac_sandbox.h"
-@@ -584,7 +585,7 @@ FolderWizardSelectiveSync::FolderWizardSelectiveSync(const AccountPtr &account)
+@@ -587,7 +588,7 @@ FolderWizardSelectiveSync::FolderWizardSelectiveSync(const AccountPtr &account)
      if (!Theme::instance()->disableVirtualFilesSyncFolder() && Theme::instance()->showVirtualFilesOption() && bestAvailableVfsMode() != Vfs::Off) {
          _virtualFilesCheckBox = new QCheckBox(tr("Use virtual files instead of downloading content immediately %1").arg(bestAvailableVfsMode() == Vfs::WindowsCfApi ? QString() : tr("(experimental)")));
          connect(_virtualFilesCheckBox, &QCheckBox::clicked, this, &FolderWizardSelectiveSync::virtualFilesCheckboxClicked);
@@ -701,26 +717,17 @@ index b62a7b3c07..85de6f00a1 100644
      void slotShowLegalNotice();
      void slotRemotePollIntervalChanged(int seconds);
 diff --git a/src/gui/owncloudsetupwizard.cpp b/src/gui/owncloudsetupwizard.cpp
-index d70dd35817..585a86502e 100644
+index 208f998f98..eae1709d3a 100644
 --- a/src/gui/owncloudsetupwizard.cpp
 +++ b/src/gui/owncloudsetupwizard.cpp
-@@ -9,6 +9,7 @@
- #include "accountmanager.h"
- #include "clientproxy.h"
- #include "common/utility.h"
-+#include "common/qtcompat.h"
- #include "configfile.h"
- #include "filesystem.h"
- #include "folderman.h"
-@@ -505,7 +506,7 @@ bool OwncloudSetupWizard::checkDowngradeAdvised(QNetworkReply *reply)
-     }
+@@ -4,6 +4,7 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
+  */
  
-     // Adhere to HSTS, even though we do not parse it properly
--    if (reply->hasRawHeader("Strict-Transport-Security"_L1)) {
-+    if (reply->hasRawHeader("Strict-Transport-Security")) {
-         return false;
-     }
-     return true;
++#include "common/qtcompat.h"
+ #include "owncloudsetupwizard.h"
+ 
+ #include "folderman.h"
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
 index d6e8336f83..173d0f9d9b 100644
 --- a/src/gui/settingsdialog.cpp
@@ -1030,7 +1037,7 @@ index 424bc4c191..c478caa092 100644
  #include <algorithm>
  
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index 8ad55aa7f9..9b828ba271 100644
+index 597c2eeb6b..081ac1e99d 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
 @@ -27,6 +27,7 @@
@@ -1053,6 +1060,28 @@ index b65a604b72..b15ac6c1e2 100644
  
  #include <QTimer>
  #include <QJsonDocument>
+diff --git a/src/gui/wizard/accountwizardcontroller.cpp b/src/gui/wizard/accountwizardcontroller.cpp
+index 9ce828a426..586ce0b2c3 100644
+--- a/src/gui/wizard/accountwizardcontroller.cpp
++++ b/src/gui/wizard/accountwizardcontroller.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "wizard/accountwizardcontroller.h"
+ 
++#include "common/qtcompat.h"
++
+ #include "account.h"
+ #include "accountmanager.h"
+ #include "clientproxy.h"
+@@ -1958,7 +1960,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
+         break;
+     }
+ 
+-    return !reply->hasRawHeader("Strict-Transport-Security"_L1);
++    return !QNetworkReplyHasRawHeader(reply, "Strict-Transport-Security");
+ }
+ 
+ } // namespace OCC
 diff --git a/src/libsync/CMakeLists.txt b/src/libsync/CMakeLists.txt
 index 87ee8c3ed1..5ed8b3146c 100644
 --- a/src/libsync/CMakeLists.txt
@@ -1442,7 +1471,7 @@ index 0000000000..ba7eb44067
 +
 +QByteArray unGzipData(const QByteArray& inputData);
 diff --git a/src/libsync/networkjobs.cpp b/src/libsync/networkjobs.cpp
-index 4d3b5403e2..8af4c7d366 100644
+index 8cd4709d96..2baaf83268 100644
 --- a/src/libsync/networkjobs.cpp
 +++ b/src/libsync/networkjobs.cpp
 @@ -10,6 +10,7 @@
@@ -1453,7 +1482,7 @@ index 4d3b5403e2..8af4c7d366 100644
  
  #include "creds/abstractcredentials.h"
  #include "creds/httpcredentials.h"
-@@ -815,7 +816,7 @@ bool PropfindJob::finished()
+@@ -814,7 +815,7 @@ bool PropfindJob::finished()
          // Parse DAV response
          auto domDocument = QDomDocument();
  
