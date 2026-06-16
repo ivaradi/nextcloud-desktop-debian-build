@@ -1,12 +1,12 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d46ed4d312..1ed56c1a05 100644
+index 173dce08d4..2f7ee7970d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -31,7 +31,7 @@ set(BIN_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
  include(${CMAKE_SOURCE_DIR}/NEXTCLOUD.cmake)
  
  set(QT_VERSION_MAJOR "6")
--set(REQUIRED_QT_VERSION "6.8.0")
+-set(REQUIRED_QT_VERSION "6.10.0")
 +set(REQUIRED_QT_VERSION "6.2.4")
  
  # CfAPI Shell Extensions
@@ -475,7 +475,7 @@ index 72e585aea7..9bf2a8c344 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index 0a16af2219..8db5c8e773 100644
+index b68e5fd928..85075de318 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -487,7 +487,7 @@ index 0a16af2219..8db5c8e773 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -504,10 +504,17 @@ target_link_libraries(nextcloudCore
+@@ -522,10 +522,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -506,7 +506,7 @@ index 0a16af2219..8db5c8e773 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -736,3 +743,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -781,3 +788,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -542,7 +542,7 @@ index f49410d6ea..db71b8e12d 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index d88cb2a4d1..8a1637ba91 100644
+index d31834f081..072fd187f3 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -619,7 +619,7 @@ index 7f478534af..62f583617b 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index f68fb3db2f..ac0b5cdc3e 100644
+index 3f508659ba..06ffd66c8c 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -31,6 +31,7 @@
@@ -630,7 +630,7 @@ index f68fb3db2f..ac0b5cdc3e 100644
  
  #include "config.h"
  
-@@ -1118,7 +1119,7 @@ void Application::setupTranslations()
+@@ -1159,7 +1160,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -708,7 +708,7 @@ index 9208814e36..074c6fd519 100644
          });
          _virtualFilesCheckBox->setChecked(bestAvailableVfsMode() == Vfs::WindowsCfApi);
 diff --git a/src/gui/owncloudsetupwizard.cpp b/src/gui/owncloudsetupwizard.cpp
-index 01d95502d1..27dd0bfdc9 100644
+index db1c0b6bde..10d8f67fb4 100644
 --- a/src/gui/owncloudsetupwizard.cpp
 +++ b/src/gui/owncloudsetupwizard.cpp
 @@ -4,6 +4,7 @@
@@ -720,7 +720,7 @@ index 01d95502d1..27dd0bfdc9 100644
  
  #include "folderman.h"
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
-index 58f50275fa..49a87bdafd 100644
+index fb66182fab..b4d1b1a840 100644
 --- a/src/gui/settingsdialog.cpp
 +++ b/src/gui/settingsdialog.cpp
 @@ -17,6 +17,7 @@
@@ -1028,7 +1028,7 @@ index 424bc4c191..c478caa092 100644
  #include <algorithm>
  
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index 84fb7fe599..139762fcdf 100644
+index b7ea769b28..c850bc0382 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
 @@ -27,6 +27,7 @@
@@ -1136,10 +1136,10 @@ index 199f7c0546..588dc8ad3b 100644
                  }
  
 diff --git a/src/libsync/account.cpp b/src/libsync/account.cpp
-index d55b7951ea..4a5f91ee95 100644
+index e4ef525c1f..db4dd4e485 100644
 --- a/src/libsync/account.cpp
 +++ b/src/libsync/account.cpp
-@@ -25,6 +25,7 @@
+@@ -24,6 +24,7 @@
  
  #include "common/syncjournaldb.h"
  #include "common/asserts.h"
@@ -1147,7 +1147,7 @@ index d55b7951ea..4a5f91ee95 100644
  #include "clientsideencryption.h"
  #include "ocsuserstatusconnector.h"
  
-@@ -1295,7 +1296,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
+@@ -1289,7 +1290,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
              return;
          }
  
