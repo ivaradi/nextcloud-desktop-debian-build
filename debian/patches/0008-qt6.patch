@@ -542,7 +542,7 @@ index f49410d6ea..db71b8e12d 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index d31834f081..072fd187f3 100644
+index 8f9d82dbf0..e3ff80da6a 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -566,7 +566,7 @@ index d139565a56..41e2924fce 100644
  #include <QSettings>
  #include <QTimer>
 diff --git a/src/gui/advancedsettings.cpp b/src/gui/advancedsettings.cpp
-index 7f478534af..62f583617b 100644
+index 60d024b158..a2b7fc790f 100644
 --- a/src/gui/advancedsettings.cpp
 +++ b/src/gui/advancedsettings.cpp
 @@ -28,7 +28,9 @@
@@ -596,7 +596,7 @@ index 7f478534af..62f583617b 100644
  } // namespace
  
  namespace OCC {
-@@ -373,6 +378,7 @@ void AdvancedSettings::slotCreateDebugArchive()
+@@ -389,6 +394,7 @@ void AdvancedSettings::slotCreateDebugArchive()
          return;
      }
  
@@ -604,7 +604,7 @@ index 7f478534af..62f583617b 100644
  #ifdef Q_OS_MACOS
      auto scopedAccess = Utility::MacSandboxSecurityScopedAccess::create(destination);
  
-@@ -393,6 +399,13 @@ void AdvancedSettings::slotCreateDebugArchive()
+@@ -409,6 +415,13 @@ void AdvancedSettings::slotCreateDebugArchive()
              tr("Redact information deemed sensitive before sharing! Debug archive created at %1").arg(destination.toLocalFile())
          );
      }
@@ -663,7 +663,7 @@ index c061eff726..2a0751b07c 100644
                  }
              }
 diff --git a/src/gui/folderman.cpp b/src/gui/folderman.cpp
-index 7fe6760ed2..a39f60c2aa 100644
+index 138c7c207a..1cab1e63ce 100644
 --- a/src/gui/folderman.cpp
 +++ b/src/gui/folderman.cpp
 @@ -16,6 +16,7 @@
@@ -720,7 +720,7 @@ index db1c0b6bde..10d8f67fb4 100644
  
  #include "folderman.h"
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
-index fb66182fab..b4d1b1a840 100644
+index f1dd82993a..d6f9710886 100644
 --- a/src/gui/settingsdialog.cpp
 +++ b/src/gui/settingsdialog.cpp
 @@ -17,6 +17,7 @@
@@ -744,7 +744,7 @@ index 42b61a5d84..ac29fbf181 100644
  #include <QUrl>
  #include <QJsonDocument>
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index 496a2a4d10..02b74a7c3f 100644
+index 324a5d5eb6..9d1bd4f1a9 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
 @@ -18,6 +18,7 @@
@@ -1052,7 +1052,7 @@ index b65a604b72..b15ac6c1e2 100644
  #include <QTimer>
  #include <QJsonDocument>
 diff --git a/src/gui/wizard/accountwizardcontroller.cpp b/src/gui/wizard/accountwizardcontroller.cpp
-index 95f6b89ee4..9001c95bda 100644
+index 85075a7e6d..b76314ae41 100644
 --- a/src/gui/wizard/accountwizardcontroller.cpp
 +++ b/src/gui/wizard/accountwizardcontroller.cpp
 @@ -5,6 +5,8 @@
@@ -1064,7 +1064,7 @@ index 95f6b89ee4..9001c95bda 100644
  #include "account.h"
  #include "accountmanager.h"
  #include "clientproxy.h"
-@@ -1993,7 +1995,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
+@@ -2002,7 +2004,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
          break;
      }
  
@@ -1158,7 +1158,7 @@ index e4ef525c1f..db4dd4e485 100644
  
      promise->start();
 diff --git a/src/libsync/clientsideencryption.cpp b/src/libsync/clientsideencryption.cpp
-index c5426ef2df..3268280a73 100644
+index 6d3e7b9b19..d80c0b08b6 100644
 --- a/src/libsync/clientsideencryption.cpp
 +++ b/src/libsync/clientsideencryption.cpp
 @@ -14,11 +14,12 @@
@@ -1175,7 +1175,7 @@ index c5426ef2df..3268280a73 100644
  
  #include <QDebug>
  #include <QLoggingCategory>
-@@ -2747,26 +2748,12 @@ bool EncryptionHelper::dataDecryption(const QByteArray &key, const QByteArray &i
+@@ -2756,26 +2757,12 @@ bool EncryptionHelper::dataDecryption(const QByteArray &key, const QByteArray &i
  
  QByteArray EncryptionHelper::gzipThenEncryptData(const QByteArray &key, const QByteArray &inputData, const QByteArray &iv, QByteArray &returnTag)
  {
@@ -1205,7 +1205,7 @@ index c5426ef2df..3268280a73 100644
      return outputData;
  }
  
-@@ -2778,23 +2765,7 @@ QByteArray EncryptionHelper::decryptThenUnGzipData(const QByteArray &key, const
+@@ -2787,23 +2774,7 @@ QByteArray EncryptionHelper::decryptThenUnGzipData(const QByteArray &key, const
          return {};
      }
  
@@ -1231,7 +1231,7 @@ index c5426ef2df..3268280a73 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 394a7b22fd..d70e078c89 100644
+index faa590d3a9..907a8db269 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1243,7 +1243,7 @@ index 394a7b22fd..d70e078c89 100644
  #include "csync.h"
  
 diff --git a/src/libsync/discoveryphase.cpp b/src/libsync/discoveryphase.cpp
-index 602ded6293..fd805dbe93 100644
+index ba5230aed3..f577eeb6cb 100644
 --- a/src/libsync/discoveryphase.cpp
 +++ b/src/libsync/discoveryphase.cpp
 @@ -17,6 +17,7 @@
@@ -1254,6 +1254,30 @@ index 602ded6293..fd805dbe93 100644
  
  #include <csync_exclude.h>
  #include "vio/csync_vio_local.h"
+diff --git a/src/libsync/encryptedfoldermetadatahandler.cpp b/src/libsync/encryptedfoldermetadatahandler.cpp
+index 956d485b66..f17e9b44d9 100644
+--- a/src/libsync/encryptedfoldermetadatahandler.cpp
++++ b/src/libsync/encryptedfoldermetadatahandler.cpp
+@@ -10,6 +10,7 @@
+ #include "common/syncjournaldb.h"
+ #include "clientsideencryptionjobs.h"
+ #include "clientsideencryption.h"
++#include "common/qtcompat.h"
+ 
+ #include <QLoggingCategory>
+ #include <QNetworkReply>
+diff --git a/src/libsync/encryptfolderjob.cpp b/src/libsync/encryptfolderjob.cpp
+index 92b3300359..f53e216891 100644
+--- a/src/libsync/encryptfolderjob.cpp
++++ b/src/libsync/encryptfolderjob.cpp
+@@ -8,6 +8,7 @@
+ #include "common/syncjournaldb.h"
+ #include "clientsideencryptionjobs.h"
+ #include "foldermetadata.h"
++#include "common/qtcompat.h"
+ #include <QLoggingCategory>
+ 
+ using namespace Qt::StringLiterals;
 diff --git a/src/libsync/filesystem.cpp b/src/libsync/filesystem.cpp
 index e27301c035..762d93a25c 100644
 --- a/src/libsync/filesystem.cpp
@@ -1579,7 +1603,7 @@ index d5aa8776a1..baf79a8e2e 100644
  #include "filesystem.h"
  
 diff --git a/src/libsync/theme.cpp b/src/libsync/theme.cpp
-index 830554b98e..7576d5452c 100644
+index 4d6642af35..bf28b3c009 100644
 --- a/src/libsync/theme.cpp
 +++ b/src/libsync/theme.cpp
 @@ -9,6 +9,7 @@
@@ -1590,7 +1614,7 @@ index 830554b98e..7576d5452c 100644
  
  #include <QtCore>
  #ifndef TOKEN_AUTH_ONLY
-@@ -916,14 +917,12 @@ QString Theme::versionSwitchOutput() const
+@@ -924,14 +925,12 @@ QString Theme::versionSwitchOutput() const
  
  double Theme::getColorDarkness(const QColor &color)
  {
@@ -1607,7 +1631,7 @@ index 830554b98e..7576d5452c 100644
  }
  
  QColor Theme::getBackgroundAwareLinkColor(const QColor &backgroundColor)
-@@ -1038,7 +1037,7 @@ QColor Theme::defaultColor()
+@@ -1051,7 +1050,7 @@ QColor Theme::destructiveActionTextColor() const
  void Theme::connectToPaletteSignal() const
  {
      if (const auto ptr = qobject_cast<QGuiApplication*>(qApp)) {
@@ -1616,7 +1640,7 @@ index 830554b98e..7576d5452c 100644
      }
  }
  
-@@ -1081,19 +1080,6 @@ QVariantMap Theme::systemPalette() const
+@@ -1094,19 +1093,6 @@ QVariantMap Theme::systemPalette() const
  bool Theme::darkMode() const
  {
      connectToPaletteSignal();
@@ -1636,7 +1660,7 @@ index 830554b98e..7576d5452c 100644
  
  #ifdef Q_OS_WIN
      static const auto darkModeSubkey = QStringLiteral("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
-@@ -1104,7 +1090,8 @@ bool Theme::darkMode() const
+@@ -1117,7 +1103,8 @@ bool Theme::darkMode() const
          }
      }
  #endif
@@ -1647,7 +1671,7 @@ index 830554b98e..7576d5452c 100644
  
  bool Theme::displayLegacyImportDialog() const
 diff --git a/test/syncenginetestutils.cpp b/test/syncenginetestutils.cpp
-index bd6a7d441c..01ed6685bc 100644
+index 7893328465..8d47b26f90 100644
 --- a/test/syncenginetestutils.cpp
 +++ b/test/syncenginetestutils.cpp
 @@ -438,7 +438,7 @@ FakePropfindReply::FakePropfindReply(FileInfo &remoteRootFileInfo, QNetworkAcces
