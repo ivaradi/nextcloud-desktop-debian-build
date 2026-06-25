@@ -526,7 +526,7 @@ index f49410d6ea..db71b8e12d 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index fe7c66e315..be9eb6ee83 100644
+index a4ae1f0775..f1b991792c 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -594,7 +594,7 @@ index c061eff726..2a0751b07c 100644
                  }
              }
 diff --git a/src/gui/folderman.cpp b/src/gui/folderman.cpp
-index ae388eb8d4..d1636c10f5 100644
+index ac1d755605..423e1b5a2b 100644
 --- a/src/gui/folderman.cpp
 +++ b/src/gui/folderman.cpp
 @@ -16,6 +16,7 @@
@@ -746,7 +746,7 @@ index 42b61a5d84..ac29fbf181 100644
  #include <QUrl>
  #include <QJsonDocument>
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index 39949ea206..f8c1058b7a 100644
+index ce8ccda9ee..64ea4f87f4 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
 @@ -18,6 +18,7 @@
@@ -1138,7 +1138,7 @@ index d55b7951ea..4a5f91ee95 100644
  
      promise->start();
 diff --git a/src/libsync/clientsideencryption.cpp b/src/libsync/clientsideencryption.cpp
-index cc8c83cd54..d618fc3acd 100644
+index c188f366e8..19b4a6c230 100644
 --- a/src/libsync/clientsideencryption.cpp
 +++ b/src/libsync/clientsideencryption.cpp
 @@ -14,11 +14,12 @@
@@ -1155,7 +1155,7 @@ index cc8c83cd54..d618fc3acd 100644
  
  #include <QDebug>
  #include <QLoggingCategory>
-@@ -2759,26 +2760,12 @@ bool EncryptionHelper::dataDecryption(const QByteArray &key, const QByteArray &i
+@@ -2768,26 +2769,12 @@ bool EncryptionHelper::dataDecryption(const QByteArray &key, const QByteArray &i
  
  QByteArray EncryptionHelper::gzipThenEncryptData(const QByteArray &key, const QByteArray &inputData, const QByteArray &iv, QByteArray &returnTag)
  {
@@ -1185,7 +1185,7 @@ index cc8c83cd54..d618fc3acd 100644
      return outputData;
  }
  
-@@ -2790,23 +2777,7 @@ QByteArray EncryptionHelper::decryptThenUnGzipData(const QByteArray &key, const
+@@ -2799,23 +2786,7 @@ QByteArray EncryptionHelper::decryptThenUnGzipData(const QByteArray &key, const
          return {};
      }
  
@@ -1211,7 +1211,7 @@ index cc8c83cd54..d618fc3acd 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 3e19660240..77f8abed38 100644
+index 1b459ee326..e534ef777f 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1223,7 +1223,7 @@ index 3e19660240..77f8abed38 100644
  #include "csync.h"
  
 diff --git a/src/libsync/discoveryphase.cpp b/src/libsync/discoveryphase.cpp
-index 602ded6293..fd805dbe93 100644
+index ba5230aed3..f577eeb6cb 100644
 --- a/src/libsync/discoveryphase.cpp
 +++ b/src/libsync/discoveryphase.cpp
 @@ -17,6 +17,7 @@
@@ -1234,6 +1234,30 @@ index 602ded6293..fd805dbe93 100644
  
  #include <csync_exclude.h>
  #include "vio/csync_vio_local.h"
+diff --git a/src/libsync/encryptedfoldermetadatahandler.cpp b/src/libsync/encryptedfoldermetadatahandler.cpp
+index 956d485b66..4163c59ee5 100644
+--- a/src/libsync/encryptedfoldermetadatahandler.cpp
++++ b/src/libsync/encryptedfoldermetadatahandler.cpp
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include "rootencryptedfolderinfo.h"
++#include "common/qtcompat.h"
+ #include "encryptedfoldermetadatahandler.h"
+ #include "foldermetadata.h"
+ #include "account.h"
+diff --git a/src/libsync/encryptfolderjob.cpp b/src/libsync/encryptfolderjob.cpp
+index 92b3300359..16559b7759 100644
+--- a/src/libsync/encryptfolderjob.cpp
++++ b/src/libsync/encryptfolderjob.cpp
+@@ -5,6 +5,7 @@
+ 
+ #include "encryptfolderjob.h"
+ 
++#include "common/qtcompat.h"
+ #include "common/syncjournaldb.h"
+ #include "clientsideencryptionjobs.h"
+ #include "foldermetadata.h"
 diff --git a/src/libsync/filesystem.cpp b/src/libsync/filesystem.cpp
 index e27301c035..762d93a25c 100644
 --- a/src/libsync/filesystem.cpp
@@ -1442,7 +1466,7 @@ index 0000000000..ba7eb44067
 +
 +QByteArray unGzipData(const QByteArray& inputData);
 diff --git a/src/libsync/networkjobs.cpp b/src/libsync/networkjobs.cpp
-index 4d3b5403e2..8af4c7d366 100644
+index 8cd4709d96..2baaf83268 100644
 --- a/src/libsync/networkjobs.cpp
 +++ b/src/libsync/networkjobs.cpp
 @@ -10,6 +10,7 @@
@@ -1453,7 +1477,7 @@ index 4d3b5403e2..8af4c7d366 100644
  
  #include "creds/abstractcredentials.h"
  #include "creds/httpcredentials.h"
-@@ -815,7 +816,7 @@ bool PropfindJob::finished()
+@@ -814,7 +815,7 @@ bool PropfindJob::finished()
          // Parse DAV response
          auto domDocument = QDomDocument();
  
@@ -1627,7 +1651,7 @@ index 78dedac439..9864f97518 100644
  
  bool Theme::displayLegacyImportDialog() const
 diff --git a/test/syncenginetestutils.cpp b/test/syncenginetestutils.cpp
-index bd6a7d441c..01ed6685bc 100644
+index 7893328465..8d47b26f90 100644
 --- a/test/syncenginetestutils.cpp
 +++ b/test/syncenginetestutils.cpp
 @@ -438,7 +438,7 @@ FakePropfindReply::FakePropfindReply(FileInfo &remoteRootFileInfo, QNetworkAcces
