@@ -30,6 +30,7 @@ declare -A DIST_TO_OBS=(
     ["noble"]="xUbuntu_24.04"
     ["questing"]="xUbuntu_25.10"
     ["resolute"]="xUbuntu_26.04"
+    ["stonking"]=""
     ["bookworm"]="Debian_12"
     ["trixie"]="Debian_13"
     ["testing"]="Debian_Testing"
@@ -184,8 +185,10 @@ if test "${has_ppa_keys}" = "yes"; then
             pkgvertag="~${distribution}1"
             obs_dist="${DIST_TO_OBS[${distribution}]}"
 
-            ln ../nextcloud-desktop_*[0-9.][0-9]"${pkgvertag}.dsc" "${OBS_SUBDIR}/nextcloud-desktop-${obs_dist}.dsc"
-            ln ../nextcloud-desktop_*[0-9.][0-9]"${pkgvertag}.debian.tar"* "${OBS_SUBDIR}/"
+            if test -n "${obs_dist}"; then
+                ln ../nextcloud-desktop_*[0-9.][0-9]"${pkgvertag}.dsc" "${OBS_SUBDIR}/nextcloud-desktop-${obs_dist}.dsc"
+                ln ../nextcloud-desktop_*[0-9.][0-9]"${pkgvertag}.debian.tar"* "${OBS_SUBDIR}/"
+            fi
         done
 
         osc add ${OBS_SUBDIR}/*
