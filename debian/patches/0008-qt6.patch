@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 173dce08d4..2f7ee7970d 100644
+index 0424b16e79..c062aa2967 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -31,7 +31,7 @@ set(BIN_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -441,7 +441,7 @@ index ab99460a0f..6d911b7217 100644
  // SQL expression to check whether path.startswith(prefix + '/')
  // Note: '/' + 1 == '0'
 diff --git a/src/csync/csync_exclude.cpp b/src/csync/csync_exclude.cpp
-index 72e585aea7..9bf2a8c344 100644
+index 438fa9aac3..e32a02862f 100644
 --- a/src/csync/csync_exclude.cpp
 +++ b/src/csync/csync_exclude.cpp
 @@ -21,6 +21,7 @@
@@ -461,7 +461,7 @@ index 72e585aea7..9bf2a8c344 100644
              continue;
          }
          csync_exclude_expand_escapes(line);
-@@ -471,10 +472,10 @@ CSYNC_EXCLUDE_TYPE ExcludedFiles::traversalPatternMatch(const QString &path, Ite
+@@ -472,10 +473,10 @@ CSYNC_EXCLUDE_TYPE ExcludedFiles::traversalPatternMatch(const QString &path, Ite
          QRegularExpressionMatch m;
          if (filetype == ItemTypeDirectory
              && _bnameTraversalRegexDir.contains(basePath)) {
@@ -475,7 +475,7 @@ index 72e585aea7..9bf2a8c344 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index b68e5fd928..85075de318 100644
+index 1e570318da..07c516581d 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -487,7 +487,7 @@ index b68e5fd928..85075de318 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -522,10 +522,17 @@ target_link_libraries(nextcloudCore
+@@ -518,10 +518,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -506,7 +506,7 @@ index b68e5fd928..85075de318 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -781,3 +788,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -773,3 +780,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -619,7 +619,7 @@ index 60d024b158..a2b7fc790f 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index 3f508659ba..06ffd66c8c 100644
+index 40cba58df8..bb02dca741 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -31,6 +31,7 @@
@@ -630,7 +630,7 @@ index 3f508659ba..06ffd66c8c 100644
  
  #include "config.h"
  
-@@ -1159,7 +1160,7 @@ void Application::setupTranslations()
+@@ -1191,7 +1192,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -708,7 +708,7 @@ index 9208814e36..074c6fd519 100644
          });
          _virtualFilesCheckBox->setChecked(bestAvailableVfsMode() == Vfs::WindowsCfApi);
 diff --git a/src/gui/owncloudsetupwizard.cpp b/src/gui/owncloudsetupwizard.cpp
-index db1c0b6bde..10d8f67fb4 100644
+index 02b302c194..67b25da2ad 100644
 --- a/src/gui/owncloudsetupwizard.cpp
 +++ b/src/gui/owncloudsetupwizard.cpp
 @@ -4,6 +4,7 @@
@@ -718,7 +718,7 @@ index db1c0b6bde..10d8f67fb4 100644
 +#include "common/qtcompat.h"
  #include "owncloudsetupwizard.h"
  
- #include "folderman.h"
+ #include "accountmanager.h"
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
 index f1dd82993a..d6f9710886 100644
 --- a/src/gui/settingsdialog.cpp
@@ -979,7 +979,7 @@ index 9034750791..c7a6e8b7b2 100644
  #include <QtCore>
  #include <QAbstractListModel>
 diff --git a/src/gui/tray/asyncimageresponse.cpp b/src/gui/tray/asyncimageresponse.cpp
-index 875a2d16eb..58969f7546 100644
+index c76ed14069..98d35536de 100644
 --- a/src/gui/tray/asyncimageresponse.cpp
 +++ b/src/gui/tray/asyncimageresponse.cpp
 @@ -10,6 +10,8 @@
@@ -1052,7 +1052,7 @@ index b65a604b72..b15ac6c1e2 100644
  #include <QTimer>
  #include <QJsonDocument>
 diff --git a/src/gui/wizard/accountwizardcontroller.cpp b/src/gui/wizard/accountwizardcontroller.cpp
-index 85075a7e6d..b76314ae41 100644
+index 1ba290c210..390db25214 100644
 --- a/src/gui/wizard/accountwizardcontroller.cpp
 +++ b/src/gui/wizard/accountwizardcontroller.cpp
 @@ -5,6 +5,8 @@
@@ -1064,7 +1064,7 @@ index 85075a7e6d..b76314ae41 100644
  #include "account.h"
  #include "accountmanager.h"
  #include "clientproxy.h"
-@@ -2002,7 +2004,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
+@@ -2032,7 +2034,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
          break;
      }
  
@@ -1486,7 +1486,7 @@ index 0000000000..ba7eb44067
 +
 +QByteArray unGzipData(const QByteArray& inputData);
 diff --git a/src/libsync/networkjobs.cpp b/src/libsync/networkjobs.cpp
-index 8cd4709d96..2baaf83268 100644
+index 1dee03fa82..be71c4c2e8 100644
 --- a/src/libsync/networkjobs.cpp
 +++ b/src/libsync/networkjobs.cpp
 @@ -10,6 +10,7 @@
@@ -1603,7 +1603,7 @@ index d5aa8776a1..baf79a8e2e 100644
  #include "filesystem.h"
  
 diff --git a/src/libsync/theme.cpp b/src/libsync/theme.cpp
-index 4d6642af35..bf28b3c009 100644
+index 3f86e61f6d..d45ed4846b 100644
 --- a/src/libsync/theme.cpp
 +++ b/src/libsync/theme.cpp
 @@ -9,6 +9,7 @@
@@ -1614,7 +1614,7 @@ index 4d6642af35..bf28b3c009 100644
  
  #include <QtCore>
  #ifndef TOKEN_AUTH_ONLY
-@@ -924,14 +925,12 @@ QString Theme::versionSwitchOutput() const
+@@ -919,14 +920,12 @@ QString Theme::versionSwitchOutput() const
  
  double Theme::getColorDarkness(const QColor &color)
  {
@@ -1631,7 +1631,7 @@ index 4d6642af35..bf28b3c009 100644
  }
  
  QColor Theme::getBackgroundAwareLinkColor(const QColor &backgroundColor)
-@@ -1051,7 +1050,7 @@ QColor Theme::destructiveActionTextColor() const
+@@ -1046,7 +1045,7 @@ QColor Theme::destructiveActionTextColor() const
  void Theme::connectToPaletteSignal() const
  {
      if (const auto ptr = qobject_cast<QGuiApplication*>(qApp)) {
@@ -1640,7 +1640,7 @@ index 4d6642af35..bf28b3c009 100644
      }
  }
  
-@@ -1094,19 +1093,6 @@ QVariantMap Theme::systemPalette() const
+@@ -1089,19 +1088,6 @@ QVariantMap Theme::systemPalette() const
  bool Theme::darkMode() const
  {
      connectToPaletteSignal();
@@ -1660,7 +1660,7 @@ index 4d6642af35..bf28b3c009 100644
  
  #ifdef Q_OS_WIN
      static const auto darkModeSubkey = QStringLiteral("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
-@@ -1117,7 +1103,8 @@ bool Theme::darkMode() const
+@@ -1112,7 +1098,8 @@ bool Theme::darkMode() const
          }
      }
  #endif
