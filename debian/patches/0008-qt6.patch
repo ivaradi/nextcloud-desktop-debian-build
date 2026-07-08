@@ -537,6 +537,19 @@ index a4ae1f0775..f1b991792c 100644
  
  #include "theme.h"
  #include "foldercreationdialog.h"
+diff --git a/src/gui/accountsetupfromcommandlinejob.cpp b/src/gui/accountsetupfromcommandlinejob.cpp
+index 397d26607b..2e35d657b0 100644
+--- a/src/gui/accountsetupfromcommandlinejob.cpp
++++ b/src/gui/accountsetupfromcommandlinejob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "accountsetupfromcommandlinejob.h"
+ 
++#include "common/qtcompat.h"
++
+ #include "accountmanager.h"
+ #include "accountstate.h"
+ #include "creds/abstractcredentials.h"
 diff --git a/src/gui/accountstate.cpp b/src/gui/accountstate.cpp
 index d139565a56..41e2924fce 100644
 --- a/src/gui/accountstate.cpp
@@ -550,7 +563,7 @@ index d139565a56..41e2924fce 100644
  #include <QSettings>
  #include <QTimer>
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index 9205dcd1f1..30a396fb30 100644
+index fc0c4ae9ab..0225dde32f 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -31,6 +31,7 @@
@@ -561,7 +574,7 @@ index 9205dcd1f1..30a396fb30 100644
  
  #include "config.h"
  
-@@ -1053,7 +1054,7 @@ void Application::setupTranslations()
+@@ -1059,7 +1060,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -981,7 +994,7 @@ index 20ece0431a..96469c8ce6 100644
  #include <QtCore>
  #include <QAbstractListModel>
 diff --git a/src/gui/tray/asyncimageresponse.cpp b/src/gui/tray/asyncimageresponse.cpp
-index 875a2d16eb..58969f7546 100644
+index c76ed14069..98d35536de 100644
 --- a/src/gui/tray/asyncimageresponse.cpp
 +++ b/src/gui/tray/asyncimageresponse.cpp
 @@ -10,6 +10,8 @@
@@ -1583,7 +1596,7 @@ index d5aa8776a1..baf79a8e2e 100644
  #include "filesystem.h"
  
 diff --git a/src/libsync/theme.cpp b/src/libsync/theme.cpp
-index 78dedac439..9864f97518 100644
+index e37436c942..a7fa415dbc 100644
 --- a/src/libsync/theme.cpp
 +++ b/src/libsync/theme.cpp
 @@ -9,6 +9,7 @@
@@ -1594,7 +1607,7 @@ index 78dedac439..9864f97518 100644
  
  #include <QtCore>
  #ifndef TOKEN_AUTH_ONLY
-@@ -907,14 +908,12 @@ QString Theme::versionSwitchOutput() const
+@@ -902,14 +903,12 @@ QString Theme::versionSwitchOutput() const
  
  double Theme::getColorDarkness(const QColor &color)
  {
@@ -1611,7 +1624,7 @@ index 78dedac439..9864f97518 100644
  }
  
  QColor Theme::getBackgroundAwareLinkColor(const QColor &backgroundColor)
-@@ -1029,7 +1028,7 @@ QColor Theme::defaultColor()
+@@ -1024,7 +1023,7 @@ QColor Theme::defaultColor()
  void Theme::connectToPaletteSignal() const
  {
      if (const auto ptr = qobject_cast<QGuiApplication*>(qApp)) {
@@ -1620,7 +1633,7 @@ index 78dedac439..9864f97518 100644
      }
  }
  
-@@ -1072,19 +1071,6 @@ QVariantMap Theme::systemPalette() const
+@@ -1067,19 +1066,6 @@ QVariantMap Theme::systemPalette() const
  bool Theme::darkMode() const
  {
      connectToPaletteSignal();
@@ -1640,7 +1653,7 @@ index 78dedac439..9864f97518 100644
  
  #ifdef Q_OS_WIN
      static const auto darkModeSubkey = QStringLiteral("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
-@@ -1095,7 +1081,8 @@ bool Theme::darkMode() const
+@@ -1090,7 +1076,8 @@ bool Theme::darkMode() const
          }
      }
  #endif
