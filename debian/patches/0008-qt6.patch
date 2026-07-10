@@ -425,7 +425,7 @@ index ab99460a0f..6d911b7217 100644
  // SQL expression to check whether path.startswith(prefix + '/')
  // Note: '/' + 1 == '0'
 diff --git a/src/csync/csync_exclude.cpp b/src/csync/csync_exclude.cpp
-index b92cfa08e4..38f3d462ec 100644
+index 9aabf0a93c..03cc265061 100644
 --- a/src/csync/csync_exclude.cpp
 +++ b/src/csync/csync_exclude.cpp
 @@ -21,6 +21,7 @@
@@ -436,16 +436,16 @@ index b92cfa08e4..38f3d462ec 100644
  #include "../version.h"
  
  #include <QString>
-@@ -300,7 +301,7 @@ void ExcludedFiles::loadExcludeFilePatterns(const QString &basePath, QFile &file
-         if (line.isEmpty() || line.startsWith('#'))
+@@ -311,7 +312,7 @@ void ExcludedFiles::loadExcludeFilePatterns(const QString &basePath, QFile &file
              continue;
+         }
          const auto patternStr = QString::fromUtf8(line);
 -        if (QStringView{patternStr}.trimmed() == QLatin1StringView("*")) {
 +        if (QStringView{patternStr}.trimmed() == QLatin1StringOrView("*")) {
              continue;
          }
          csync_exclude_expand_escapes(line);
-@@ -462,10 +463,10 @@ CSYNC_EXCLUDE_TYPE ExcludedFiles::traversalPatternMatch(const QString &path, Ite
+@@ -473,10 +474,10 @@ CSYNC_EXCLUDE_TYPE ExcludedFiles::traversalPatternMatch(const QString &path, Ite
          QRegularExpressionMatch m;
          if (filetype == ItemTypeDirectory
              && _bnameTraversalRegexDir.contains(basePath)) {
@@ -563,7 +563,7 @@ index d139565a56..41e2924fce 100644
  #include <QSettings>
  #include <QTimer>
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index fc0c4ae9ab..0225dde32f 100644
+index 0a3fa090bb..42a1929dae 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -31,6 +31,7 @@
@@ -574,7 +574,7 @@ index fc0c4ae9ab..0225dde32f 100644
  
  #include "config.h"
  
-@@ -1059,7 +1060,7 @@ void Application::setupTranslations()
+@@ -1058,7 +1059,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
