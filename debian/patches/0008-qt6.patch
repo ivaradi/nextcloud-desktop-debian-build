@@ -441,7 +441,7 @@ index ab99460a0f..6d911b7217 100644
  // SQL expression to check whether path.startswith(prefix + '/')
  // Note: '/' + 1 == '0'
 diff --git a/src/csync/csync_exclude.cpp b/src/csync/csync_exclude.cpp
-index 438fa9aac3..e32a02862f 100644
+index 17d08f4a10..a89e22a5a9 100644
 --- a/src/csync/csync_exclude.cpp
 +++ b/src/csync/csync_exclude.cpp
 @@ -21,6 +21,7 @@
@@ -452,16 +452,16 @@ index 438fa9aac3..e32a02862f 100644
  #include "../version.h"
  
  #include <QString>
-@@ -309,7 +310,7 @@ void ExcludedFiles::loadExcludeFilePatterns(const QString &basePath, QFile &file
-         if (line.isEmpty() || line.startsWith('#'))
+@@ -320,7 +321,7 @@ void ExcludedFiles::loadExcludeFilePatterns(const QString &basePath, QFile &file
              continue;
+         }
          const auto patternStr = QString::fromUtf8(line);
 -        if (QStringView{patternStr}.trimmed() == QLatin1StringView("*")) {
 +        if (QStringView{patternStr}.trimmed() == QLatin1StringOrView("*")) {
              continue;
          }
          csync_exclude_expand_escapes(line);
-@@ -472,10 +473,10 @@ CSYNC_EXCLUDE_TYPE ExcludedFiles::traversalPatternMatch(const QString &path, Ite
+@@ -483,10 +484,10 @@ CSYNC_EXCLUDE_TYPE ExcludedFiles::traversalPatternMatch(const QString &path, Ite
          QRegularExpressionMatch m;
          if (filetype == ItemTypeDirectory
              && _bnameTraversalRegexDir.contains(basePath)) {
@@ -475,7 +475,7 @@ index 438fa9aac3..e32a02862f 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index 545bab39cd..528f81a329 100644
+index 0c0ad01453..2b7779745d 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -632,7 +632,7 @@ index 60d024b158..a2b7fc790f 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index 9732b68b86..010b3dfbd1 100644
+index d3eba1acf3..651fb9eca8 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -31,6 +31,7 @@
@@ -643,7 +643,7 @@ index 9732b68b86..010b3dfbd1 100644
  
  #include "config.h"
  
-@@ -1196,7 +1197,7 @@ void Application::setupTranslations()
+@@ -1195,7 +1196,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -732,8 +732,43 @@ index 02b302c194..67b25da2ad 100644
  #include "owncloudsetupwizard.h"
  
  #include "accountmanager.h"
+diff --git a/src/gui/search/qml/UnifiedSearchResultListItem.qml b/src/gui/search/qml/UnifiedSearchResultListItem.qml
+index 6c998598fb..5866e1615a 100644
+--- a/src/gui/search/qml/UnifiedSearchResultListItem.qml
++++ b/src/gui/search/qml/UnifiedSearchResultListItem.qml
+@@ -30,9 +30,17 @@ MouseArea {
+     height: Style.unifiedSearchItemHeight
+ 
+     ToolTip {
+-        popupType: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++        id: unifiedSearchResultMouseAreaToolTop
++
+         visible: unifiedSearchResultMouseArea.containsMouse
+         text: isFetchMoreTrigger ? qsTr("Load more results") : model.resultTitle + "\n\n" + model.subline
++
++        Binding {
++            target: unifiedSearchResultMouseAreaToolTop
++            property: "popupType"
++            value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++            when: unifiedSearchResultMouseAreaToolTop.hasOwnProperty("popupType")
++        }
+     }
+ 
+     Rectangle {
+diff --git a/src/gui/search/unifiedsearchresultslistmodel.cpp b/src/gui/search/unifiedsearchresultslistmodel.cpp
+index 21f1d1fb8a..19fbe9f24d 100644
+--- a/src/gui/search/unifiedsearchresultslistmodel.cpp
++++ b/src/gui/search/unifiedsearchresultslistmodel.cpp
+@@ -10,6 +10,7 @@
+ #include "guiutility.h"
+ #include "folderman.h"
+ #include "networkjobs.h"
++#include "common/qtcompat.h"
+ 
+ #include <algorithm>
+ 
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
-index e272f5ee2c..b4af9f59a9 100644
+index ce835cccf1..f4228cddfd 100644
 --- a/src/gui/settingsdialog.cpp
 +++ b/src/gui/settingsdialog.cpp
 @@ -17,6 +17,7 @@
@@ -944,31 +979,8 @@ index 82b2640d61..141e608dcd 100644
      }
  
  
-diff --git a/src/gui/tray/UnifiedSearchResultListItem.qml b/src/gui/tray/UnifiedSearchResultListItem.qml
-index 6c998598fb..5866e1615a 100644
---- a/src/gui/tray/UnifiedSearchResultListItem.qml
-+++ b/src/gui/tray/UnifiedSearchResultListItem.qml
-@@ -30,9 +30,17 @@ MouseArea {
-     height: Style.unifiedSearchItemHeight
- 
-     ToolTip {
--        popupType: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+        id: unifiedSearchResultMouseAreaToolTop
-+
-         visible: unifiedSearchResultMouseArea.containsMouse
-         text: isFetchMoreTrigger ? qsTr("Load more results") : model.resultTitle + "\n\n" + model.subline
-+
-+        Binding {
-+            target: unifiedSearchResultMouseAreaToolTop
-+            property: "popupType"
-+            value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+            when: unifiedSearchResultMouseAreaToolTop.hasOwnProperty("popupType")
-+        }
-     }
- 
-     Rectangle {
 diff --git a/src/gui/tray/activitydata.cpp b/src/gui/tray/activitydata.cpp
-index 7733429732..9953c46c44 100644
+index 10baf7bef4..21d2092749 100644
 --- a/src/gui/tray/activitydata.cpp
 +++ b/src/gui/tray/activitydata.cpp
 @@ -8,6 +8,7 @@
@@ -980,7 +992,7 @@ index 7733429732..9953c46c44 100644
  using namespace Qt::StringLiterals;
  
 diff --git a/src/gui/tray/activitylistmodel.cpp b/src/gui/tray/activitylistmodel.cpp
-index 26e5a0e5d1..fa94315190 100644
+index b279b0c75f..a0b21f83ea 100644
 --- a/src/gui/tray/activitylistmodel.cpp
 +++ b/src/gui/tray/activitylistmodel.cpp
 @@ -18,6 +18,7 @@
@@ -1028,23 +1040,11 @@ index 8e8a1a8d61..f917c6d7ac 100644
  
  #include <QJsonDocument>
  #include <QJsonObject>
-diff --git a/src/gui/tray/unifiedsearchresultslistmodel.cpp b/src/gui/tray/unifiedsearchresultslistmodel.cpp
-index 424bc4c191..c478caa092 100644
---- a/src/gui/tray/unifiedsearchresultslistmodel.cpp
-+++ b/src/gui/tray/unifiedsearchresultslistmodel.cpp
-@@ -10,6 +10,7 @@
- #include "guiutility.h"
- #include "folderman.h"
- #include "networkjobs.h"
-+#include "common/qtcompat.h"
- 
- #include <algorithm>
- 
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index 44ade499a7..4721da8458 100644
+index e7509fe416..5211f9da2e 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
-@@ -27,6 +27,7 @@
+@@ -26,6 +26,7 @@
  #include "userstatusconnector.h"
  #include "common/utility.h"
  #include "ocsassistantconnector.h"
@@ -1053,7 +1053,7 @@ index 44ade499a7..4721da8458 100644
  #ifdef BUILD_FILE_PROVIDER_MODULE
  #include "gui/macOS/fileprovider.h"
 diff --git a/src/gui/trayaccountpopup_qt.cpp b/src/gui/trayaccountpopup_qt.cpp
-index 68ecd48ae4..3a094a31ce 100644
+index 8b80b8dda1..7fe1fc8dff 100644
 --- a/src/gui/trayaccountpopup_qt.cpp
 +++ b/src/gui/trayaccountpopup_qt.cpp
 @@ -5,6 +5,8 @@
@@ -1512,7 +1512,7 @@ index 0000000000..ba7eb44067
 +
 +QByteArray unGzipData(const QByteArray& inputData);
 diff --git a/src/libsync/networkjobs.cpp b/src/libsync/networkjobs.cpp
-index 1dee03fa82..be71c4c2e8 100644
+index 5c3ef45333..e2555c20ed 100644
 --- a/src/libsync/networkjobs.cpp
 +++ b/src/libsync/networkjobs.cpp
 @@ -10,6 +10,7 @@
@@ -1523,7 +1523,7 @@ index 1dee03fa82..be71c4c2e8 100644
  
  #include "creds/abstractcredentials.h"
  #include "creds/httpcredentials.h"
-@@ -814,7 +815,7 @@ bool PropfindJob::finished()
+@@ -809,7 +810,7 @@ bool PropfindJob::finished()
          // Parse DAV response
          auto domDocument = QDomDocument();
  
