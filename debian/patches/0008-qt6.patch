@@ -67,10 +67,10 @@ index 0000000000..ccded5d62e
 +#include "qtcompat.h"
 diff --git a/src/common/qtcompat.h b/src/common/qtcompat.h
 new file mode 100644
-index 0000000000..9b633f0027
+index 0000000000..492c28cf98
 --- /dev/null
 +++ b/src/common/qtcompat.h
-@@ -0,0 +1,357 @@
+@@ -0,0 +1,417 @@
 +
 +#pragma once
 +
@@ -428,6 +428,66 @@ index 0000000000..9b633f0027
 +
 +//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
++
++#ifdef QT_CORE_LIB
++
++//-----------------------------------------------------------------------------
++
++#include <QJsonValue>
++
++//-----------------------------------------------------------------------------
++
++#if QT_VERSION<QT_VERSION_CHECK(6, 8, 0)
++inline bool operator==(const QString &lhs, const QJsonValue &rhs)
++{
++    return lhs == rhs.toString();
++}
++
++inline bool operator==(const QJsonValue &lhs, const QString &rhs)
++{
++    return lhs.toString() == rhs;
++}
++
++inline bool operator!=(const QString &lhs, const QJsonValue &rhs)
++{
++    return lhs != rhs.toString();
++}
++
++inline bool operator!=(const QJsonValue &lhs, const QString &rhs)
++{
++    return lhs.toString() != rhs;
++}
++
++// QJsonValueRef is a non-const reference to a QJsonValue inside QJsonObject/QJsonArray
++// It can be implicitly converted to QJsonValue, but we need explicit operators
++// to avoid ambiguity when comparing with QString
++inline bool operator==(const QString &lhs, const QJsonValueRef &rhs)
++{
++    return lhs == rhs.toString();
++}
++
++inline bool operator==(const QJsonValueRef &lhs, const QString &rhs)
++{
++    return lhs.toString() == rhs;
++}
++
++inline bool operator!=(const QString &lhs, const QJsonValueRef &rhs)
++{
++    return lhs != rhs.toString();
++}
++
++inline bool operator!=(const QJsonValueRef &lhs, const QString &rhs)
++{
++    return lhs.toString() != rhs;
++}
++#endif
++
++//-----------------------------------------------------------------------------
++
++#endif // QT_CORE_LIB
++
++//-----------------------------------------------------------------------------
++//-----------------------------------------------------------------------------
 diff --git a/src/common/syncjournaldb.cpp b/src/common/syncjournaldb.cpp
 index ab99460a0f..6d911b7217 100644
 --- a/src/common/syncjournaldb.cpp
@@ -475,7 +535,7 @@ index 17d08f4a10..a89e22a5a9 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index 0c0ad01453..2b7779745d 100644
+index cd90eb3fb2..ba9f233db2 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -487,7 +547,7 @@ index 0c0ad01453..2b7779745d 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -556,10 +556,17 @@ target_link_libraries(nextcloudCore
+@@ -577,10 +577,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -506,7 +566,7 @@ index 0c0ad01453..2b7779745d 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -811,3 +818,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -832,3 +839,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -632,7 +692,7 @@ index 60d024b158..a2b7fc790f 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index d3eba1acf3..651fb9eca8 100644
+index 85c21b9875..da13013534 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -31,6 +31,7 @@
@@ -643,7 +703,7 @@ index d3eba1acf3..651fb9eca8 100644
  
  #include "config.h"
  
-@@ -1195,7 +1196,7 @@ void Application::setupTranslations()
+@@ -1198,7 +1199,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -676,7 +736,7 @@ index c061eff726..2a0751b07c 100644
                  }
              }
 diff --git a/src/gui/folderman.cpp b/src/gui/folderman.cpp
-index 138c7c207a..1cab1e63ce 100644
+index c31565bdb7..36bfffe20b 100644
 --- a/src/gui/folderman.cpp
 +++ b/src/gui/folderman.cpp
 @@ -16,6 +16,7 @@
@@ -720,6 +780,110 @@ index 9208814e36..074c6fd519 100644
              _selectiveSync->setEnabled(state == Qt::Unchecked);
          });
          _virtualFilesCheckBox->setChecked(bestAvailableVfsMode() == Vfs::WindowsCfApi);
+diff --git a/src/gui/governance/applygovernancelabel.cpp b/src/gui/governance/applygovernancelabel.cpp
+index 88dc726d78..0a97b6b15c 100644
+--- a/src/gui/governance/applygovernancelabel.cpp
++++ b/src/gui/governance/applygovernancelabel.cpp
+@@ -7,6 +7,8 @@
+ 
+ #include "ocsgovernancejob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC
+diff --git a/src/gui/governance/deletegovernancelabel.cpp b/src/gui/governance/deletegovernancelabel.cpp
+index 56032e2a64..e32545ada1 100644
+--- a/src/gui/governance/deletegovernancelabel.cpp
++++ b/src/gui/governance/deletegovernancelabel.cpp
+@@ -7,6 +7,8 @@
+ 
+ #include "ocsgovernancejob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC
+diff --git a/src/gui/governance/getavailablegovernancelabels.cpp b/src/gui/governance/getavailablegovernancelabels.cpp
+index cf76f74f7a..13f3885564 100644
+--- a/src/gui/governance/getavailablegovernancelabels.cpp
++++ b/src/gui/governance/getavailablegovernancelabels.cpp
+@@ -7,6 +7,8 @@
+ 
+ #include "ocsgovernancejob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC
+diff --git a/src/gui/governance/getgovernancelabels.cpp b/src/gui/governance/getgovernancelabels.cpp
+index ac95577a50..8759c03264 100644
+--- a/src/gui/governance/getgovernancelabels.cpp
++++ b/src/gui/governance/getgovernancelabels.cpp
+@@ -7,6 +7,8 @@
+ 
+ #include "ocsgovernancejob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC
+diff --git a/src/gui/governance/governancelabelslistmodel.cpp b/src/gui/governance/governancelabelslistmodel.cpp
+index 203cca598d..f1c5532278 100644
+--- a/src/gui/governance/governancelabelslistmodel.cpp
++++ b/src/gui/governance/governancelabelslistmodel.cpp
+@@ -10,6 +10,8 @@
+ #include <QJsonObject>
+ #include <QJsonArray>
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC
+diff --git a/src/gui/governance/governancenetworkjob.cpp b/src/gui/governance/governancenetworkjob.cpp
+index e43d2824c8..a80ad0311b 100644
+--- a/src/gui/governance/governancenetworkjob.cpp
++++ b/src/gui/governance/governancenetworkjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "governancenetworkjob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC
+diff --git a/src/gui/governance/typedgovernancenetworkjob.cpp b/src/gui/governance/typedgovernancenetworkjob.cpp
+index 7ac3ce6be5..334da54790 100644
+--- a/src/gui/governance/typedgovernancenetworkjob.cpp
++++ b/src/gui/governance/typedgovernancenetworkjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "typedgovernancenetworkjob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC
+diff --git a/src/gui/governance/typedwithlabelidgovernancenetworkjob.cpp b/src/gui/governance/typedwithlabelidgovernancenetworkjob.cpp
+index 81102ff000..716485424d 100644
+--- a/src/gui/governance/typedwithlabelidgovernancenetworkjob.cpp
++++ b/src/gui/governance/typedwithlabelidgovernancenetworkjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "typedwithlabelidgovernancenetworkjob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC
 diff --git a/src/gui/owncloudsetupwizard.cpp b/src/gui/owncloudsetupwizard.cpp
 index 02b302c194..67b25da2ad 100644
 --- a/src/gui/owncloudsetupwizard.cpp
@@ -780,7 +944,7 @@ index ce835cccf1..f4228cddfd 100644
  #include <QLabel>
  #include <QStandardItemModel>
 diff --git a/src/gui/sharemanager.cpp b/src/gui/sharemanager.cpp
-index 42b61a5d84..ac29fbf181 100644
+index 42a151dba2..d5d2128a06 100644
 --- a/src/gui/sharemanager.cpp
 +++ b/src/gui/sharemanager.cpp
 @@ -11,6 +11,7 @@
@@ -792,7 +956,7 @@ index 42b61a5d84..ac29fbf181 100644
  #include <QUrl>
  #include <QJsonDocument>
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index 324a5d5eb6..9d1bd4f1a9 100644
+index 63887e03f4..9276a9b026 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
 @@ -18,6 +18,7 @@
@@ -992,7 +1156,7 @@ index 10baf7bef4..21d2092749 100644
  using namespace Qt::StringLiterals;
  
 diff --git a/src/gui/tray/activitylistmodel.cpp b/src/gui/tray/activitylistmodel.cpp
-index b279b0c75f..a0b21f83ea 100644
+index 3a8ecf54af..14c5ef875b 100644
 --- a/src/gui/tray/activitylistmodel.cpp
 +++ b/src/gui/tray/activitylistmodel.cpp
 @@ -18,6 +18,7 @@
@@ -1162,7 +1326,7 @@ index 199f7c0546..588dc8ad3b 100644
                  }
  
 diff --git a/src/libsync/account.cpp b/src/libsync/account.cpp
-index e4ef525c1f..db4dd4e485 100644
+index a9ff3c9add..01f4ae7db2 100644
 --- a/src/libsync/account.cpp
 +++ b/src/libsync/account.cpp
 @@ -24,6 +24,7 @@
@@ -1173,7 +1337,7 @@ index e4ef525c1f..db4dd4e485 100644
  #include "clientsideencryption.h"
  #include "ocsuserstatusconnector.h"
  
-@@ -1289,7 +1290,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
+@@ -1311,7 +1312,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
              return;
          }
  
@@ -1183,6 +1347,19 @@ index e4ef525c1f..db4dd4e485 100644
      });
  
      promise->start();
+diff --git a/src/libsync/capabilities.cpp b/src/libsync/capabilities.cpp
+index c1474e6d22..df9f7758b4 100644
+--- a/src/libsync/capabilities.cpp
++++ b/src/libsync/capabilities.cpp
+@@ -13,6 +13,8 @@
+ #include <QVersionNumber>
+ #include <QDebug>
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC {
 diff --git a/src/libsync/clientsideencryption.cpp b/src/libsync/clientsideencryption.cpp
 index 6d3e7b9b19..d80c0b08b6 100644
 --- a/src/libsync/clientsideencryption.cpp
