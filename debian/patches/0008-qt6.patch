@@ -67,10 +67,10 @@ index 0000000000..ccded5d62e
 +#include "qtcompat.h"
 diff --git a/src/common/qtcompat.h b/src/common/qtcompat.h
 new file mode 100644
-index 0000000000..9b633f0027
+index 0000000000..492c28cf98
 --- /dev/null
 +++ b/src/common/qtcompat.h
-@@ -0,0 +1,357 @@
+@@ -0,0 +1,417 @@
 +
 +#pragma once
 +
@@ -425,6 +425,66 @@ index 0000000000..9b633f0027
 +//-----------------------------------------------------------------------------
 +
 +#endif // QT_NETWORK_LIB
++
++//-----------------------------------------------------------------------------
++//-----------------------------------------------------------------------------
++
++#ifdef QT_CORE_LIB
++
++//-----------------------------------------------------------------------------
++
++#include <QJsonValue>
++
++//-----------------------------------------------------------------------------
++
++#if QT_VERSION<QT_VERSION_CHECK(6, 8, 0)
++inline bool operator==(const QString &lhs, const QJsonValue &rhs)
++{
++    return lhs == rhs.toString();
++}
++
++inline bool operator==(const QJsonValue &lhs, const QString &rhs)
++{
++    return lhs.toString() == rhs;
++}
++
++inline bool operator!=(const QString &lhs, const QJsonValue &rhs)
++{
++    return lhs != rhs.toString();
++}
++
++inline bool operator!=(const QJsonValue &lhs, const QString &rhs)
++{
++    return lhs.toString() != rhs;
++}
++
++// QJsonValueRef is a non-const reference to a QJsonValue inside QJsonObject/QJsonArray
++// It can be implicitly converted to QJsonValue, but we need explicit operators
++// to avoid ambiguity when comparing with QString
++inline bool operator==(const QString &lhs, const QJsonValueRef &rhs)
++{
++    return lhs == rhs.toString();
++}
++
++inline bool operator==(const QJsonValueRef &lhs, const QString &rhs)
++{
++    return lhs.toString() == rhs;
++}
++
++inline bool operator!=(const QString &lhs, const QJsonValueRef &rhs)
++{
++    return lhs != rhs.toString();
++}
++
++inline bool operator!=(const QJsonValueRef &lhs, const QString &rhs)
++{
++    return lhs.toString() != rhs;
++}
++#endif
++
++//-----------------------------------------------------------------------------
++
++#endif // QT_CORE_LIB
 +
 +//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
