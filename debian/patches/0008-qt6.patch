@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 0424b16e79..c062aa2967 100644
+index 22e88c28d7..32b00f20e1 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -31,7 +31,7 @@ set(BIN_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -25,8 +25,8 @@ index 0424b16e79..c062aa2967 100644
 -include(KDECMakeSettings)
  include(ECMMarkNonGuiExecutable)
  include(ECMSetupVersion)
- 
-@@ -152,7 +150,7 @@ if(APPLE AND BUILD_OWNCLOUD_OSX_BUNDLE)
+ include(ECMQmlModule)
+@@ -153,7 +151,7 @@ if(APPLE AND BUILD_OWNCLOUD_OSX_BUNDLE)
      add_definitions(-DBUILD_OWNCLOUD_OSX_BUNDLE)
  endif()
  
@@ -535,7 +535,7 @@ index 17d08f4a10..a89e22a5a9 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index cd90eb3fb2..ba9f233db2 100644
+index a6bf4ec2d8..bf5849f396 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -547,12 +547,15 @@ index cd90eb3fb2..ba9f233db2 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -577,10 +577,17 @@ target_link_libraries(nextcloudCore
+@@ -575,13 +575,20 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
 -  KF6::Archive
    KDAB::kdsingleapplication
+ 
+   nextcloudGuiSearch
+   nextcloudGuiSearchplugin
    )
  
 +if(KF6Archive_FOUND)
@@ -566,7 +569,7 @@ index cd90eb3fb2..ba9f233db2 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -832,3 +839,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -833,3 +840,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -602,7 +605,7 @@ index 841dd2da42..2098c41437 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index 8f9d82dbf0..e3ff80da6a 100644
+index b2b0b93047..43b1948f14 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -692,7 +695,7 @@ index 60d024b158..a2b7fc790f 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index 85c21b9875..da13013534 100644
+index 38b41a14f4..aeae7b7d90 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -31,6 +31,7 @@
@@ -703,7 +706,7 @@ index 85c21b9875..da13013534 100644
  
  #include "config.h"
  
-@@ -1198,7 +1199,7 @@ void Application::setupTranslations()
+@@ -1206,7 +1207,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -736,7 +739,7 @@ index c061eff726..2a0751b07c 100644
                  }
              }
 diff --git a/src/gui/folderman.cpp b/src/gui/folderman.cpp
-index c31565bdb7..36bfffe20b 100644
+index 6a6c7de367..895db04c35 100644
 --- a/src/gui/folderman.cpp
 +++ b/src/gui/folderman.cpp
 @@ -16,6 +16,7 @@
@@ -833,7 +836,7 @@ index ac95577a50..8759c03264 100644
  
  namespace OCC
 diff --git a/src/gui/governance/governancelabelslistmodel.cpp b/src/gui/governance/governancelabelslistmodel.cpp
-index 203cca598d..f1c5532278 100644
+index 7cf772db38..ff2831d9b0 100644
 --- a/src/gui/governance/governancelabelslistmodel.cpp
 +++ b/src/gui/governance/governancelabelslistmodel.cpp
 @@ -10,6 +10,8 @@
@@ -885,7 +888,7 @@ index 81102ff000..716485424d 100644
  
  namespace OCC
 diff --git a/src/gui/owncloudsetupwizard.cpp b/src/gui/owncloudsetupwizard.cpp
-index 02b302c194..67b25da2ad 100644
+index 511059ba46..6abaf118ba 100644
 --- a/src/gui/owncloudsetupwizard.cpp
 +++ b/src/gui/owncloudsetupwizard.cpp
 @@ -4,6 +4,7 @@
@@ -896,10 +899,10 @@ index 02b302c194..67b25da2ad 100644
  #include "owncloudsetupwizard.h"
  
  #include "accountmanager.h"
-diff --git a/src/gui/search/qml/UnifiedSearchResultListItem.qml b/src/gui/search/qml/UnifiedSearchResultListItem.qml
+diff --git a/src/gui/search/UnifiedSearchResultListItem.qml b/src/gui/search/UnifiedSearchResultListItem.qml
 index 6c998598fb..5866e1615a 100644
---- a/src/gui/search/qml/UnifiedSearchResultListItem.qml
-+++ b/src/gui/search/qml/UnifiedSearchResultListItem.qml
+--- a/src/gui/search/UnifiedSearchResultListItem.qml
++++ b/src/gui/search/UnifiedSearchResultListItem.qml
 @@ -30,9 +30,17 @@ MouseArea {
      height: Style.unifiedSearchItemHeight
  
@@ -932,7 +935,7 @@ index 21f1d1fb8a..19fbe9f24d 100644
  #include <algorithm>
  
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
-index ce835cccf1..f4228cddfd 100644
+index 12871424e6..22608e753e 100644
 --- a/src/gui/settingsdialog.cpp
 +++ b/src/gui/settingsdialog.cpp
 @@ -17,6 +17,7 @@
@@ -1242,7 +1245,7 @@ index b65a604b72..b15ac6c1e2 100644
  #include <QTimer>
  #include <QJsonDocument>
 diff --git a/src/gui/wizard/accountwizardcontroller.cpp b/src/gui/wizard/accountwizardcontroller.cpp
-index 1ba290c210..390db25214 100644
+index 1e6f11f4af..54336c555d 100644
 --- a/src/gui/wizard/accountwizardcontroller.cpp
 +++ b/src/gui/wizard/accountwizardcontroller.cpp
 @@ -5,6 +5,8 @@
@@ -1254,7 +1257,7 @@ index 1ba290c210..390db25214 100644
  #include "account.h"
  #include "accountmanager.h"
  #include "clientproxy.h"
-@@ -2032,7 +2034,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
+@@ -2023,7 +2025,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
          break;
      }
  
@@ -1482,7 +1485,7 @@ index 92b3300359..f53e216891 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/libsync/filesystem.cpp b/src/libsync/filesystem.cpp
-index e27301c035..762d93a25c 100644
+index 9e5f6ef10c..607fbb604f 100644
 --- a/src/libsync/filesystem.cpp
 +++ b/src/libsync/filesystem.cpp
 @@ -7,6 +7,7 @@
@@ -1960,7 +1963,7 @@ index b45cf49114..060f9aca0b 100644
  
  #include "account.h"
 diff --git a/test/testfolderman.cpp b/test/testfolderman.cpp
-index 127a9b4f31..f377bcb8bf 100644
+index e06761a13b..aa6ef16ab2 100644
 --- a/test/testfolderman.cpp
 +++ b/test/testfolderman.cpp
 @@ -14,6 +14,7 @@
