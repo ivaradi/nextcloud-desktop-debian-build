@@ -67,10 +67,10 @@ index 0000000000..ccded5d62e
 +#include "qtcompat.h"
 diff --git a/src/common/qtcompat.h b/src/common/qtcompat.h
 new file mode 100644
-index 0000000000..492c28cf98
+index 0000000000..293d3b81ac
 --- /dev/null
 +++ b/src/common/qtcompat.h
-@@ -0,0 +1,417 @@
+@@ -0,0 +1,448 @@
 +
 +#pragma once
 +
@@ -487,6 +487,37 @@ index 0000000000..492c28cf98
 +#endif // QT_CORE_LIB
 +
 +//-----------------------------------------------------------------------------
++
++#ifdef QT_QML_LIB
++
++//-----------------------------------------------------------------------------
++
++#include <QQmlComponent>
++#include <QQmlEngine>
++#include <QUrl>
++
++//-----------------------------------------------------------------------------
++
++#if QT_VERSION<QT_VERSION_CHECK(6, 5, 0)
++inline QQmlComponent *QmlComponentFromUri(QQmlEngine *engine, const QString &uri, const QString &typeName)
++{
++    // Convert uri like "com.nextcloud.desktopclient.search" to qrc path
++    // like "qrc:/com/nextcloud/desktopclient/search/SearchWindow.qml"
++    QString qrcPath = QStringLiteral("qrc:/") + uri + u'/' + typeName + QStringLiteral(".qml");
++    return new QQmlComponent(engine, QUrl::fromUserInput(qrcPath));
++}
++#else
++inline QQmlComponent *QmlComponentFromUri(QQmlEngine *engine, const QString &uri, const QString &typeName)
++{
++    return new QQmlComponent(engine, uri, typeName);
++}
++#endif
++
++//-----------------------------------------------------------------------------
++
++#endif // QT_QML_LIB
++
++//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
 diff --git a/src/common/syncjournaldb.cpp b/src/common/syncjournaldb.cpp
 index ab99460a0f..6d911b7217 100644
@@ -899,6 +930,106 @@ index 511059ba46..6abaf118ba 100644
  #include "owncloudsetupwizard.h"
  
  #include "accountmanager.h"
+diff --git a/src/gui/search/CMakeLists.txt b/src/gui/search/CMakeLists.txt
+index 19894e5589..2804868b0e 100644
+--- a/src/gui/search/CMakeLists.txt
++++ b/src/gui/search/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ # SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ # SPDX-License-Identifier: GPL-2.0-or-later
+ 
++set(CMAKE_AUTOMOC ON)
++
+ add_library(nextcloudGuiSearch STATIC)
+ 
+ target_sources(nextcloudGuiSearch
+@@ -11,10 +13,34 @@ target_sources(nextcloudGuiSearch
+     unifiedsearchresultslistmodel.cpp
+ )
+ 
+-ecm_add_qml_module(nextcloudGuiSearch
+-  URI com.nextcloud.desktopclient.search
+-  GENERATE_PLUGIN_SOURCE
+-  QML_FILES
++if(ECM_VERSION VERSION_GREATER_EQUAL "6.0.0")
++  ecm_add_qml_module(nextcloudGuiSearch
++    URI com.nextcloud.desktopclient.search
++    GENERATE_PLUGIN_SOURCE
++    QML_FILES
++      SearchWindow.qml
++      UnifiedSearchInputContainer.qml
++      UnifiedSearchResultFetchMoreTrigger.qml
++      UnifiedSearchResultItem.qml
++      UnifiedSearchResultItemSkeleton.qml
++      UnifiedSearchResultItemSkeletonContainer.qml
++      UnifiedSearchResultItemSkeletonGradientRectangle.qml
++      UnifiedSearchResultListItem.qml
++      UnifiedSearchResultNothingFound.qml
++      UnifiedSearchPlaceholderView.qml
++      UnifiedSearchResultSectionItem.qml
++  )
++else()
++  # Workaround for CMake AUTOMOC bug with static libraries on Qt 6.2.x.
++  # AUTOMOC doesn't properly propagate moc symbols from static libraries.
++  # See: https://gitlab.kitware.com/cmake/cmake/-/issues/19939
++  if(QT_VERSION_MAJOR STREQUAL "6" AND QT_VERSION_MINOR LESS 5)
++    qt_generate_moc(unifiedsearchresultslistmodel.h ${CMAKE_CURRENT_BINARY_DIR}/moc_unifiedsearchresultslistmodel.cpp)
++    target_sources(nextcloudGuiSearch PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/moc_unifiedsearchresultslistmodel.cpp)
++    target_include_directories(nextcloudGuiSearch PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
++  endif()
++
++  set(_search_qml_files
+     SearchWindow.qml
+     UnifiedSearchInputContainer.qml
+     UnifiedSearchResultFetchMoreTrigger.qml
+@@ -26,6 +52,46 @@ ecm_add_qml_module(nextcloudGuiSearch
+     UnifiedSearchResultNothingFound.qml
+     UnifiedSearchPlaceholderView.qml
+     UnifiedSearchResultSectionItem.qml
+-)
++  )
++  file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/com.nextcloud.desktopclient.search.qmldir"
++       CONTENT "module com.nextcloud.desktopclient.search\n")
++  foreach(_f ${_search_qml_files})
++    get_filename_component(_nw ${_f} NAME_WE)
++    file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/com.nextcloud.desktopclient.search.qmldir"
++         "${_nw} 1.0 ${_f}\n")
++  endforeach()
++  if(NOT DEFINED KDE_INSTALL_QMLDIR)
++    include(GNUInstallDirs)
++    set(KDE_INSTALL_QMLDIR "${CMAKE_INSTALL_LIBDIR}/qml")
++  endif()
++  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/com.nextcloud.desktopclient.search.qmldir ${_search_qml_files}
++    DESTINATION "${KDE_INSTALL_QMLDIR}/com/nextcloud/desktopclient/search")
++
++  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/nextcloudGuiSearchplugin.cpp"
++    "#include <QQmlEngineExtensionPlugin>\n"
++    "\n"
++    "class NextcloudGuiSearchPlugin : public QQmlEngineExtensionPlugin\n"
++    "{\n"
++    "    Q_OBJECT\n"
++    "    Q_PLUGIN_METADATA(IID \"org.qt-project.Qt.QQmlEngineExtensionInterface\")\n"
++    "};\n"
++    "\n"
++    "#include \"nextcloudGuiSearchplugin.moc\"\n"
++  )
++  add_library(nextcloudGuiSearchplugin STATIC)
++  target_sources(nextcloudGuiSearchplugin PRIVATE
++    "${CMAKE_CURRENT_BINARY_DIR}/nextcloudGuiSearchplugin.cpp"
++  )
++  target_link_libraries(nextcloudGuiSearchplugin
++    PUBLIC
++      nextcloudGuiSearch
++    PRIVATE
++      Qt::Qml
++  )
++  set_target_properties(nextcloudGuiSearchplugin PROPERTIES
++    AUTOMOC ON
++    AUTOMOC_MOC_OPTIONS "-Muri=com.nextcloud.desktopclient.search"
++  )
++endif()
+ 
+ target_link_libraries(nextcloudGuiSearch PRIVATE nextcloudCore)
 diff --git a/src/gui/search/UnifiedSearchResultListItem.qml b/src/gui/search/UnifiedSearchResultListItem.qml
 index 6c998598fb..5866e1615a 100644
 --- a/src/gui/search/UnifiedSearchResultListItem.qml
@@ -991,6 +1122,44 @@ index b6ec909176..50716a585e 100644
  	QString sha1sum = Utility::formatFingerprint(cert.digest(QCryptographicHash::Sha1).toHex());
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
+diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
+index 7fc19a3af5..e85a334154 100644
+--- a/src/gui/systray.cpp
++++ b/src/gui/systray.cpp
+@@ -46,6 +46,8 @@
+ #define NOTIFICATIONS_IFACE "org.freedesktop.Notifications"
+ #endif
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC {
+@@ -430,11 +432,11 @@ void Systray::showSearchWindow(int userIndex)
+         return;
+     }
+ 
+-    QQmlComponent searchWindowComponent(trayEngine(), "com.nextcloud.desktopclient.search"_L1, "SearchWindow"_L1);
++    auto *searchWindowComponent = QmlComponentFromUri(trayEngine(), QStringLiteral("com.nextcloud.desktopclient.search"), QStringLiteral("SearchWindow"));
+ 
+-    if (searchWindowComponent.isError()) {
+-        qCWarning(lcSystray) << searchWindowComponent.errorString();
+-        qCWarning(lcSystray) << searchWindowComponent.errors();
++    if (searchWindowComponent->isError()) {
++        qCWarning(lcSystray) << searchWindowComponent->errorString();
++        qCWarning(lcSystray) << searchWindowComponent->errors();
+         return;
+     }
+ 
+@@ -447,7 +449,7 @@ void Systray::showSearchWindow(int userIndex)
+                     }},
+         {"searchModel", QVariant::fromValue(searchModel)},
+     };
+-    const auto createdObject = searchWindowComponent.createWithInitialProperties(initialProperties);
++    const auto createdObject = searchWindowComponent->createWithInitialProperties(initialProperties);
+     const auto window = qobject_cast<QQuickWindow *>(createdObject);
+     if (!window) {
+         qCWarning(lcSystray) << "Search window resulted in creation of object that was not a window!";
 diff --git a/src/gui/tray/ActivityItem.qml b/src/gui/tray/ActivityItem.qml
 index 58f94f229c..00cbcd65ba 100644
 --- a/src/gui/tray/ActivityItem.qml
