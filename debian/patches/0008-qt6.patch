@@ -931,7 +931,7 @@ index 511059ba46..6abaf118ba 100644
  
  #include "accountmanager.h"
 diff --git a/src/gui/search/CMakeLists.txt b/src/gui/search/CMakeLists.txt
-index 19894e5589..2804868b0e 100644
+index 19894e5589..2890c82192 100644
 --- a/src/gui/search/CMakeLists.txt
 +++ b/src/gui/search/CMakeLists.txt
 @@ -1,6 +1,8 @@
@@ -982,25 +982,12 @@ index 19894e5589..2804868b0e 100644
      SearchWindow.qml
      UnifiedSearchInputContainer.qml
      UnifiedSearchResultFetchMoreTrigger.qml
-@@ -26,6 +52,46 @@ ecm_add_qml_module(nextcloudGuiSearch
+@@ -26,6 +52,33 @@ ecm_add_qml_module(nextcloudGuiSearch
      UnifiedSearchResultNothingFound.qml
      UnifiedSearchPlaceholderView.qml
      UnifiedSearchResultSectionItem.qml
 -)
 +  )
-+  file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/com.nextcloud.desktopclient.search.qmldir"
-+       CONTENT "module com.nextcloud.desktopclient.search\n")
-+  foreach(_f ${_search_qml_files})
-+    get_filename_component(_nw ${_f} NAME_WE)
-+    file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/com.nextcloud.desktopclient.search.qmldir"
-+         "${_nw} 1.0 ${_f}\n")
-+  endforeach()
-+  if(NOT DEFINED KDE_INSTALL_QMLDIR)
-+    include(GNUInstallDirs)
-+    set(KDE_INSTALL_QMLDIR "${CMAKE_INSTALL_LIBDIR}/qml")
-+  endif()
-+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/com.nextcloud.desktopclient.search.qmldir ${_search_qml_files}
-+    DESTINATION "${KDE_INSTALL_QMLDIR}/com/nextcloud/desktopclient/search")
 +
 +  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/nextcloudGuiSearchplugin.cpp"
 +    "#include <QQmlEngineExtensionPlugin>\n"
