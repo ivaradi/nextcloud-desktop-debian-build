@@ -1234,6 +1234,31 @@ index fc0779df1b..9bff80e7be 100644
                      }
  
                      visible: root.showDismissButton
+diff --git a/src/gui/tray/AutoSizingMenu.qml b/src/gui/tray/AutoSizingMenu.qml
+index e3cc79871d..303cdd34dc 100644
+--- a/src/gui/tray/AutoSizingMenu.qml
++++ b/src/gui/tray/AutoSizingMenu.qml
+@@ -8,7 +8,7 @@ import QtQuick.Controls
+ import Style
+ 
+ Menu {
+-    popupType: Popup.Window
++    id: autoSizingMenu
+ 
+     width: {
+         var result = 0;
+@@ -20,4 +20,11 @@ Menu {
+         }
+         return result + padding * 2;
+     }
++
++    Binding {
++        target: autoSizingMenu
++        property: "popupType"
++        value: Popup.Window
++        when: autoSizingMenu.hasOwnProperty("popupType")
++    }
+ }
 diff --git a/src/gui/tray/TalkReplyTextField.qml b/src/gui/tray/TalkReplyTextField.qml
 index 1c61a3ba2b..8f5af5a75b 100644
 --- a/src/gui/tray/TalkReplyTextField.qml
