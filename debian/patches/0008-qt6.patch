@@ -67,10 +67,10 @@ index 0000000000..ccded5d62e
 +#include "qtcompat.h"
 diff --git a/src/common/qtcompat.h b/src/common/qtcompat.h
 new file mode 100644
-index 0000000000..293d3b81ac
+index 0000000000..bacf450ad4
 --- /dev/null
 +++ b/src/common/qtcompat.h
-@@ -0,0 +1,448 @@
+@@ -0,0 +1,447 @@
 +
 +#pragma once
 +
@@ -188,8 +188,7 @@ index 0000000000..293d3b81ac
 +
 +inline QString operator""_s(const char16_t *str, size_t size)
 +{
-+    return QString(QStringPrivate(nullptr, const_cast<char16_t *>(str),
-+                                  qsizetype(size)));
++    return QString::fromUtf16(str, static_cast<qsizetype>(size));
 +}
 +
 +inline QByteArray operator""_ba(const char *str, size_t size)
@@ -566,7 +565,7 @@ index 17d08f4a10..a89e22a5a9 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index a6bf4ec2d8..bf5849f396 100644
+index eb40bf61f5..cac22af99a 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -612,10 +611,10 @@ index a6bf4ec2d8..bf5849f396 100644
 +endif()
 +configure_file(tray/TrayFoldersMenuButton.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/tray/TrayFoldersMenuButton.qml)
 diff --git a/src/gui/EmojiPicker.qml b/src/gui/EmojiPicker.qml
-index 841dd2da42..2098c41437 100644
+index ca1026e419..9252c314fb 100644
 --- a/src/gui/EmojiPicker.qml
 +++ b/src/gui/EmojiPicker.qml
-@@ -181,10 +181,18 @@ ColumnLayout {
+@@ -180,10 +180,18 @@ ColumnLayout {
                  }
  
                  ToolTip {
@@ -636,7 +635,7 @@ index 841dd2da42..2098c41437 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index b2b0b93047..43b1948f14 100644
+index 972e851673..08a618111b 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -672,6 +671,151 @@ index d139565a56..41e2924fce 100644
  
  #include <QSettings>
  #include <QTimer>
+diff --git a/src/gui/activity/activitydata.cpp b/src/gui/activity/activitydata.cpp
+index 10baf7bef4..21d2092749 100644
+--- a/src/gui/activity/activitydata.cpp
++++ b/src/gui/activity/activitydata.cpp
+@@ -8,6 +8,7 @@
+ 
+ #include "activitydata.h"
+ #include "folderman.h"
++#include "common/qtcompat.h"
+ 
+ using namespace Qt::StringLiterals;
+ 
+diff --git a/src/gui/activity/activitylistmodel.cpp b/src/gui/activity/activitylistmodel.cpp
+index 15e4b9eb82..1246b3fa0b 100644
+--- a/src/gui/activity/activitylistmodel.cpp
++++ b/src/gui/activity/activitylistmodel.cpp
+@@ -19,6 +19,7 @@
+ #include "systray.h"
+ #include "talkreply.h"
+ #include "common/utility.h"
++#include "common/qtcompat.h"
+ 
+ #include <QAbstractListModel>
+ #include <QDesktopServices>
+diff --git a/src/gui/activity/notificationhandler.cpp b/src/gui/activity/notificationhandler.cpp
+index cf0624367a..cde9cec563 100644
+--- a/src/gui/activity/notificationhandler.cpp
++++ b/src/gui/activity/notificationhandler.cpp
+@@ -8,6 +8,7 @@
+ #include "accountstate.h"
+ #include "capabilities.h"
+ #include "networkjobs.h"
++#include "common/qtcompat.h"
+ 
+ #include "iconjob.h"
+ 
+diff --git a/src/gui/activity/qml/ActivityItem.qml b/src/gui/activity/qml/ActivityItem.qml
+index 34d5176bb5..398a8015c2 100644
+--- a/src/gui/activity/qml/ActivityItem.qml
++++ b/src/gui/activity/qml/ActivityItem.qml
+@@ -33,9 +33,17 @@ ItemDelegate {
+     Accessible.onPressAction: root.clicked()
+ 
+     ToolTip {
+-        popupType: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++        id: rootToolTip
++
+         visible: root.hovered && !activityContent.childHovered && model.displayLocation !== ""
+         text: qsTr("In %1").arg(model.displayLocation)
++
++        Binding {
++            target: rootToolTip
++            property: "popupType"
++            value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++            when: rootToolTip.hasOwnProperty("popupType")
++        }
+     }
+ 
+     // TODO: the current style does not support customization of this control
+diff --git a/src/gui/activity/qml/ActivityItemContent.qml b/src/gui/activity/qml/ActivityItemContent.qml
+index 822259d97d..98d0ca8a81 100644
+--- a/src/gui/activity/qml/ActivityItemContent.qml
++++ b/src/gui/activity/qml/ActivityItemContent.qml
+@@ -15,7 +15,7 @@ import "../../tray"
+ RowLayout {
+     id: root
+ 
+-    required property color adaptiveTextColor
++    property color adaptiveTextColor
+ 
+     property variant activityData: {{}}
+ 
+@@ -182,9 +182,17 @@ RowLayout {
+                     icon.height: Style.activityListButtonIconSize
+ 
+                     ToolTip {
+-                        popupType: Qt.platform.os === "windows" ? Popup.Item : Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++                        id: fieldDetailsButtonToolTip
++
+                         text: qsTr("Open file details")
+                         visible: parent.hovered
++
++                        Binding {
++                            target: fieldDetailsButtonToolTip
++                            property: "popupType"
++                            value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++                            when: fieldDetailsButtonToolTip.hasOwnProperty("popupType")
++                        }
+                     }
+ 
+                     display: Button.IconOnly
+@@ -228,9 +236,17 @@ RowLayout {
+                     display: Button.IconOnly
+ 
+                     ToolTip {
+-                        popupType: Qt.platform.os === "windows" ? Popup.Item : Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++                        id: dismissActionButtonToolTip
++
+                         text: qsTr("Dismiss")
+                         visible: parent.hovered
++
++                        Binding {
++                            target: dismissActionButtonToolTip
++                            property: "popupType"
++                            value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++                            when: dismissActionButtonToolTip.hasOwnProperty("popupType")
++                        }
+                     }
+ 
+                     visible: root.showDismissButton
+diff --git a/src/gui/activity/qml/TalkReplyTextField.qml b/src/gui/activity/qml/TalkReplyTextField.qml
+index 7d5f4bd3af..3de3b10aab 100644
+--- a/src/gui/activity/qml/TalkReplyTextField.qml
++++ b/src/gui/activity/qml/TalkReplyTextField.qml
+@@ -54,9 +54,17 @@ NCContextMenuTextField {
+         }
+ 
+         ToolTip {
+-            popupType: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++            id: sendReplyMessageButtonToolTip
++
+             visible: sendReplyMessageButton.hovered
+             text:  qsTr("Send reply to chat message")
++
++            Binding {
++                target: sendReplyMessageButtonToolTip
++                property: "popupType"
++                value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++                when: sendReplyMessageButtonToolTip.hasOwnProperty("popupType")
++            }
+         }
+     }
+ }
+diff --git a/src/gui/activity/talkreply.cpp b/src/gui/activity/talkreply.cpp
+index 8e8a1a8d61..f917c6d7ac 100644
+--- a/src/gui/activity/talkreply.cpp
++++ b/src/gui/activity/talkreply.cpp
+@@ -7,6 +7,7 @@
+ 
+ #include "accountstate.h"
+ #include "networkjobs.h"
++#include "common/qtcompat.h"
+ 
+ #include <QJsonDocument>
+ #include <QJsonObject>
 diff --git a/src/gui/advancedsettings.cpp b/src/gui/advancedsettings.cpp
 index 60d024b158..a2b7fc790f 100644
 --- a/src/gui/advancedsettings.cpp
@@ -1110,10 +1254,10 @@ index b6ec909176..50716a585e 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index 7fc19a3af5..e85a334154 100644
+index fccdb9813d..e820c9d86e 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
-@@ -46,6 +46,8 @@
+@@ -47,6 +47,8 @@
  #define NOTIFICATIONS_IFACE "org.freedesktop.Notifications"
  #endif
  
@@ -1122,7 +1266,7 @@ index 7fc19a3af5..e85a334154 100644
  using namespace Qt::StringLiterals;
  
  namespace OCC {
-@@ -430,11 +432,11 @@ void Systray::showSearchWindow(int userIndex)
+@@ -452,11 +454,11 @@ void Systray::showSearchWindow(int userIndex)
          return;
      }
  
@@ -1138,7 +1282,7 @@ index 7fc19a3af5..e85a334154 100644
          return;
      }
  
-@@ -447,7 +449,7 @@ void Systray::showSearchWindow(int userIndex)
+@@ -469,7 +471,7 @@ void Systray::showSearchWindow(int userIndex)
                      }},
          {"searchModel", QVariant::fromValue(searchModel)},
      };
@@ -1147,80 +1291,6 @@ index 7fc19a3af5..e85a334154 100644
      const auto window = qobject_cast<QQuickWindow *>(createdObject);
      if (!window) {
          qCWarning(lcSystray) << "Search window resulted in creation of object that was not a window!";
-diff --git a/src/gui/tray/ActivityItem.qml b/src/gui/tray/ActivityItem.qml
-index 58f94f229c..00cbcd65ba 100644
---- a/src/gui/tray/ActivityItem.qml
-+++ b/src/gui/tray/ActivityItem.qml
-@@ -34,9 +34,17 @@ ItemDelegate {
-     Accessible.onPressAction: root.clicked()
- 
-     ToolTip {
--        popupType: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+        id: rootToolTip
-+
-         visible: root.hovered && !activityContent.childHovered && model.displayLocation !== ""
-         text: qsTr("In %1").arg(model.displayLocation)
-+
-+        Binding {
-+            target: rootToolTip
-+            property: "popupType"
-+            value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+            when: rootToolTip.hasOwnProperty("popupType")
-+        }
-     }
- 
-     // TODO: the current style does not support customization of this control
-diff --git a/src/gui/tray/ActivityItemContent.qml b/src/gui/tray/ActivityItemContent.qml
-index fc0779df1b..9bff80e7be 100644
---- a/src/gui/tray/ActivityItemContent.qml
-+++ b/src/gui/tray/ActivityItemContent.qml
-@@ -14,7 +14,7 @@ import com.nextcloud.desktopclient
- RowLayout {
-     id: root
- 
--    required property color adaptiveTextColor
-+    property color adaptiveTextColor
- 
-     property variant activityData: {{}}
- 
-@@ -181,9 +181,17 @@ RowLayout {
-                     icon.height: Style.activityListButtonIconSize
- 
-                     ToolTip {
--                        popupType: Qt.platform.os === "windows" ? Popup.Item : Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+                        id: fieldDetailsButtonToolTip
-+
-                         text: qsTr("Open file details")
-                         visible: parent.hovered
-+
-+                        Binding {
-+                            target: fieldDetailsButtonToolTip
-+                            property: "popupType"
-+                            value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+                            when: fieldDetailsButtonToolTip.hasOwnProperty("popupType")
-+                        }
-                     }
- 
-                     display: Button.IconOnly
-@@ -227,9 +235,17 @@ RowLayout {
-                     display: Button.IconOnly
- 
-                     ToolTip {
--                        popupType: Qt.platform.os === "windows" ? Popup.Item : Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+                        id: dismissActionButtonToolTip
-+
-                         text: qsTr("Dismiss")
-                         visible: parent.hovered
-+
-+                        Binding {
-+                            target: dismissActionButtonToolTip
-+                            property: "popupType"
-+                            value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+                            when: dismissActionButtonToolTip.hasOwnProperty("popupType")
-+                        }
-                     }
- 
-                     visible: root.showDismissButton
 diff --git a/src/gui/tray/AutoSizingMenu.qml b/src/gui/tray/AutoSizingMenu.qml
 index e3cc79871d..303cdd34dc 100644
 --- a/src/gui/tray/AutoSizingMenu.qml
@@ -1245,29 +1315,6 @@ index e3cc79871d..303cdd34dc 100644
 +        value: Popup.Window
 +        when: autoSizingMenu.hasOwnProperty("popupType")
 +    }
- }
-diff --git a/src/gui/tray/TalkReplyTextField.qml b/src/gui/tray/TalkReplyTextField.qml
-index 1c61a3ba2b..8f5af5a75b 100644
---- a/src/gui/tray/TalkReplyTextField.qml
-+++ b/src/gui/tray/TalkReplyTextField.qml
-@@ -54,9 +54,17 @@ TextField {
-         }
- 
-         ToolTip {
--            popupType: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+            id: sendReplyMessageButtonToolTip
-+
-             visible: sendReplyMessageButton.hovered
-             text:  qsTr("Send reply to chat message")
-+
-+            Binding {
-+                target: sendReplyMessageButtonToolTip
-+                property: "popupType"
-+                value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+                when: sendReplyMessageButtonToolTip.hasOwnProperty("popupType")
-+            }
-         }
-     }
  }
 diff --git a/src/gui/tray/TrayFolderListItem.qml b/src/gui/tray/TrayFolderListItem.qml
 index feb8303830..b2e29a7df9 100644
@@ -1327,30 +1374,6 @@ index 82b2640d61..141e608dcd 100644
      }
  
  
-diff --git a/src/gui/tray/activitydata.cpp b/src/gui/tray/activitydata.cpp
-index 10baf7bef4..21d2092749 100644
---- a/src/gui/tray/activitydata.cpp
-+++ b/src/gui/tray/activitydata.cpp
-@@ -8,6 +8,7 @@
- 
- #include "activitydata.h"
- #include "folderman.h"
-+#include "common/qtcompat.h"
- 
- using namespace Qt::StringLiterals;
- 
-diff --git a/src/gui/tray/activitylistmodel.cpp b/src/gui/tray/activitylistmodel.cpp
-index 3a8ecf54af..14c5ef875b 100644
---- a/src/gui/tray/activitylistmodel.cpp
-+++ b/src/gui/tray/activitylistmodel.cpp
-@@ -18,6 +18,7 @@
- #include "activitydata.h"
- #include "systray.h"
- #include "common/utility.h"
-+#include "common/qtcompat.h"
- 
- #include <QAbstractListModel>
- #include <QDesktopServices>
 diff --git a/src/gui/tray/asyncimageresponse.cpp b/src/gui/tray/asyncimageresponse.cpp
 index 875310d96f..641be3b24e 100644
 --- a/src/gui/tray/asyncimageresponse.cpp
@@ -1364,35 +1387,11 @@ index 875310d96f..641be3b24e 100644
  #include "accountmanager.h"
  
  using namespace Qt::StringLiterals;
-diff --git a/src/gui/tray/notificationhandler.cpp b/src/gui/tray/notificationhandler.cpp
-index cf0624367a..cde9cec563 100644
---- a/src/gui/tray/notificationhandler.cpp
-+++ b/src/gui/tray/notificationhandler.cpp
-@@ -8,6 +8,7 @@
- #include "accountstate.h"
- #include "capabilities.h"
- #include "networkjobs.h"
-+#include "common/qtcompat.h"
- 
- #include "iconjob.h"
- 
-diff --git a/src/gui/tray/talkreply.cpp b/src/gui/tray/talkreply.cpp
-index 8e8a1a8d61..f917c6d7ac 100644
---- a/src/gui/tray/talkreply.cpp
-+++ b/src/gui/tray/talkreply.cpp
-@@ -7,6 +7,7 @@
- 
- #include "accountstate.h"
- #include "networkjobs.h"
-+#include "common/qtcompat.h"
- 
- #include <QJsonDocument>
- #include <QJsonObject>
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index e7509fe416..5211f9da2e 100644
+index 0ccccb571b..f449937f5c 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
-@@ -26,6 +26,7 @@
+@@ -25,6 +25,7 @@
  #include "userstatusconnector.h"
  #include "common/utility.h"
  #include "ocsassistantconnector.h"
@@ -1618,7 +1617,7 @@ index 6d3e7b9b19..d80c0b08b6 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index faa590d3a9..907a8db269 100644
+index 4ed3ffa98d..f4bd7a4622 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1642,7 +1641,7 @@ index ba5230aed3..f577eeb6cb 100644
  #include <csync_exclude.h>
  #include "vio/csync_vio_local.h"
 diff --git a/src/libsync/encryptedfoldermetadatahandler.cpp b/src/libsync/encryptedfoldermetadatahandler.cpp
-index 956d485b66..f17e9b44d9 100644
+index 7688d1a142..39ece6cc78 100644
 --- a/src/libsync/encryptedfoldermetadatahandler.cpp
 +++ b/src/libsync/encryptedfoldermetadatahandler.cpp
 @@ -10,6 +10,7 @@
@@ -1666,7 +1665,7 @@ index 92b3300359..f53e216891 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/libsync/filesystem.cpp b/src/libsync/filesystem.cpp
-index 9e5f6ef10c..607fbb604f 100644
+index 4fb2172e57..2f69c025d0 100644
 --- a/src/libsync/filesystem.cpp
 +++ b/src/libsync/filesystem.cpp
 @@ -7,6 +7,7 @@
@@ -1677,6 +1676,18 @@ index 9e5f6ef10c..607fbb604f 100644
  #include "csync.h"
  #include "vio/csync_vio_local.h"
  #include "std/c_time.h"
+diff --git a/src/libsync/foldermetadata.cpp b/src/libsync/foldermetadata.cpp
+index 9ee4cfdc6f..6d70df1181 100644
+--- a/src/libsync/foldermetadata.cpp
++++ b/src/libsync/foldermetadata.cpp
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include "account.h"
++#include "common/qtcompat.h"
+ #include "encryptedfoldermetadatahandler.h"
+ #include "foldermetadata.h"
+ #include "clientsideencryption.h"
 diff --git a/src/libsync/kfcompat.cpp b/src/libsync/kfcompat.cpp
 new file mode 100644
 index 0000000000..09a0552883
@@ -2096,7 +2107,7 @@ index b43723f630..93568774f0 100644
  
  class TestAccountSettings : public QObject
 diff --git a/test/testactivitydata.cpp b/test/testactivitydata.cpp
-index 3a3f8ad923..0cb3f0cd01 100644
+index 45cd5da659..9223802839 100644
 --- a/test/testactivitydata.cpp
 +++ b/test/testactivitydata.cpp
 @@ -8,6 +8,7 @@
