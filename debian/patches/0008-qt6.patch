@@ -1224,7 +1224,7 @@ index c188f366e8..19b4a6c230 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 1b459ee326..e534ef777f 100644
+index f444bcb730..5e477b072c 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1248,7 +1248,7 @@ index ba5230aed3..f577eeb6cb 100644
  #include <csync_exclude.h>
  #include "vio/csync_vio_local.h"
 diff --git a/src/libsync/encryptedfoldermetadatahandler.cpp b/src/libsync/encryptedfoldermetadatahandler.cpp
-index 956d485b66..4163c59ee5 100644
+index 7688d1a142..240891a0e6 100644
 --- a/src/libsync/encryptedfoldermetadatahandler.cpp
 +++ b/src/libsync/encryptedfoldermetadatahandler.cpp
 @@ -4,6 +4,7 @@
@@ -1283,6 +1283,18 @@ index e27301c035..762d93a25c 100644
  #include "csync.h"
  #include "vio/csync_vio_local.h"
  #include "std/c_time.h"
+diff --git a/src/libsync/foldermetadata.cpp b/src/libsync/foldermetadata.cpp
+index 9ee4cfdc6f..5323d408ea 100644
+--- a/src/libsync/foldermetadata.cpp
++++ b/src/libsync/foldermetadata.cpp
+@@ -8,6 +8,7 @@
+ #include "foldermetadata.h"
+ #include "clientsideencryption.h"
+ #include <common/checksums.h>
++#include <common/qtcompat.h>
+ #include <QDir>
+ #include <QJsonArray>
+ #include <QJsonDocument>
 diff --git a/src/libsync/kfcompat.cpp b/src/libsync/kfcompat.cpp
 new file mode 100644
 index 0000000000..09a0552883
