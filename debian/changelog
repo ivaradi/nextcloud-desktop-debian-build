@@ -1,3 +1,1464 @@
+nextcloud-desktop (34.0.0) jammy; urgency=medium
+
+  [ Jyrki Gadinger ]
+  * chore: bump version to 33.0.0-rc1
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: show paused status when account has no sync sources
+  * Update src/gui/tray/syncstatussummary.cpp
+  * fix: disable server version check (<7.0)
+  * Fix typo in connection validator comment
+  * Comment out server version check logic
+  * Update src/gui/tray/syncstatussummary.cpp
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ rakekniven ]
+  * chore(i18n): id -> ID
+
+  [ Rello ]
+  * Update syncstatussummary.cpp
+
+  [ Iva Horn ]
+  * feat: Automatically label issues with OS extracted from description
+  * fix(macOS): Drop macOS 12 Support
+  * feat(file-provider): Server features integration in file provider extension
+  * fix(macOS): FinderSync socket resolution and logging
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * feat(macOS): Consolidated Xcode Workspace (#9435)
+
+  [ Jyrki Gadinger ]
+  * fix: use text emoji replacements to avoid creating duplicate labels
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * chore: update Craft and craft cache
+
+  [ Iva Horn ]
+  * fix(macOS): Defined PRODUCT_BUNDLE_IDENTIFIER for FinderSync
+  * chore(macOS): Updated Xcode project settings
+  * fix(macOS): Resolved warning about deprecated ld_classic
+  * fix(macOS): macdeployqt now finds libvpx
+  * fix(macOS): Suppress -Wimplicit-retain-self by using weak/strong self in dispatch_async blocks
+  * fix(macOS): Resolved various compiler warnings.
+
+  [ Matthieu Gallien ]
+  * fix(e2ee): ensure PIN input dialog is top most window
+
+  [ rakekniven ]
+  * chore(i18n): Adde context for translators
+
+  [ dependabot[bot] ]
+  * chore(deps): bump actions/stale from 10.1.1 to 10.2.0
+
+  [ Rello ]
+  * enhanced detail in "Stale DB entry" log entry
+
+  [ Iva Horn ]
+  * fix(macOS): skip build-tree RPATH to prevent install_name_tool conflict
+  * fix(macOS): Removed TARGETED_DEVICE_FAMILY from Xcode project
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: remove hard-coded app name from sync folder path
+
+  [ chrip ]
+  * Fix #7009: Remove leftover .msi and msi.log after update
+  * Use constant for msi log filename (msi.log)
+
+  [ Christoph Schaefer ]
+  * Apply suggestions from code review
+
+  [ chrip ]
+  * Apply additional suggestion from code review
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * feat(macOS): QtWebEngine Switch
+  * feat(macOS): Updated NCDesktopClientSocketKit to use unified logging system.
+  * fix(macOS): Resolved warning about run script phase.
+  * fix(macOS): Copy Debugging Symbols
+  * fix(macOS): Prevent FinderSync Initializer Crash
+  * chore(macOS): Do not force-load FinderSync
+  * fix(macOS): FinderSync Socket Connection
+  * chore(macOS): Removed Unecessary Info.plist Property
+  * fix(macOS): GitHub Copilot Review Amendments
+  * chore(macOS): Added NEXTCLOUD.cmake to Xcode Workspace
+
+  [ Jyrki Gadinger ]
+  * fix(win32): fix windowserror logging again
+  * fix(win32): only increase ACL size if a new ACE needs to be added
+
+  [ Matthieu Gallien ]
+  * chore: test upload of a locked file inside a remote deleted folder
+  * chore: ensure that automated tests will break if we have invalid jobs
+  * fix: ensure proper upload of locked files
+
+  [ Rello ]
+  * feat: move settings navigation to left sidebar
+  * Apply suggestion from @Rello
+  * fix: border
+  * fix: Remove zorder for upload limit radio buttons
+
+  [ Jyrki Gadinger ]
+  * fix(settings): do not overlap warning message
+
+  [ Matthieu Gallien ]
+  * fix(e2ee): use the correct certificate when recovering folder metadata
+  * fix(e2ee): we need a valid certificate finger print for all types
+  * fix(e2ee): store certificate handle rather than key
+  * fix(e2ee): generate valid metadata after certificate migration
+
+  [ Camila Ayres ]
+  * test(capabilities): check for client_integration capabilities.
+  * fix(integration): typo in translation context.
+  * fix(integration): extend context for translation.
+  * test(fakefolder): return the account state.
+  * test(integration): add tests for FileActionsModel.
+  * fix(integration): do not use an empty fileId from the sync journal.
+  * fix(integration): mimetype returned on Linux differs from other platforms.
+  * fix(integration): add const to static var.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * fix(macOS): fix crash for FileProviderSettings
+
+  [ Rello ]
+  * fix: load app icons for external sites app
+  * fix: avoid duplicate log write failure popups
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(macOS): Regain synchronization folder access (closes #9480)
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * feat(file-provider): Note about missing support for end-to-end encryption in file provider extension.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ dependabot[bot] ]
+  * chore(deps): bump actions/upload-artifact from 6.0.0 to 7.0.0
+  * fix(l10n): Update translations from Transifex
+
+  [ Camila Ayres ]
+  * fix(accountmanager): check existing account proxy type setting.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(file-provider): Fetch share options by user ID not user name (#9074)
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: Improve error handling and clean menu texts
+
+  [ Matthieu Gallien ]
+  * feat(e2ee): add basic support for e2ee metadata format 2.1
+  * fix(e2ee/vfs): disable on-demand population of encrypted folders
+  * chore(e2ee): modernize casts to use c++ cast style
+  * chore(e2ee): add some debug output related to keys management
+  * fix(e2ee): ensure we update the user own certificate when needed
+  * chore(e2ee): add more missing binary suffix for binary byte arrays
+  * fix(e2ee): fix certificate migration
+  * chore(filesystem): fix detection of locked files to prevent errors
+  * fix(windows): ensure proper detection of locked files during upload
+  * fix(upload): ensure we see a warning if we cannot read a file to upload
+
+  [ Jyrki Gadinger ]
+  * fix(logging): prefix localdiscoverytracker category
+  * fix(folder): always restart self-scheduling timer
+  * feat(syncengine): fail and restart the sync if discovery is suspicious
+
+  [ Matthieu Gallien ]
+  * fix(windows): ensure automated tests run fine
+
+  [ Jyrki Gadinger ]
+  * fix(syncengine): perform rediscover only after local deletions
+
+  [ Iva Horn ]
+  * fix(file-provider): Fully handle macOS alias files without MIME type or extension (fixes #8436)
+
+  [ Matthieu Gallien ]
+  * fix(e2ee): allow read of metadata 1.2 again
+  * fix(e2ee): ensure we can read legacy e2ee metadata via API v2
+  * fix(e2ee): properly propagate the proper encryption metadata version
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(file-provider): Sync status on app launch
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Added "File actions" translation
+
+  [ dependabot[bot] ]
+  * chore(deps): bump cpp-linter/cpp-linter-action from 2.16.7 to 2.17.0
+
+  [ Rello ]
+  * fix: validate file action tree elements before showing response
+
+  [ Camila Ayres ]
+  * refactor(integration): clean up code.
+  * fix(integration): do not set an empty file id.
+  * fix(integration): parse url when parsing capabilities json.
+  * refactor(integration): FileActionsModel::setupFileProperties.
+
+  [ Jyrki Gadinger ]
+  * fix(propagateuploadng): do not encode davUrl
+
+  [ Iva Horn ]
+  * fix(file-provider): Refactored change enumeration completion (affects #9553)
+
+  [ Matthieu Gallien ]
+  * chore: modernize code style
+  * fix(e2ee): use display name instead of user ID for UI messages
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * fix(settingsdialog): let scroll area actually resize on current widget in the stack
+  * refactor(settingsdialog): get rid of now-useless designer file
+  * fix(accountsettings): avoid inner scrollable folder list
+  * fix(settingsdialog): avoid black background in scrollbars with Breeze style
+  * fix(accountsettings): allow widgets to be as small as needed
+  * refactor(settingsdialog): use constexpr for toolbar css
+  * fix(settingsdialog): avoid clipping FileProvider QML settings
+  * refactor(settingsdialog): simplify qss rules
+
+  [ Camila Ayres ]
+  * fix(integration): use icon instead of Image for file actions list.
+  * feat(integration): close window when user clicks on response text to open browser.
+  * refactor(integration): remove MouseArea from ItemDelegate.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * Updated README
+
+  [ Jyrki Gadinger ]
+  * fix(i18n): let Qt handle plural forms
+
+  [ Iva Horn ]
+  * fix(file-provider): Working Set Change Enumeration (fixes #9602)
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(l10n): Sanitized file provider UI extension string catalog.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * fix(filesystem): deal with win32 long paths when recursively removing folders
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * chore: add test for current folder read-only state depending on permissions
+  * fix(permissions): mark a folder readonly only if there are no other modifiable permissions present
+  * chore: add test for local folder perms on remote perms change
+  * fix(discovery): recurse in subdirs if etag and remoteperms differ
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * chore(network): enable again our request timeout feature
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * fix(read-only): make the parent folder writable before deleting a file
+  * feat(icon/ai): improved Nextcloud Assistant icon
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(macOS): Fix developer build
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ rakekniven ]
+  * chore(i18n): Correct text case in error message label
+  * chore(l10n) Update QLabel text property to not translate
+  * chore(l10n): Update QLabel text property to not translate
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Stefan Agner ]
+  * fix(settings): add missing endGroup() in Folder::removeFromSettings
+
+  [ Iva Horn ]
+  * feat(macOS): Replace UNIX sockets with XPC
+  * fix(build): include application.h for qobject_cast in socketapi.cpp
+  * fix(ci): exclude Objective-C files from clang-tidy on Linux
+  * fix(build): include QIODevice for complete type in socketapi_p.h
+  * fix(build): include findersyncxpc.h for complete type in socketapi.cpp
+  * fix(ci): also exclude macOS headers from clang-tidy on Linux
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ István Váradi ]
+  * ci: Remove Debian build
+
+  [ dependabot[bot] ]
+  * chore(deps): bump maxim-lobanov/setup-xcode from 1.6.0 to 1.7.0
+
+  [ Iva Horn ]
+  * chore(dependencies): Updated Realm to 20.0.4 to fix builds with Xcode 26.4
+  * fix(macOS): hide dock icon when closing settings with ⌘+W
+
+  [ Matthieu Gallien ]
+  * chore: improve one translated string
+
+  [ Jyrki Gadinger ]
+  * refactor(asyncimageresponse): use Qt::StringLiterals
+  * refactor(asyncimageresponse): use early returns where possible
+  * fix(asyncimageresponse): enhance check for received SVG response
+  * fix(asyncimageresponse): scale QImage to requested size
+  * refactor(asyncimageresponse): use QMimeDatabase for SVG check
+  * fix(gui/settings): use different palette colour for widget backgrounds
+  * fix(gui/settings): keep using AlternateBase as background on Windows
+
+  [ Camila Ayres ]
+  * fix(integration): only call parseEndpoints if fileId is not empty.
+  * fix(integration): file id might be empty for file provider if no sync folder is found.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * chore(legalnotice): update copyright year
+
+  [ dependabot[bot] ]
+  * chore(deps): bump actions/cache from 5.0.3 to 5.0.4
+
+  [ Iva Horn ]
+  * fix(macOS): Extension Display Names
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(macOS): Improved sandbox migration experience
+  * chore(macOS): Added organization name and Xcode version to Xcode project
+  * fix(macOS): incremental builds and macdeployqt
+
+  [ Matthieu Gallien ]
+  * fix(windows/vfs): do not create DB record for invalid virtual items
+  * fix(windows/vfs): automated test for Windows VFS case clash items
+
+  [ Iva Horn ]
+  * fix(macOS): guard checkForUpdatesInBackground on Sparkle's automaticallyChecksForUpdates
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * chore(mac-crafter): Sparkle 2.9.1
+  * fix(macOS): Sparkle Sandboxing
+
+  [ Matthieu Gallien ]
+  * chore: use newer CI image with qt 6.10.2
+  * chore: do not ignore return value from QFile::open
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * chore: systemd service is now wanted by graphical target
+
+  [ Iva Horn ]
+  * fix(macOS): Set app extension version information correctly
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(macOS): Launch on Login
+  * chore(macOS): Resolved SwiftFormat lint warnings.
+  * fix(macOS): macOS 13 Ventura Compatibility
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * chore(ci): update images
+
+  [ Matthieu Gallien ]
+  * chore: PPA Debian package type is a community packaging
+  * chore: suggest people test the AppImage before reporting issues on linux
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * fix(gui): use native QLineEdit styling for server address
+
+  [ Matthieu Gallien ]
+  * fix(windows/vfs): ensure critical logs are going to be produced
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * chore: lower log level for legacy config imports
+  * chore: parse command line options before migrating configuration
+
+  [ dependabot[bot] ]
+  * chore(deps): bump cpp-linter/cpp-linter-action from 2.17.0 to 2.17.1
+
+  [ Rello ]
+  * fix: remove unused secure file drop socket command
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Camila Ayres ]
+  * fix(folderman): disconnect slotFolderCanSyncChanged when unloading folder.
+  * refactor: modernize FolderMan::slotFolderCanSyncChanged.
+  * fix(socketapi): remove doWait from broadcastMessage in slotUnregisterPath.
+  * refactor: movernize SocketApi::slotUnregisterPath.
+  * test(folderman): add test function to unload and delete folders.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * refactor(windows): remove obsolete Explorer fallback socket commands
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(macOS): Open app settings on necessity of sandbox folder migration
+
+  [ dependabot[bot] ]
+  * chore(deps): bump actions/github-script from 8.0.0 to 9.0.0
+
+  [ dependabot[bot] ]
+  * chore(deps): bump actions/upload-artifact from 7.0.0 to 7.0.1
+  * fix(file-provider): Return without error on redundant account setup
+  * chore: Updated AGENTS.md
+  * fix(file-provider): Synchronous deduplicated account setup calls
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(macOS): Word wrap in sandbox migration error display
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(macOS): keep sync dylib install_name as @rpath through cmake --install
+  * fix(macOS): Store credentials provided through command line in macOS keychain
+  * fix(macOS): Updated NextcloudKit dependency to fix NextcloudFileProviderKit tests
+
+  [ Rello ]
+  * Enhance URL validation in openBrowser function
+  * Change URL opening method in FileActionsWindow
+  * Add method to open URL in browser from systray
+  * Add openUrlInBrowser method to systray.h
+  * Update CallNotificationDialog.qml
+  * Update systray.cpp
+
+  [ dependabot[bot] ]
+  * chore(deps): bump cpp-linter/cpp-linter-action from 2.17.1 to 2.18.0
+
+  [ dependabot[bot] ]
+  * chore(deps): bump actions/cache from 5.0.4 to 5.0.5
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * feat(file-provider): Open folder tray window header button
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ rakekniven ]
+  * chore(i18n): Change group folder to team folder
+  * chore(i18n): Change group folder to team folder
+  * chore(i18n): Change group folder to team folder
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * chore: Updated README with manuals link.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * feat(loginFlow): delay initialization of web view page until needed
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(file-provider): Push ignore list via XPC
+
+  [ Jyrki Gadinger ]
+  * fix(sharing): parse received timestamp from expiration date
+
+  [ Iva Horn ]
+  * fix(file-provider): Keep downloaded recursively and immediately (affects #9057)
+  * fix(file-provider): Prevent unnecessary logging about an inexistent trash container item in database
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(file-provider): Replaced decoration asset for items to keep downloaded
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * chore: uses known working zlib 1.3.1 release
+
+  [ Iva Horn ]
+  * feat: Extended AGENTS.md with details about logging in file provider extension code
+  * fix(file-provider): Improved logging in file provider extension
+  * chore(file-provider): Moved FileProviderDomainDefaults.swift from extension target to NextcloudFileProviderKit package
+  * feat(file-provider): Run time switch for debug logging
+  * fix(file-provider): Logging now adopts category string in unified logging output, too
+  * chore(file-provider): SwiftFormat
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * fix(cfapi): avoid creation of db records if CfExecute failed
+  * fix(account): prepare new remoteinfo entry the same way as it's done in discovery
+
+  [ Matthieu Gallien ]
+  * fix(upload): skip locked files during upload to avoid errors
+  * fix(lockedFiles): try to silently ignore locked files
+  * fix(lockedFiles): ensure locked files seen during discovery are known
+  * fix(lockedFiles): check for locked files before opening them
+  * chore: only ignore locked files when uploading them
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Camila Ayres ]
+  * chore(github): enhance pull request template with a checklist.
+  * chore: update CODEOWNERS file.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ rakekniven ]
+  * chore(i18n): Added nbsp before ellipsis
+  * chore(i18n): Added nbsp before ellipsis
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix(translation): string for time display
+
+  [ Jyrki Gadinger ]
+  * fix(win32): unlock file after acquiring a lock
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(#9929): Add post installation script step to delete the obsolete launch agent file to avoid multiple client instances.
+  * chore: Updated bug report template.
+  * fix: Updated bug report template.
+  * chore: Updated bug report template.
+  * fix(file-provider): Bundles and packages exclusion
+  * chore(NextcloudIntegration.xcodeproj): Updated project settings
+  * chore(NextcloudFileProviderKit): SwiftFormat
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: settings dialog minimum size
+
+  [ greatjourney589 ]
+  * fix(editLocally): evaluate lock-record DB call outside Q_ASSERT
+
+  [ Iva Horn ]
+  * fix(file-provider): Surpress Finder's native eviction actions (#9891)
+  * feat(file-provider): Finished custom evict action.
+
+  [ AndreasK ]
+  * fix logger for stdout
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(file-provider): Offer local folder opening regardless of group folders
+  * fix(#9923): Apply eager content policy also to first item in nested hierarchies.
+
+  [ Rello ]
+  * fix: Refactor visitedDirectory handling in MaterializedEnumerationObserver
+  * fkx
+  * fix(test): Fix test assertion for directory visit status
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Qoole ]
+  * perf(rename): cache fileExists results in PropagateLocalRename::start
+
+  [ Iva Horn ]
+  * fix(file-provider): Upload quota excess handling
+  * fix(file-provider): Upload quota excess handling in UI
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: remove admin recall feature
+
+  [ Iva Horn ]
+  * fix(file-provider): Prevent duplicate database records for the same file provider item
+  * fix(file-provider): Disable file provider on macOS 13 Ventura (see #9927)
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Camila Ayres ]
+  * fix(file-provider): detect lock changes during working set enumeration.
+  * test(file-provider): add testLockChangeDetectedByRemoteStateComparison.
+
+  [ Rello ]
+  * feature: Regrouping of settings dialog
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: testing error
+  * fix: switch fix
+  * fix: label rows
+  * fix: row layouts
+  * fix: new icon and margins
+  * fix: tuning border radius and margins
+  * fix: spacing of Account URL
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(file-provider): Content Policy Inheritance for New Items
+
+  [ Jyrki Gadinger ]
+  * fix(logs): change update channel log severity to info
+
+  [ Iva Horn ]
+  * fix(file-provider): Restored and updated (some) translations
+  * fix(file-provider): Preserve local creation and modification dates
+
+  [ Rello ]
+  * fix: double background in settings navigation
+  * fix: folder listing background
+  * fix: align layout of impressum and ignore list also
+  * fix: background colors of ignore settings
+
+  [ Jyrki Gadinger ]
+  * test(discovery): add test for ignoring non-downloadable folders
+  * fix(discovery): do not sync folders missing "Allow download and sync" permission
+  * test(account): add test to ensure non-downloadable shares are omitted
+  * fix(win32): do not list items without download permission
+
+  [ Rello ]
+  * fix: double background in settings navigation
+  * fix: folder listing background
+
+  [ Jyrki Gadinger ]
+  * fix(settings): make accountsettings backgrounds actually transparent
+
+  [ Iva Horn ]
+  * fix(file-provider): Reconciled file provider domain names
+
+  [ Rello ]
+  * fix: use branded icons also for dev builds
+
+  [ Iva Horn ]
+  * feat(file-provider): Enable "Sync now" button
+  * feat(file-provider): Open in browser
+
+  [ Josh ]
+  * fix(logs): further clarify update channel selection logging and logic
+  * chore: add hasDesktopEnterpriseChannel()
+
+  [ Iva Horn ]
+  * fix(file-provider): Fixup for pull request #10057
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * feat(file-provider): Copy internal link
+  * fix(l10n): Pulled in new translations.
+  * fix(file-provider): New remote items inherit content policy
+
+  [ Rello ]
+  * fix: ignore list panels
+
+  [ Josh ]
+  * chore: add nodiscard
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Camila Ayres ]
+  * feat(macOS): new systray window.
+  * feat(macOS): display new systray window.
+  * style: rename macOS systray file and move it to the macOS folder.
+  * style: rename menu action from 'App settings' to 'Settings'.
+  * feat(macOS): display QML systray window when user row is clicked.
+  * chore: update copyright year in new file.
+  * fix: return focus to the new popup window after user clicks aways from QML window.
+  * feat(macOS): add hover effect to Settings and Quit actions.
+  * feat(Linux/Windows): add new tray popup window.
+  * refactor(macOS): clean up comments, make code more concise, fix warnings.
+  * fix(linux): adjust new qml account popup.
+
+  [ Rello ]
+  * fix: UI alignments
+  * fix: fix hover colors and margins
+  * fix: fix hover colors and EnforcedPlainTextLabel usage
+
+  [ Matthieu Gallien ]
+  * fix(tray): fix color of tray popup separator line
+
+  [ Iva Horn ]
+  * chore(doc): Updated documentation for contributors on macOS
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ dependabot[bot] ]
+  * chore(deps): bump webiny/action-conventional-commits from 1.3.1 to 1.4.2
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ dependabot[bot] ]
+  * chore(deps): bump actions/stale from 10.2.0 to 10.3.0
+
+  [ Jyrki Gadinger ]
+  * fix(lscoljob): disable Qt's decompression check to allow listing of really large folders again
+
+  [ Camila Ayres ]
+  * fix(tray): show correct sync status icon in macOS account popup.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(file-provider): Re-enumerate items after app updates
+
+  [ Camila Ayres ]
+  * fix(networkjobs): move processEvents after reply reads in LsColJob
+
+  [ Iva Horn ]
+  * fix(macOS): Use the same macOS app icon in developer build as in Nextcloud release builds.
+
+  [ Rello ]
+  * fix: evaluate notify-push ids and only start sync if the ids are known/enumerated at all
+  * fix: revert wrong commit
+
+  [ Camila Ayres ]
+  * chore(contributing): add section about AI-assisted contributions.
+  * chore(contributing): add section Apply a license.
+  * chore(.github): update checklist to include the new AI guidelines and policy.
+  * chore(agents): add section Nextcloud Contribution Policy.
+  * chore(agents): update information about commit messages and signing.
+  * chore(agents): update license header instructions.
+
+  [ Rello ]
+  * feat: add QML account wizard
+  * fix: Implemented the XPC acknowledgment fallback.
+
+  [ dependabot[bot] ]
+  * chore(deps): bump actions/checkout from 6.0.2 to 6.0.3
+
+  [ Matthieu Gallien ]
+  * feat(agents): add some more details on what we want for c++ code
+  * fix: fix review comments
+
+  [ Iva Horn ]
+  * fix(file-provider): Updated API calls NextcloudKit dependency to breaking changes in 7.3.3
+
+  [ Rello ]
+  * fix: do not trigger false remote wipe message
+  * fix: align UI for VFS and sync settings
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * UX fixes: - V2 poll timer - folder-already used check - remove option to reuse or clean up (backup) existing sync folder - dock icon when account wizard is active - tray menu also opens when 0 accounts - tray menu UI when 0 accounts - macOS default sync folder - remove unnecessary log warnings - accessiblity labels
+  * fix: opening account wizard a second time
+  * fix(accountWizard): UX fixes - V2 poll timer - folder-already used check - remove option to reuse or clean up (backup) existing sync folder - dock icon when account wizard is active - tray menu also opens when 0 accounts - tray menu UI when 0 accounts - macOS default sync folder - remove unnecessary log warnings - accessiblity labels
+  * fix: opening account wizard a second time
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: review fixes
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: review fixes
+
+  [ Carl Schwan ]
+  * fix: Add missing icons to buttons on Plasma
+
+  [ Camila Ayres ]
+  * fix(agents): correct from AGPL to GPL.
+
+  [ Rello ]
+  * fix: macOS tray translations
+
+  [ Matthieu Gallien ]
+  * fix: prevent crash by forcing conversion to QString
+
+  [ Rello ]
+  * fix: Proxy dialog wrongly handled
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Camila Ayres ]
+  * chore(readme): add link to the CONTRIBUTING.md.
+
+  [ Iva Horn ]
+  * feat(macOS): Use .icon format for macOS app bundle
+  * fix: Added missing import to AccountWizardWindow.qml
+
+  [ Rello ]
+  * fix: adjust the switch to the server UI (color/size)
+
+  [ Jyrki Gadinger ]
+  * fix(filedetails): use correct path for fetching file tags
+
+  [ Camila Ayres ]
+  * fix(common): preserve Windows Explorer custom folder icons during migration.
+
+  [ Iva Horn ]
+  * feat(macOS): fall back to SVG + ECM pipeline for branded builds
+  * chore(macOS): Updated workspace dependencies and consolidated Package.resolved files.
+
+  [ Rello ]
+  * fix: move constant into Style.qml and fix ignorelist popup
+  * Update src/gui/advancedsettings.cpp
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: move constant into Style.qml and fix ignorelist popup
+
+  [ Iva Horn ]
+  * fix(mac-crafter): Fix clean build by conditionally signing file provider extensions
+  * fix(ci): Use macOS 26 runners for GitHub actions.
+
+  [ Rello ]
+  * fix: do not double translate. The meaningful text is already translated in the unit strings like %n hour(s) and %n minute(s). Translating only %1 %2 gives translators almost no useful source text, and the placeholder order should stay stable for a compact duration.
+  * fix: reduce logging
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: AppToken removal
+
+  [ Camila Ayres ]
+  * fix(gui): add maybe_unused attribute to parameter.
+  * fix(macOS): use ternary expression.
+  * fix(macOS): give copiedHandler the explicit block type.
+
+  [ rakekniven ]
+  * chore(i18n): Delete .tx/nextcloud.client-desktop directory
+
+  [ Camila Ayres ]
+  * fix: updated link to instructions for KDE Craft.
+
+  [ Iva Horn ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * fix: add direct log when folder watcher detects changes
+  * feat: update craft configuration for next release
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(macOS): Restored support for pre-Xcode 26 build enviroments
+
+  [ Camila Ayres ]
+  * fix(file-provider): use slash prefix for child item queries.
+  * test(file-provider): add path boundary prefix tests.
+
+  [ Iva Horn ]
+  * feat(audio): replace Qt Multimedia with a native audio abstraction
+  * fix(Windows): Updated WINVER to require Windows 10 as the rest of the project
+
+  [ Matthieu Gallien ]
+  * feat(dbus): use KF6 DBusAddons to offer DBus API
+  * fix(linux/updater): do not freeze on start when running update check
+
+  [ Camila Ayres ]
+  * fix(file-provider): prevent data loss when parent folder moves during sync.
+  * test(file-provider): add move safe deletion tests.
+
+  [ Jyrki Gadinger ]
+  * chore: bump version to 34.0.0-rc1
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Camila Ayres ]
+  * fix(file-provider): invalidate lock tokens when file paths change.
+  * test(file-provider): add lock token invalidation tests.
+  * test(file-provider): retain in-memory realm across async enumeration
+
+  [ Iva Horn ]
+  * fix(#10053): Initial menu bar extra sync status
+  * chore(macOS): Removed obsolete SwiftNIO dependency
+  * fix(#10177): Unblock menu bar extra
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * chore: Removed obsolete Qt version gates in code
+  * fix(#10178): Draggable account wizard window.
+
+  [ Troed Sångberg ]
+  * fix(gui): prevent nullptr dereference when VFS mode is unavailable
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * fix(vfs/windows): test folders on-demand with a sub-folder prefix
+  * fix(vfs/windows): use proper relative local path for DB records
+
+  [ Camila Ayres ]
+  * chore(agents): add guideline for verifiable claims in contributions.
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(macOS): Relabel "virtual files" as "File Provider"
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Camila Ayres ]
+  * fix(libsync): use slash prefix in removeRecursively.
+  * fix(libsync): clear lock token when propagating file path changes.
+  * fix(libsync): update child journal records on directory rename.
+  * refactor(test): fix path and remove syncOnce calls.
+  * fix(libsync): crash.
+  * fix(test): fix failed test.
+  * fix(test): remove check for vfs plugin.
+
+  [ Matthieu Gallien ]
+  * fix(rename): avoid errors during sync with remote rename tracking
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Ravi Kant Sharma ]
+  * fix: build error with OpenSSL 4.0
+
+  [ Iva Horn ]
+  * fix(#10216): Prevent app nap and silent kill
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix(UI): read OCC_UPDATE_URL only for dev builds
+  * feature: move logout and remove to settings menu
+  * fix(UI): line break issue and panel background
+  * fix(UI): condition for public share link visibility
+  * fix(UI): The settings button now uses AccountState::isSignedOut() instead of isConnected()
+  * fix(UI): test fixes
+  * fix(UI): settings dialog background
+  * fix(UI): settings dialog background
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * fix(gui): remove gap after status messages
+
+  [ Matthieu Gallien ]
+  * fix(encryption): explicit detection of child or root encrypted folders
+  * fix(encryption): prevent user to leave encrypted shares: not possible
+
+  [ Iva Horn ]
+  * fix(file-provider): Fixed different drops of remote changes in sync logic
+  * chore(file-provider): Reorganized code for improved contributor understanding
+  * fix(file-provider): Corrected some test assumptions
+  * chore(file-provider): Applied SwiftFormat
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(#10237): Support Adobe Lock Files
+  * fix(file-provider): Confine the enumeration of remote changes to what actually was visited locally
+
+  [ Rello ]
+  * fix: parsing ] in ignorelist in File Provider correctly
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * chore: Remove QtWebEngine
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(file-provider): Crash due to __FILEPROVIDER_OBSERVER_TOO_MANY_ITEMS__
+
+  [ mosandlt ]
+  * fix(cmd,csync): don't silently ignore a missing --exclude file
+
+  [ Matthieu Gallien ]
+  * fix(logs): prints the Qt platform name at startup
+
+  [ Rello ]
+  * fix: no special handling. we change the theme text
+  * fix: shorten version string; details in debug archive
+
+  [ Iva Horn ]
+  * fix(Ticket#96101255): Crash on wake due to race condition
+
+  [ Matthieu Gallien ]
+  * chore: disable building with Qt WebEngine in craft settings
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: open the finder location instead of the file directly
+  * feat: add NC URI account setup
+  * fix: only allow valid URLs
+  * fix: only allow valid URLs and reduce logging
+  * fix: cancel a running login flow if a new one arrives
+  * fix: remove unused <chrono> and stabilize the code
+  * fix: prevent double account wizard
+  * Update src/gui/wizard/accountwizardcontroller.cpp
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * fix(accountsetup): exit with code 1 when sync folder creation fails during provisioning
+  * fix(account/setup): fix automated account creation via CLI options
+
+  [ Rello ]
+  * feat(tray): update account status menu
+  * fix: Code cleanups and Claude-Review findings
+  * fix: test case issue
+
+  [ Matthieu Gallien ]
+  * fix: moves code related to Activity class inside the class itself
+  * fix: small clean up in activity list model class
+  * fix: do not rename existing variables when not needed
+
+  [ Rello ]
+  * style(macOS): change the text for some tray menu options.
+
+  [ Matthieu Gallien ]
+  * fix: better code style
+  * fix: fix issues reported by static code checks
+  * fix: fix warnings reported by static code checks
+  * fix: we already require Qt 6.10.0 minimum
+  * fix: fix code style such that a slot has no return value
+  * fix: fix invalid behavior in rowCount method of a Qt based model
+
+  [ Rello ]
+  * fix: app list svg rendering
+
+  [ Camila Ayres ]
+  * refactor(qml): use Style properties and create wizard component.
+  * fix(tray): make TrayAccountAppsModel::Roles an unscoped enum.
+  * fix(tray): include IconUrlRole in TrayAccountAppsModel::data role range.
+
+  [ Rello ]
+  * fix: string cleanups
+
+  [ Iva Horn ]
+  * chore(macOS): Split up trayaccountpopup_mac.mm into dedicated source code files and added documentation
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(file-provider): Support Adobe InDesign safe save
+
+  [ Rello ]
+  * fix: translation strings
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * fix: load existing accounts before creating a new one
+
+  [ Xaymar ]
+  * fix: Don't recursively call processEvents
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix(UI): Make FolderMetadata enforce that every decrypted E2EE filename is a single path segment before it can enter discovery.
+  * fix(UI): test fixes
+  * fix: Remove file deletion on metadata error
+  * fix: Add checks for '.' and '..' in filename validation
+  * fix: review findings
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * fix(exclude): avoid trying to read patterns from file when reading failed
+  * fix(cfapi): download exclude pattern lists with the next sync when creating placeholder files
+
+  [ Iva Horn ]
+  * fix(#10085): "Remove Download" unavailable on folders
+  * fix(macOS): Updated TransifexStringCatalogSanitizer
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: "dismiss" string and showing of chat message in tray preview
+
+  [ Iva Horn ]
+  * fix(TransifexStringCatalogSanitizer): Hardening to prevent data loss
+
+  [ Rello ]
+  * feat: add search dialog to new tray menu
+
+  [ Camila Ayres ]
+  * refactor(search): move search window state derivation into the model
+  * test(search): cover SearchState transitions in the search model
+
+  [ Rello ]
+  * fix: make the search modular by separating UI components
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: do not allow scheme change for push notifications
+
+  [ Matthieu Gallien ]
+  * feat(governance): add base class for governance related network jobs
+  * feat(governance): very basic getter to test governance capability
+  * feat(governance): add more job types for each requests
+  * feat(governance): getting ready to be able to use governance API
+  * feat(governance): open governance labels dialog from files manager
+  * feat(governance): add automated tesst for network requests
+  * feat(governance): parse governance API replies to populate the UI
+  * feat(governance): makes our apply labels dialog usefull
+  * feat(governance): fix some issues with QML bindings of enum types
+  * feat(governance): remove unused components from governance dialog
+  * feat(governance): now the ComboBox displays the labels
+  * feat(governance): add all label types
+  * feat(governance): apply labels and fix issues
+  * feat(governance): apply wizard visual style to GovernanceLabelsDialog
+  * feat(governance): fix governance API requests syntax
+  * feat(governance): improve QML bindings to the governance jobs
+  * feat(governance): manage label selection inside the model
+  * feat(governance): add or remove labels by selecting them, display state
+  * feat(governance): display network errors when using governance labels
+  * feat(governance): apply design review on the new dialog
+  * feat(governance): ensure labels model is properly populated
+  * fix: improve logging of network requests
+  * feat(governance): add icons before Sensitivity and Retention labels
+  * feat(governance): ensure labels model is properly populated
+  * feat(governance): apply changes from API updated development state
+  * feat(governance): deduplicate some code
+
+  [ Jyrki Gadinger ]
+  * chore(capabilities): remove unused capability methods
+  * chore(ocssharejob): remove unused setPublicUpload method
+  * chore(sharing): remove unused methods related to `name` attributes
+
+  [ Qoole ]
+  * perf(activity): inline FolderMan::instance() and avoid string concat in hot path
+
+  [ Jyrki Gadinger ]
+  * chore: bump version to 34.0.0-rc2
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Claudio Cambra ]
+  * fix(tray): Give macOS menu popup expected visual effect material
+  * fix(tray): Use liquid glass view for tray on macOS 26+
+
+  [ Iva Horn ]
+  * Improve FinderSync Extension handling
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * feat(governance): update governance API for latest changes
+
+  [ Iva Horn ]
+  * fix(file-provider): Check for upload size mismatch
+  * fix(file-provider): Fix flaky testEnumerate root date assertion
+
+  [ Matthieu Gallien ]
+  * chore: @claucambra is a new code owner
+
+  [ Iva Horn ]
+  * fix(file-provider): Improved chunked upload integrity
+  * feat(macOS): Improved file provider switch user experience
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Jyrki Gadinger ]
+  * refactor(gui/search): build as a proper QML module
+
+  [ Iva Horn ]
+  * fix(file-provider): Detect upload conflicts with an If-Match precondition
+
+  [ Claudio Cambra ]
+  * feat: Add AutoCAD lock files to sync exclude
+  * feat: Detect AutoCAD files in sync engine
+  * feat: Handle file locking/unlocking when detecting .dwl(2)
+  * feat: Test AUtoCAD file locking behaviour
+  * feat(fileprovider): Detect autocad lock files
+  * feat(fileprovider): Acquire autocad lock file target name
+  * feat(fileprovider): Test autocad lock files handling
+  * feat(fileprovider): Document locking behaviour for Adobe and AutoCAD
+  * feat(fileprovider): Ensure both lock files are gone before unlocking AutoCAD file
+  * feat(fileprovider): Add test for sibling lock file behaviour
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Claudio Cambra ]
+  * chore: Add performance test/results requirement for perf PRs in PR template
+  * chore: Add performance improvement claim requirements to AGENTS.md
+  * feat: Add adobe lock file extensions to sync ignore list
+  * feat: Add Adobe excluded files test
+  * feat: Add check for lockable adobe document extension
+  * feat: Add Adobe lock file -> target path matching logic
+  * feat: Test detection and handling of adobe document lock files
+
+  [ thstyl2000 ]
+  * fix(folderwatcher): ignore stale inotify descriptors
+
+  [ Claudio Cambra ]
+  * fix(macOS): Prevent stripping of application name components following a dot during Sparkle updates
+
+  [ Matthieu Gallien ]
+  * chore: prepare for 34.0.0 rc3 release
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * fix(file-provider): Remove the misleading size check for uploads again
+  * chore(macOS): Updated dependencies
+
+  [ Claudio Cambra ]
+  * feat(ui): Add NCContextMenuTextField
+  * feat(ui): Use NCContextMenuTextField as base for all QML textfields
+  * fix(ui): Fix text palettes in windows
+
+  [ Rello ]
+  * feat: refactor activity window into own folder structure
+  * fix: reopening a cached Activities window now reloads its account-pinned SyncStatusSummary before showing it.
+  * feat: refactor activity window into own folder structure
+  * fix: dependencies
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Iva Horn ]
+  * feat(file-provider): Add a reset button in the app settings
+  * fix(l10n): Update translations from Transifex
+
+  [ Matthieu Gallien ]
+  * chore: clean up static code reported warnings
+  * fix(encryption): adjust log output to help to debug
+  * fix(encryption): do not loop twice to remove a single file
+  * fix(encryption): ignore invalid files when scanning encrypted folders
+  * chore: prepare for 34.0.0 rc4 release
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: dependencies
+
+  [ Claudio Cambra ]
+  * feat: Detect affinity document extensions
+  * feat: Detect and handle affinity lock files
+  * feat: Add affinity lock files to exclude list
+  * feat: Add tests for affinity lock files
+  * fix: simplify lock file check for affinity
+  * fix(edit-locally): normalize acquired userIdAtHost
+  * fix(edit-locally): add testing for host normalization
+  * docs: add dev doc for edit locally
+
+  [ Matthieu Gallien ]
+  * chore: prepare for release 34.0.0 rc5
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+
+  [ Rello ]
+  * fix: Do not continue polling ETag in file provider extension when account is not connected
+  * fix: add tests checking disconnected accounts' file provider extensions do not trigger polling ETag check
+
+  [ Iva Horn ]
+  * fix(file-provider): don't drop all remote changes when one folder read fails
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Claudio Cambra ]
+  * fix(agents): ensure agents follow proper testing practices
+  * fix(file-provider): add extension property for canonical form
+  * fix(file-provider): add method to compare locations using canonical form
+  * fix(file-provider): add test to verify canonical check
+  * fix(file-provider): store normalised form in db
+  * fix(file-provider): add convenience methods for location checks using normalised strings
+  * fix(file-provider): use comparison methods/queries in location checks
+  * fix(file-provider): test location comparisons
+  * fix(file-provider): document normalisation
+  * fix(file-provider): remove unnecessary extension property
+  * fix(file-provider): populate normalized fields in dbmanager tests
+  * fix(file-provider): centralise updating location metadata
+  * fix(file-provider): remove account parameter from queries
+  * fix(file-provider): Add convenience methods for comparing paths and descendancy with normalisation
+  * fix(file-provider): use normalisation-using methods for path checks in working set scan
+  * fix(file-provider): add tests for new path checking methods
+  * fix(file-provider): add test for schema 203 migration
+  * fix(file-provider): swift-format normalisation changes
+  * fix(file-provider): test normalisation changes for hierarchical changes
+  * fix(file-provider): add tests for new item metadata path normalisation convenience methods
+
+  [ Matthieu Gallien ]
+  * fix(governance): makes desktop UI closer to the files web UI
+
+  [ Iva Horn ]
+  * fix(file-provider): Do not vend .allowsExcludingFromSync capability on items
+
+  [ Matthieu Gallien ]
+  * chore: prepare for 34.0.0 final release
+
+ -- István Váradi <ivaradi@varadiistvan.hu>  Tue, 28 Jul 2026 14:26:22 +0000
+
 nextcloud-desktop (33.0.0) jammy; urgency=medium
 
   [ Claudio Cambra ]
