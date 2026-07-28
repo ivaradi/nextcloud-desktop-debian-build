@@ -782,7 +782,7 @@ index 822259d97d..98d0ca8a81 100644
  
                      visible: root.showDismissButton
 diff --git a/src/gui/activity/qml/TalkReplyTextField.qml b/src/gui/activity/qml/TalkReplyTextField.qml
-index 7d5f4bd3af..3de3b10aab 100644
+index 3e6c2050df..d3934b29b2 100644
 --- a/src/gui/activity/qml/TalkReplyTextField.qml
 +++ b/src/gui/activity/qml/TalkReplyTextField.qml
 @@ -54,9 +54,17 @@ NCContextMenuTextField {
@@ -914,7 +914,7 @@ index c061eff726..2a0751b07c 100644
                  }
              }
 diff --git a/src/gui/folderman.cpp b/src/gui/folderman.cpp
-index 6a6c7de367..895db04c35 100644
+index bcb9cf3464..12f5c8a844 100644
 --- a/src/gui/folderman.cpp
 +++ b/src/gui/folderman.cpp
 @@ -16,6 +16,7 @@
@@ -985,7 +985,7 @@ index 56032e2a64..e32545ada1 100644
  
  namespace OCC
 diff --git a/src/gui/governance/getavailablegovernancelabels.cpp b/src/gui/governance/getavailablegovernancelabels.cpp
-index cf76f74f7a..13f3885564 100644
+index 310fd8471d..9e20883246 100644
 --- a/src/gui/governance/getavailablegovernancelabels.cpp
 +++ b/src/gui/governance/getavailablegovernancelabels.cpp
 @@ -7,6 +7,8 @@
@@ -1011,10 +1011,10 @@ index ac95577a50..8759c03264 100644
  
  namespace OCC
 diff --git a/src/gui/governance/governancelabelslistmodel.cpp b/src/gui/governance/governancelabelslistmodel.cpp
-index 7cf772db38..ff2831d9b0 100644
+index 7d4eae7751..f18f60506e 100644
 --- a/src/gui/governance/governancelabelslistmodel.cpp
 +++ b/src/gui/governance/governancelabelslistmodel.cpp
-@@ -10,6 +10,8 @@
+@@ -13,6 +13,8 @@
  #include <QJsonObject>
  #include <QJsonArray>
  
@@ -1197,7 +1197,7 @@ index 21f1d1fb8a..19fbe9f24d 100644
  #include <algorithm>
  
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
-index 12871424e6..22608e753e 100644
+index 454cea5cb0..8fbff8b439 100644
 --- a/src/gui/settingsdialog.cpp
 +++ b/src/gui/settingsdialog.cpp
 @@ -17,6 +17,7 @@
@@ -1629,7 +1629,7 @@ index 4ed3ffa98d..f4bd7a4622 100644
  #include "csync.h"
  
 diff --git a/src/libsync/discoveryphase.cpp b/src/libsync/discoveryphase.cpp
-index ba5230aed3..f577eeb6cb 100644
+index 257e4c9071..569fba2253 100644
 --- a/src/libsync/discoveryphase.cpp
 +++ b/src/libsync/discoveryphase.cpp
 @@ -17,6 +17,7 @@
@@ -1665,7 +1665,7 @@ index 92b3300359..f53e216891 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/libsync/filesystem.cpp b/src/libsync/filesystem.cpp
-index 4fb2172e57..2f69c025d0 100644
+index 88731dc75e..1f07005964 100644
 --- a/src/libsync/filesystem.cpp
 +++ b/src/libsync/filesystem.cpp
 @@ -7,6 +7,7 @@
@@ -2155,7 +2155,7 @@ index b45cf49114..060f9aca0b 100644
  
  #include "account.h"
 diff --git a/test/testfolderman.cpp b/test/testfolderman.cpp
-index e06761a13b..aa6ef16ab2 100644
+index 277ed2da91..98492d2ad0 100644
 --- a/test/testfolderman.cpp
 +++ b/test/testfolderman.cpp
 @@ -14,6 +14,7 @@
@@ -2167,12 +2167,12 @@ index e06761a13b..aa6ef16ab2 100644
  #include "account.h"
  #include "accountstate.h"
 diff --git a/test/testlocaldiscovery.cpp b/test/testlocaldiscovery.cpp
-index e5e2a943dc..6b02d0e8b7 100644
+index f3e1f443d3..b82dafd1c0 100644
 --- a/test/testlocaldiscovery.cpp
 +++ b/test/testlocaldiscovery.cpp
-@@ -13,6 +13,8 @@
- #include <syncengine.h>
- #include <localdiscoverytracker.h>
+@@ -18,6 +18,8 @@
+ #include <QThreadPool>
+ #include <QTemporaryDir>
  
 +#include "common/qtcompat.h"
 +
