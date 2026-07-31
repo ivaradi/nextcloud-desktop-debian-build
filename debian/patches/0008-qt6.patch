@@ -565,7 +565,7 @@ index a4a87848eb..5f936f685b 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index 4598b49384..1fa84c05bc 100644
+index 0961fd7596..78c2f972d6 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -577,7 +577,7 @@ index 4598b49384..1fa84c05bc 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -578,13 +578,20 @@ target_link_libraries(nextcloudCore
+@@ -579,13 +579,20 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -599,7 +599,7 @@ index 4598b49384..1fa84c05bc 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -836,3 +843,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -837,3 +844,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -1369,10 +1369,10 @@ index 875310d96f..641be3b24e 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index 0ccccb571b..f449937f5c 100644
+index b6136e9557..1ecbdcf537 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
-@@ -25,6 +25,7 @@
+@@ -26,6 +26,7 @@
  #include "userstatusconnector.h"
  #include "common/utility.h"
  #include "ocsassistantconnector.h"
@@ -1381,7 +1381,7 @@ index 0ccccb571b..f449937f5c 100644
  #ifdef BUILD_FILE_PROVIDER_MODULE
  #include "gui/macOS/fileprovider.h"
 diff --git a/src/gui/trayaccountpopup_qt.cpp b/src/gui/trayaccountpopup_qt.cpp
-index 8b80b8dda1..7fe1fc8dff 100644
+index 8242b16fd2..de6e9b2035 100644
 --- a/src/gui/trayaccountpopup_qt.cpp
 +++ b/src/gui/trayaccountpopup_qt.cpp
 @@ -5,6 +5,8 @@
@@ -1598,7 +1598,7 @@ index 6d3e7b9b19..d80c0b08b6 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 4ed3ffa98d..f4bd7a4622 100644
+index e843ab250f..5cc95b664e 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1610,13 +1610,13 @@ index 4ed3ffa98d..f4bd7a4622 100644
  #include "csync.h"
  
 diff --git a/src/libsync/discoveryphase.cpp b/src/libsync/discoveryphase.cpp
-index 257e4c9071..569fba2253 100644
+index a586016e99..6566ccefe0 100644
 --- a/src/libsync/discoveryphase.cpp
 +++ b/src/libsync/discoveryphase.cpp
-@@ -17,6 +17,7 @@
- 
+@@ -18,6 +18,7 @@
  #include "common/asserts.h"
  #include "common/checksums.h"
+ #include "common/filesystembase.h"
 +#include "common/qtcompat.h"
  
  #include <csync_exclude.h>
@@ -2174,13 +2174,13 @@ index 1568313f4a..9deea92c6d 100644
  
  #ifdef HAVE_QHTTPSERVER
 diff --git a/test/testsyncengine.cpp b/test/testsyncengine.cpp
-index 503454e4d7..5f073a2a9e 100644
+index e815e2a604..457b7da306 100644
 --- a/test/testsyncengine.cpp
 +++ b/test/testsyncengine.cpp
-@@ -17,6 +17,7 @@
- #include "configfile.h"
+@@ -18,6 +18,7 @@
  #include "propagatorjobs.h"
  #include "syncengine.h"
+ #include "syncoptions.h"
 +#include "common/qtcompat.h"
  
  #include <QFile>
