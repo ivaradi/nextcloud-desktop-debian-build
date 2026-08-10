@@ -6,7 +6,8 @@ scriptdir="$(readlink -f "$(dirname "${0}")")"
 
 WORKSPACE="${1}"
 BRANCH_TYPE="${2:-stable}"
-REPOSITORY="${3:-https://github.com/nextcloud/desktop}"
+PINNED_TAG="${3:-}"
+REPOSITORY="${4:-https://github.com/nextcloud/desktop}"
 
 if test "${BRANCH_TYPE}" = "stable"; then
     branch="${BRANCH_STABLE}"
@@ -17,26 +18,30 @@ else
     exit 1
 fi
 
-case "${branch}" in
-    stable-*)
-        baseversion=$(echo "${branch}" | sed 's:stable-::')
-        pattern="v${baseversion}.*"
-        ;;
-    *)
-        echo "Cannot determine base version from ${branch}"
-        exit 2
-esac
+if test "${PINNED_TAG}"; then
+    tag="${PINNED_TAG}"
+else
+    case "${branch}" in
+        stable-*)
+            baseversion=$(echo "${branch}" | sed 's:stable-::')
+            pattern="v${baseversion}.*"
+            ;;
+        *)
+            echo "Cannot determine base version from ${branch}"
+            exit 2
+    esac
 
-tag=$(git ls-remote --refs --tags "${REPOSITORY}" "${pattern}" \
-          | awk '{print $2}' \
-          | sed 's:refs/tags/::' \
-          | python3 -c "
+    tag=$(git ls-remote --refs --tags "${REPOSITORY}" "${pattern}" \
+              | awk '{print $2}' \
+              | sed 's:refs/tags/::' \
+              | python3 -c "
 import sys, re
 from packaging import version
 tags = sys.stdin.read().strip().split('\n')
 tags.sort(key=lambda t: version.parse(t.lstrip('v')))
 for tag in tags: print(tag)
 " | tail -n 1)
+fi
 
 if ! curl --fail "${REPOSITORY/github.com/api.github.com/repos}/releases/tags/${tag}"; then
     echo "No release for tag ${tag} yet, skipping"

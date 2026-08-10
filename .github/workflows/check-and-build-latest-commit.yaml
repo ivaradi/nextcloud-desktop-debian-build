@@ -9,6 +9,9 @@ on:
       what:
         required: true
         type: string
+      pinned-tag:
+        required: false
+        type: string
     secrets:
       debian-secret-key:
         required: false
@@ -97,7 +100,7 @@ jobs:
           DEBIAN_SECRET_KEY: ${{ secrets.debian-secret-key }}
           DEBIAN_SECRET_IV: ${{ secrets.debian-secret-iv }}
         run: |
-          "${GITHUB_WORKSPACE}/debian-build/check-and-build-latest-${{ inputs.what }}.sh" "${GITHUB_WORKSPACE}" ${{ inputs.branch-type }}
+          "${GITHUB_WORKSPACE}/debian-build/check-and-build-latest-${{ inputs.what }}.sh" "${GITHUB_WORKSPACE}" "${{ inputs.branch-type }}" "${{ inputs.pinned-tag }}"
       - name: Cleanup
         if: ${{ always() }}
         id: cleanup

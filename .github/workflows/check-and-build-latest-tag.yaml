@@ -16,6 +16,7 @@ jobs:
     with:
       branch-type: stable
       what: tag
+      pinned-tag: ${{ vars.STABLE_PINNED_TAG }}
     secrets:
       debian-secret-key: ${{ secrets.DEBIAN_SECRET_KEY }}
       debian-secret-iv: ${{ secrets.DEBIAN_SECRET_IV }}
