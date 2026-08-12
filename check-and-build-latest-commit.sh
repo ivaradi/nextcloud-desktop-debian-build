@@ -7,7 +7,7 @@ scriptdir="$(readlink -f "$(dirname "${0}")")"
 WORKSPACE="${1}"
 BRANCH_TYPE="${2:-master}"
 PINNED_TAG="${3:-}"
-REPOSITORY="${:-https://github.com/nextcloud/desktop}"
+REPOSITORY="${4:-https://github.com/nextcloud/desktop}"
 
 if test "${BRANCH_TYPE}" = "master"; then
     branch="master"
