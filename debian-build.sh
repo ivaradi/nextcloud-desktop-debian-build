@@ -61,10 +61,21 @@ git remote add origin "${REPOSITORY}"
 git fetch --tags origin "${COMMIT}"
 git checkout FETCH_HEAD
 
+new_tags=()
+
 for distribution in ${UBUNTU_DISTRIBUTIONS} ${DEBIAN_DISTRIBUTIONS}; do
     git clean -xdff
+
+    debian_files_ref="debian/dist/${distribution}/${BRANCH}"
+    if test "${TRIGGER}" = "tag"; then
+        debian_deb_tag="${distribution}_${COMMIT}"
+        if git -C "${scriptdir}" rev-parse -q --verify "refs/tags/${debian_deb_tag}" > /dev/null; then
+            debian_files_ref="${debian_deb_tag}"
+        fi
+    fi
+
     git -C "${scriptdir}" archive --format=tar \
-        "debian/dist/${distribution}/${BRANCH}" | \
+        "${debian_files_ref}" | \
         tar --extract
 
     read -r basever revdate kind <<<"$("${scriptdir}/git2changelog.py" \
@@ -135,8 +146,19 @@ for distribution in ${UBUNTU_DISTRIBUTIONS} ${DEBIAN_DISTRIBUTIONS}; do
     git checkout -- .
     git clean -xdff
 
+    debian_files_ref="debian/dist/${distribution}/${BRANCH}"
+    if test "${TRIGGER}" = "tag"; then
+        debian_deb_tag="${distribution}_${COMMIT}"
+        if git -C "${scriptdir}" rev-parse -q --verify "refs/tags/${debian_deb_tag}" > /dev/null; then
+            debian_files_ref="${debian_deb_tag}"
+        elif test "${kind}" = "release"; then
+            git -C "${scriptdir}" tag "${debian_deb_tag}" "${debian_files_ref}"
+            new_tags+=("${debian_deb_tag}")
+        fi
+    fi
+
     git -C "${scriptdir}" archive --format=tar \
-        "debian/dist/${distribution}/${BRANCH}" | \
+        "${debian_files_ref}" | \
         tar --extract
 
     "${scriptdir}//git2changelog.py" /tmp/tmpchangelog git2changelog.cfg \
@@ -197,4 +219,15 @@ if test "${has_ppa_keys}" = "yes"; then
         osc commit -m "Drone update"
         popd
     fi
+fi
+
+if test "${#new_tags[@]}" -gt 0; then
+    attempts=3
+    while ! git -C "${scriptdir}" push origin "${new_tags[@]}"; do
+        if test ${attempts} -le 0; then
+            exit 1
+        fi
+        attempts=$((attempts - 1))
+        sleep 10
+    done
 fi
