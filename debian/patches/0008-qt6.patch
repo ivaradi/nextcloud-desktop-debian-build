@@ -565,7 +565,7 @@ index a4a87848eb..5f936f685b 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index 0961fd7596..78c2f972d6 100644
+index f9ea7f92f8..42a8fbd3d4 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -577,7 +577,7 @@ index 0961fd7596..78c2f972d6 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -579,13 +579,20 @@ target_link_libraries(nextcloudCore
+@@ -580,13 +580,20 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -599,7 +599,7 @@ index 0961fd7596..78c2f972d6 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -837,3 +844,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -840,3 +847,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -672,7 +672,7 @@ index d139565a56..41e2924fce 100644
  #include <QSettings>
  #include <QTimer>
 diff --git a/src/gui/activity/activitydata.cpp b/src/gui/activity/activitydata.cpp
-index 10baf7bef4..21d2092749 100644
+index 8d41c85cdd..9f9395e84f 100644
 --- a/src/gui/activity/activitydata.cpp
 +++ b/src/gui/activity/activitydata.cpp
 @@ -8,6 +8,7 @@
@@ -684,7 +684,7 @@ index 10baf7bef4..21d2092749 100644
  using namespace Qt::StringLiterals;
  
 diff --git a/src/gui/activity/activitylistmodel.cpp b/src/gui/activity/activitylistmodel.cpp
-index 15e4b9eb82..1246b3fa0b 100644
+index d31ce28883..4546bbc583 100644
 --- a/src/gui/activity/activitylistmodel.cpp
 +++ b/src/gui/activity/activitylistmodel.cpp
 @@ -19,6 +19,7 @@
@@ -851,7 +851,7 @@ index 60d024b158..a2b7fc790f 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index 38b41a14f4..aeae7b7d90 100644
+index 5c1ea67351..776e50b463 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -31,6 +31,7 @@
@@ -862,7 +862,7 @@ index 38b41a14f4..aeae7b7d90 100644
  
  #include "config.h"
  
-@@ -1206,7 +1207,7 @@ void Application::setupTranslations()
+@@ -1277,7 +1278,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -919,7 +919,7 @@ index 5c3504674f..b58163fa23 100644
  #include "folderstatusdelegate.h"
  #include <account.h>
 diff --git a/src/gui/folderwizard.cpp b/src/gui/folderwizard.cpp
-index 9208814e36..074c6fd519 100644
+index 703a3bbd20..d3378ccce8 100644
 --- a/src/gui/folderwizard.cpp
 +++ b/src/gui/folderwizard.cpp
 @@ -15,6 +15,7 @@
@@ -930,7 +930,7 @@ index 9208814e36..074c6fd519 100644
  
  #ifdef Q_OS_MACOS
  #include "common/utility_mac_sandbox.h"
-@@ -587,7 +588,7 @@ FolderWizardSelectiveSync::FolderWizardSelectiveSync(const AccountPtr &account)
+@@ -585,7 +586,7 @@ FolderWizardSelectiveSync::FolderWizardSelectiveSync(const AccountPtr &account)
      if (!Theme::instance()->disableVirtualFilesSyncFolder() && Theme::instance()->showVirtualFilesOption() && bestAvailableVfsMode() != Vfs::Off) {
          _virtualFilesCheckBox = new QCheckBox(tr("Use virtual files instead of downloading content immediately %1").arg(bestAvailableVfsMode() == Vfs::WindowsCfApi ? QString() : tr("(experimental)")));
          connect(_virtualFilesCheckBox, &QCheckBox::clicked, this, &FolderWizardSelectiveSync::virtualFilesCheckboxClicked);
@@ -1202,10 +1202,10 @@ index 42a151dba2..d5d2128a06 100644
  #include <QUrl>
  #include <QJsonDocument>
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index 63887e03f4..9276a9b026 100644
+index c4bf97098a..58ede0daee 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
-@@ -18,6 +18,7 @@
+@@ -17,6 +17,7 @@
  #include "encryptfolderjob.h"
  #include "theme.h"
  #include "common/syncjournalfilerecord.h"
@@ -1235,7 +1235,7 @@ index b6ec909176..50716a585e 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index fccdb9813d..e820c9d86e 100644
+index e9459e41c2..acc4a3a3fe 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -47,6 +47,8 @@
@@ -1247,7 +1247,7 @@ index fccdb9813d..e820c9d86e 100644
  using namespace Qt::StringLiterals;
  
  namespace OCC {
-@@ -452,11 +454,11 @@ void Systray::showSearchWindow(int userIndex)
+@@ -453,11 +455,11 @@ void Systray::showSearchWindow(int userIndex)
          return;
      }
  
@@ -1263,7 +1263,7 @@ index fccdb9813d..e820c9d86e 100644
          return;
      }
  
-@@ -469,7 +471,7 @@ void Systray::showSearchWindow(int userIndex)
+@@ -470,7 +472,7 @@ void Systray::showSearchWindow(int userIndex)
                      }},
          {"searchModel", QVariant::fromValue(searchModel)},
      };
@@ -1369,7 +1369,7 @@ index 875310d96f..641be3b24e 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index b6136e9557..1ecbdcf537 100644
+index 3e04f33798..fce7cd9db4 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
 @@ -26,6 +26,7 @@
@@ -1598,7 +1598,7 @@ index 6d3e7b9b19..d80c0b08b6 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index e843ab250f..5cc95b664e 100644
+index 705c399e0a..3f38d04a09 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1610,7 +1610,7 @@ index e843ab250f..5cc95b664e 100644
  #include "csync.h"
  
 diff --git a/src/libsync/discoveryphase.cpp b/src/libsync/discoveryphase.cpp
-index a586016e99..6566ccefe0 100644
+index 25d53130ee..9227167795 100644
 --- a/src/libsync/discoveryphase.cpp
 +++ b/src/libsync/discoveryphase.cpp
 @@ -18,6 +18,7 @@
@@ -1646,7 +1646,7 @@ index 92b3300359..f53e216891 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/libsync/filesystem.cpp b/src/libsync/filesystem.cpp
-index 88731dc75e..1f07005964 100644
+index 99fdb8d5b0..56ed1884e5 100644
 --- a/src/libsync/filesystem.cpp
 +++ b/src/libsync/filesystem.cpp
 @@ -7,6 +7,7 @@
@@ -1969,6 +1969,18 @@ index 74729921fe..fbf9fb6bc5 100644
      const auto jsonDoc = QJsonDocument::fromJson(fileIdsJson.toUtf8(), &parseError);
  
      if (parseError.error != QJsonParseError::NoError) {
+diff --git a/src/libsync/syncengine.cpp b/src/libsync/syncengine.cpp
+index e810d0750c..b81932fc00 100644
+--- a/src/libsync/syncengine.cpp
++++ b/src/libsync/syncengine.cpp
+@@ -18,6 +18,7 @@
+ #include "deletejob.h"
+ #include "propagatedownload.h"
+ #include "common/asserts.h"
++#include "common/qtcompat.h"
+ #include "configfile.h"
+ #include "discovery.h"
+ #include "common/vfs.h"
 diff --git a/src/libsync/syncfileitem.cpp b/src/libsync/syncfileitem.cpp
 index d5aa8776a1..baf79a8e2e 100644
 --- a/src/libsync/syncfileitem.cpp
