@@ -565,7 +565,7 @@ index 17d08f4a10..a89e22a5a9 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index c4039272b0..c8b7aac9fc 100644
+index f9ea7f92f8..42a8fbd3d4 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -577,7 +577,7 @@ index c4039272b0..c8b7aac9fc 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -586,13 +586,20 @@ target_link_libraries(nextcloudCore
+@@ -580,13 +580,20 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -599,7 +599,7 @@ index c4039272b0..c8b7aac9fc 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -847,3 +854,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -840,3 +847,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -919,7 +919,7 @@ index 5c3504674f..b58163fa23 100644
  #include "folderstatusdelegate.h"
  #include <account.h>
 diff --git a/src/gui/folderwizard.cpp b/src/gui/folderwizard.cpp
-index 9208814e36..074c6fd519 100644
+index 703a3bbd20..d3378ccce8 100644
 --- a/src/gui/folderwizard.cpp
 +++ b/src/gui/folderwizard.cpp
 @@ -15,6 +15,7 @@
@@ -930,7 +930,7 @@ index 9208814e36..074c6fd519 100644
  
  #ifdef Q_OS_MACOS
  #include "common/utility_mac_sandbox.h"
-@@ -587,7 +588,7 @@ FolderWizardSelectiveSync::FolderWizardSelectiveSync(const AccountPtr &account)
+@@ -585,7 +586,7 @@ FolderWizardSelectiveSync::FolderWizardSelectiveSync(const AccountPtr &account)
      if (!Theme::instance()->disableVirtualFilesSyncFolder() && Theme::instance()->showVirtualFilesOption() && bestAvailableVfsMode() != Vfs::Off) {
          _virtualFilesCheckBox = new QCheckBox(tr("Use virtual files instead of downloading content immediately %1").arg(bestAvailableVfsMode() == Vfs::WindowsCfApi ? QString() : tr("(experimental)")));
          connect(_virtualFilesCheckBox, &QCheckBox::clicked, this, &FolderWizardSelectiveSync::virtualFilesCheckboxClicked);
@@ -1235,7 +1235,7 @@ index b6ec909176..50716a585e 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index fccdb9813d..e820c9d86e 100644
+index 7e843e3e39..1e3d135b10 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -47,6 +47,8 @@
@@ -1247,7 +1247,7 @@ index fccdb9813d..e820c9d86e 100644
  using namespace Qt::StringLiterals;
  
  namespace OCC {
-@@ -452,11 +454,11 @@ void Systray::showSearchWindow(int userIndex)
+@@ -453,11 +455,11 @@ void Systray::showSearchWindow(int userIndex)
          return;
      }
  
@@ -1263,7 +1263,7 @@ index fccdb9813d..e820c9d86e 100644
          return;
      }
  
-@@ -469,7 +471,7 @@ void Systray::showSearchWindow(int userIndex)
+@@ -470,7 +472,7 @@ void Systray::showSearchWindow(int userIndex)
                      }},
          {"searchModel", QVariant::fromValue(searchModel)},
      };
@@ -1381,7 +1381,7 @@ index 3e04f33798..fce7cd9db4 100644
  #ifdef BUILD_FILE_PROVIDER_MODULE
  #include "gui/macOS/fileprovider.h"
 diff --git a/src/gui/trayaccountpopup_qt.cpp b/src/gui/trayaccountpopup_qt.cpp
-index 8242b16fd2..de6e9b2035 100644
+index db8b021c43..e62baca9e2 100644
 --- a/src/gui/trayaccountpopup_qt.cpp
 +++ b/src/gui/trayaccountpopup_qt.cpp
 @@ -5,6 +5,8 @@
@@ -1598,7 +1598,7 @@ index 6d3e7b9b19..d80c0b08b6 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index e843ab250f..5cc95b664e 100644
+index 705c399e0a..3f38d04a09 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1969,6 +1969,18 @@ index 74729921fe..fbf9fb6bc5 100644
      const auto jsonDoc = QJsonDocument::fromJson(fileIdsJson.toUtf8(), &parseError);
  
      if (parseError.error != QJsonParseError::NoError) {
+diff --git a/src/libsync/syncengine.cpp b/src/libsync/syncengine.cpp
+index e810d0750c..dda692d24a 100644
+--- a/src/libsync/syncengine.cpp
++++ b/src/libsync/syncengine.cpp
+@@ -7,6 +7,7 @@
+ #include "syncengine.h"
+ #include "account.h"
+ #include "common/filesystembase.h"
++#include "common/qtcompat.h"
+ #include "owncloudpropagator.h"
+ #include "common/syncjournaldb.h"
+ #include "common/syncjournalfilerecord.h"
 diff --git a/src/libsync/syncfileitem.cpp b/src/libsync/syncfileitem.cpp
 index d5aa8776a1..baf79a8e2e 100644
 --- a/src/libsync/syncfileitem.cpp
