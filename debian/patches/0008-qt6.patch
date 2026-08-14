@@ -48,6 +48,19 @@ index c19ede88ce..ee3db931ba 100644
  
  find_package(Qt${QT_MAJOR_VERSION}Core ${REQUIRED_QT_VERSION} CONFIG QUIET)
  set_package_properties(Qt${QT_MAJOR_VERSION}Core PROPERTIES
+diff --git a/src/cmd/cmd.cpp b/src/cmd/cmd.cpp
+index c3e9c50b9a..ce17f764ac 100644
+--- a/src/cmd/cmd.cpp
++++ b/src/cmd/cmd.cpp
+@@ -48,6 +48,8 @@
+ 
+ #include "config.h"
+ 
++#include "common/qtcompat.h"
++
+ #ifdef Q_OS_WIN32
+ #include <windows.h>
+ #else
 diff --git a/src/common/common.cmake b/src/common/common.cmake
 index 564b6c69b5..d0b7f235c9 100644
 --- a/src/common/common.cmake
@@ -647,7 +660,7 @@ index 972e851673..08a618111b 100644
  #include "theme.h"
  #include "foldercreationdialog.h"
 diff --git a/src/gui/accountsetupfromcommandlinejob.cpp b/src/gui/accountsetupfromcommandlinejob.cpp
-index 397d26607b..2e35d657b0 100644
+index c7eee0d9f5..9a96ed8d52 100644
 --- a/src/gui/accountsetupfromcommandlinejob.cpp
 +++ b/src/gui/accountsetupfromcommandlinejob.cpp
 @@ -5,6 +5,8 @@
@@ -660,7 +673,7 @@ index 397d26607b..2e35d657b0 100644
  #include "accountstate.h"
  #include "creds/abstractcredentials.h"
 diff --git a/src/gui/accountstate.cpp b/src/gui/accountstate.cpp
-index d139565a56..41e2924fce 100644
+index ec3311938d..777b2f5f92 100644
 --- a/src/gui/accountstate.cpp
 +++ b/src/gui/accountstate.cpp
 @@ -17,6 +17,7 @@
@@ -851,7 +864,7 @@ index 60d024b158..a2b7fc790f 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index 5c1ea67351..776e50b463 100644
+index 0e4b56610a..9b02868188 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -31,6 +31,7 @@
@@ -862,7 +875,7 @@ index 5c1ea67351..776e50b463 100644
  
  #include "config.h"
  
-@@ -1277,7 +1278,7 @@ void Application::setupTranslations()
+@@ -1281,7 +1282,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -895,7 +908,7 @@ index c061eff726..2a0751b07c 100644
                  }
              }
 diff --git a/src/gui/folderman.cpp b/src/gui/folderman.cpp
-index bcb9cf3464..12f5c8a844 100644
+index ffe045f402..92dd11df1a 100644
 --- a/src/gui/folderman.cpp
 +++ b/src/gui/folderman.cpp
 @@ -16,6 +16,7 @@
@@ -1202,7 +1215,7 @@ index 42a151dba2..d5d2128a06 100644
  #include <QUrl>
  #include <QJsonDocument>
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index c4bf97098a..58ede0daee 100644
+index 33f53ad242..e267eba311 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
 @@ -17,6 +17,7 @@
@@ -1235,7 +1248,7 @@ index b6ec909176..50716a585e 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index e9459e41c2..acc4a3a3fe 100644
+index 7e843e3e39..1e3d135b10 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -47,6 +47,8 @@
@@ -1381,7 +1394,7 @@ index 3e04f33798..fce7cd9db4 100644
  #ifdef BUILD_FILE_PROVIDER_MODULE
  #include "gui/macOS/fileprovider.h"
 diff --git a/src/gui/trayaccountpopup_qt.cpp b/src/gui/trayaccountpopup_qt.cpp
-index 8242b16fd2..de6e9b2035 100644
+index db8b021c43..e62baca9e2 100644
 --- a/src/gui/trayaccountpopup_qt.cpp
 +++ b/src/gui/trayaccountpopup_qt.cpp
 @@ -5,6 +5,8 @@
@@ -2148,7 +2161,7 @@ index b45cf49114..060f9aca0b 100644
  
  #include "account.h"
 diff --git a/test/testfolderman.cpp b/test/testfolderman.cpp
-index 277ed2da91..98492d2ad0 100644
+index 07e7a46b8d..4301a22fea 100644
 --- a/test/testfolderman.cpp
 +++ b/test/testfolderman.cpp
 @@ -14,6 +14,7 @@
