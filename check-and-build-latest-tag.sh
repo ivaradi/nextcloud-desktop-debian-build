@@ -18,7 +18,7 @@ else
     exit 1
 fi
 
-if test "${PINNED_TAG}"; then
+if test "${PINNED_TAG}" -a "${PINNED_TAG}" != "x"; then
     tag="${PINNED_TAG}"
 else
     case "${branch}" in
