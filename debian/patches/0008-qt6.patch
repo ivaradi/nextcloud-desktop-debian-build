@@ -578,7 +578,7 @@ index 17d08f4a10..a89e22a5a9 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index f9ea7f92f8..42a8fbd3d4 100644
+index f9ea7f92f8..a1b9deea9b 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -612,7 +612,7 @@ index f9ea7f92f8..42a8fbd3d4 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -840,3 +847,10 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -840,3 +847,76 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -623,6 +623,72 @@ index f9ea7f92f8..42a8fbd3d4 100644
 +    set(QML_ACCEPTTHISOBJECT_PRAGMA "")
 +endif()
 +configure_file(tray/TrayFoldersMenuButton.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/tray/TrayFoldersMenuButton.qml)
++
++if ("${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}" VERSION_GREATER_EQUAL "6.6")
++    set(QML_UNIFORM_CELL_SIZES_TRUE "uniformCellSizes: true")
++else()
++    set(QML_UNIFORM_CELL_SIZES_TRUE "")
++endif()
++configure_file(wizard/qml/BrowserAuthFooter.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/wizard/qml/BrowserAuthFooter.qml)
++
++if ("${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}" VERSION_GREATER_EQUAL "6.9")
++    set(QML_NC_CONTEXT_MENU_TEXT_FIELD  [=[
++    ContextMenu.menu: Menu {
++        // Match AutoSizingMenu: render the menu in its own window so that its
++        // items receive mouse events correctly inside frameless windows.
++        popupType: Popup.Window
++
++        MenuItem {
++            text: qsTr("Undo")
++            enabled: root.canUndo && !root.readOnly
++            onTriggered: root.undo()
++        }
++
++        MenuItem {
++            text: qsTr("Redo")
++            enabled: root.canRedo && !root.readOnly
++            onTriggered: root.redo()
++        }
++
++        MenuSeparator {}
++
++        MenuItem {
++            text: qsTr("Cut")
++            enabled: root.selectedText.length > 0 && root.echoMode === TextInput.Normal && !root.readOnly
++            onTriggered: root.cut()
++        }
++
++        MenuItem {
++            text: qsTr("Copy")
++            enabled: root.selectedText.length > 0 && root.echoMode === TextInput.Normal
++            onTriggered: root.copy()
++        }
++
++        MenuItem {
++            text: qsTr("Paste")
++            enabled: root.canPaste && !root.readOnly
++            onTriggered: root.paste()
++        }
++
++        MenuItem {
++            text: qsTr("Delete")
++            enabled: root.selectedText.length > 0 && !root.readOnly
++            onTriggered: root.remove(root.selectionStart, root.selectionEnd)
++        }
++
++        MenuSeparator {}
++
++        MenuItem {
++            text: qsTr("Select All")
++            enabled: root.length > 0
++            onTriggered: root.selectAll()
++        }
++    }
++]=])
++else()
++    set(QML_NC_CONTEXT_MENU_TEXT_FIELD "")
++endif()
++configure_file(common/NCContextMenuTextField.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/common/NCContextMenuTextField.qml)
 diff --git a/src/gui/EmojiPicker.qml b/src/gui/EmojiPicker.qml
 index ca1026e419..9252c314fb 100644
 --- a/src/gui/EmojiPicker.qml
@@ -720,6 +786,29 @@ index cf0624367a..cde9cec563 100644
  
  #include "iconjob.h"
  
+diff --git a/src/gui/activity/qml/ActivityFileMenuButton.qml b/src/gui/activity/qml/ActivityFileMenuButton.qml
+index 5e6d16afd1..9ca105e5e6 100644
+--- a/src/gui/activity/qml/ActivityFileMenuButton.qml
++++ b/src/gui/activity/qml/ActivityFileMenuButton.qml
+@@ -30,9 +30,17 @@ Button {
+     icon.height: buttonIconSize
+ 
+     ToolTip {
+-        popupType: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++        id: buttonTooltip
++
+         text: qsTr("Open file details")
+         visible: parent.hovered
++
++        Binding {
++            target: buttonToolTip
++            property: "popupType"
++            value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
++            when: buttonToolTip.hasOwnProperty("popupType")
++        }
+     }
+ 
+     display: Button.IconOnly
 diff --git a/src/gui/activity/qml/ActivityItem.qml b/src/gui/activity/qml/ActivityItem.qml
 index 34d5176bb5..398a8015c2 100644
 --- a/src/gui/activity/qml/ActivityItem.qml
@@ -884,6 +973,98 @@ index 0e4b56610a..9b02868188 100644
              const auto trFile = QString{QLatin1String{"client_"} + localeToTest};
              qCDebug(lcApplication()) << "trying to load" << localeToTest << "in" << trFile << "from" << trPath;
              if (translator->load(trFile, trPath)) {
+diff --git a/src/gui/common/NCContextMenuTextField.qml b/src/gui/common/NCContextMenuTextField.qml
+deleted file mode 100644
+index a83796ce64..0000000000
+--- a/src/gui/common/NCContextMenuTextField.qml
++++ /dev/null
+@@ -1,65 +0,0 @@
+-/*
+- * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+- * SPDX-License-Identifier: GPL-2.0-or-later
+- */
+-
+-import QtQuick
+-import QtQuick.Controls
+-
+-TextField {
+-    id: root
+-
+-    selectByMouse: true
+-
+-    ContextMenu.menu: Menu {
+-        // Match AutoSizingMenu: render the menu in its own window so that its
+-        // items receive mouse events correctly inside frameless windows.
+-        popupType: Popup.Window
+-
+-        MenuItem {
+-            text: qsTr("Undo")
+-            enabled: root.canUndo && !root.readOnly
+-            onTriggered: root.undo()
+-        }
+-
+-        MenuItem {
+-            text: qsTr("Redo")
+-            enabled: root.canRedo && !root.readOnly
+-            onTriggered: root.redo()
+-        }
+-
+-        MenuSeparator {}
+-
+-        MenuItem {
+-            text: qsTr("Cut")
+-            enabled: root.selectedText.length > 0 && root.echoMode === TextInput.Normal && !root.readOnly
+-            onTriggered: root.cut()
+-        }
+-
+-        MenuItem {
+-            text: qsTr("Copy")
+-            enabled: root.selectedText.length > 0 && root.echoMode === TextInput.Normal
+-            onTriggered: root.copy()
+-        }
+-
+-        MenuItem {
+-            text: qsTr("Paste")
+-            enabled: root.canPaste && !root.readOnly
+-            onTriggered: root.paste()
+-        }
+-
+-        MenuItem {
+-            text: qsTr("Delete")
+-            enabled: root.selectedText.length > 0 && !root.readOnly
+-            onTriggered: root.remove(root.selectionStart, root.selectionEnd)
+-        }
+-
+-        MenuSeparator {}
+-
+-        MenuItem {
+-            text: qsTr("Select All")
+-            enabled: root.length > 0
+-            onTriggered: root.selectAll()
+-        }
+-    }
+-}
+diff --git a/src/gui/common/NCContextMenuTextField.qml.in b/src/gui/common/NCContextMenuTextField.qml.in
+new file mode 100644
+index 0000000000..3af9d5c90e
+--- /dev/null
++++ b/src/gui/common/NCContextMenuTextField.qml.in
+@@ -0,0 +1,15 @@
++/*
++ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
++ * SPDX-License-Identifier: GPL-2.0-or-later
++ */
++
++import QtQuick
++import QtQuick.Controls
++
++TextField {
++    id: root
++
++    selectByMouse: true
++
++@QML_NC_CONTEXT_MENU_TEXT_FIELD@
++}
 diff --git a/src/gui/filedetails/FileDetailsPage.qml b/src/gui/filedetails/FileDetailsPage.qml
 index c061eff726..2a0751b07c 100644
 --- a/src/gui/filedetails/FileDetailsPage.qml
@@ -1440,6 +1621,22 @@ index b35e3ed5b3..61cd515ce4 100644
  }
  
  } // namespace OCC
+diff --git a/src/gui/wizard/qml/BrowserAuthFooter.qml b/src/gui/wizard/qml/BrowserAuthFooter.qml.in
+similarity index 97%
+rename from src/gui/wizard/qml/BrowserAuthFooter.qml
+rename to src/gui/wizard/qml/BrowserAuthFooter.qml.in
+index 1a08d2445e..412cc6123f 100644
+--- a/src/gui/wizard/qml/BrowserAuthFooter.qml
++++ b/src/gui/wizard/qml/BrowserAuthFooter.qml.in
+@@ -13,7 +13,7 @@ RowLayout {
+     required property QtObject controller
+ 
+     spacing: Style.wizardFooterSpacing
+-    uniformCellSizes: true
++    @QML_UNIFORM_CELL_SIZES_TRUE@
+ 
+     WizardButton {
+         enabled: !root.controller.busy
 diff --git a/src/libsync/CMakeLists.txt b/src/libsync/CMakeLists.txt
 index be060e8ce2..4a41f4fedc 100644
 --- a/src/libsync/CMakeLists.txt
