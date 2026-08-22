@@ -787,7 +787,7 @@ index cf0624367a..cde9cec563 100644
  #include "iconjob.h"
  
 diff --git a/src/gui/activity/qml/ActivityFileMenuButton.qml b/src/gui/activity/qml/ActivityFileMenuButton.qml
-index 5e6d16afd1..9ca105e5e6 100644
+index 5e6d16afd1..f55d2173c6 100644
 --- a/src/gui/activity/qml/ActivityFileMenuButton.qml
 +++ b/src/gui/activity/qml/ActivityFileMenuButton.qml
 @@ -30,9 +30,17 @@ Button {
@@ -801,19 +801,29 @@ index 5e6d16afd1..9ca105e5e6 100644
          visible: parent.hovered
 +
 +        Binding {
-+            target: buttonToolTip
++            target: buttonTooltip
 +            property: "popupType"
 +            value: Qt.platform.os === "windows" ? Popup.Item : Popup.Native
-+            when: buttonToolTip.hasOwnProperty("popupType")
++            when: buttonTooltip.hasOwnProperty("popupType")
 +        }
      }
  
      display: Button.IconOnly
 diff --git a/src/gui/activity/qml/ActivityItem.qml b/src/gui/activity/qml/ActivityItem.qml
-index 34d5176bb5..398a8015c2 100644
+index 34d5176bb5..85f97b4a97 100644
 --- a/src/gui/activity/qml/ActivityItem.qml
 +++ b/src/gui/activity/qml/ActivityItem.qml
-@@ -33,9 +33,17 @@ ItemDelegate {
+@@ -12,6 +12,9 @@ import Style
+ ItemDelegate {
+     id: root
+ 
++    required property var model
++    required property int index
++
+     property Flickable flickable
+ 
+     property int iconSize: Style.trayListItemIconSize
+@@ -33,9 +36,17 @@ ItemDelegate {
      Accessible.onPressAction: root.clicked()
  
      ToolTip {
@@ -832,8 +842,16 @@ index 34d5176bb5..398a8015c2 100644
      }
  
      // TODO: the current style does not support customization of this control
+@@ -49,7 +60,6 @@ ItemDelegate {
+ 
+             Layout.fillWidth: true
+             Layout.minimumHeight: Style.minActivityHeight
+-            Layout.preferredWidth: parent.width
+ 
+             showDismissButton: model.isDismissable
+ 
 diff --git a/src/gui/activity/qml/ActivityItemContent.qml b/src/gui/activity/qml/ActivityItemContent.qml
-index 253c164e7c..e3b931a41d 100644
+index 253c164e7c..f7c6eb0ae1 100644
 --- a/src/gui/activity/qml/ActivityItemContent.qml
 +++ b/src/gui/activity/qml/ActivityItemContent.qml
 @@ -15,7 +15,7 @@ import "../../tray"
@@ -845,7 +863,16 @@ index 253c164e7c..e3b931a41d 100644
  
      property variant activityData: {{}}
  
-@@ -199,9 +199,17 @@ RowLayout {
+@@ -126,8 +126,6 @@ RowLayout {
+ 
+         Layout.fillHeight: true
+         Layout.fillWidth: true
+-        Layout.maximumWidth: root.width - Style.standardSpacing - root.iconSize
+-        implicitWidth: root.width - Style.standardSpacing - root.iconSize
+ 
+         spacing: Style.smallSpacing
+ 
+@@ -199,9 +197,17 @@ RowLayout {
                      display: Button.IconOnly
  
                      ToolTip {
