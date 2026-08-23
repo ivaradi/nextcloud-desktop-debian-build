@@ -80,10 +80,10 @@ index 0000000000..ccded5d62e
 +#include "qtcompat.h"
 diff --git a/src/common/qtcompat.h b/src/common/qtcompat.h
 new file mode 100644
-index 0000000000..bacf450ad4
+index 0000000000..626a362c8a
 --- /dev/null
 +++ b/src/common/qtcompat.h
-@@ -0,0 +1,447 @@
+@@ -0,0 +1,455 @@
 +
 +#pragma once
 +
@@ -511,12 +511,20 @@ index 0000000000..bacf450ad4
 +//-----------------------------------------------------------------------------
 +
 +#if QT_VERSION<QT_VERSION_CHECK(6, 5, 0)
-+inline QQmlComponent *QmlComponentFromUri(QQmlEngine *engine, const QString &uri, const QString &typeName)
++namespace {
++inline QUrl qmlComponentUrlFromUri(const QString &uri, const QString &typeName)
 +{
 +    // Convert uri like "com.nextcloud.desktopclient.search" to qrc path
-+    // like "qrc:/com/nextcloud/desktopclient/search/SearchWindow.qml"
-+    QString qrcPath = QStringLiteral("qrc:/") + uri + u'/' + typeName + QStringLiteral(".qml");
-+    return new QQmlComponent(engine, QUrl::fromUserInput(qrcPath));
++    // like "qrc:/qt/qml/com/nextcloud/desktopclient/search/SearchWindow.qml"
++    auto path = uri;
++    path.replace(QLatin1Char('.'), QLatin1Char('/'));
++    return QUrl(QStringLiteral("qrc:/qt/qml/") + path + u'/' + typeName + QStringLiteral(".qml"));
++}
++}
++
++inline QQmlComponent *QmlComponentFromUri(QQmlEngine *engine, const QString &uri, const QString &typeName)
++{
++    return new QQmlComponent(engine, qmlComponentUrlFromUri(uri, typeName));
 +}
 +#else
 +inline QQmlComponent *QmlComponentFromUri(QQmlEngine *engine, const QString &uri, const QString &typeName)
@@ -1277,7 +1285,7 @@ index 511059ba46..6abaf118ba 100644
  
  #include "accountmanager.h"
 diff --git a/src/gui/search/CMakeLists.txt b/src/gui/search/CMakeLists.txt
-index 19894e5589..2890c82192 100644
+index 19894e5589..5b6dc332c1 100644
 --- a/src/gui/search/CMakeLists.txt
 +++ b/src/gui/search/CMakeLists.txt
 @@ -1,6 +1,8 @@
@@ -1328,11 +1336,17 @@ index 19894e5589..2890c82192 100644
      SearchWindow.qml
      UnifiedSearchInputContainer.qml
      UnifiedSearchResultFetchMoreTrigger.qml
-@@ -26,6 +52,33 @@ ecm_add_qml_module(nextcloudGuiSearch
+@@ -26,6 +52,39 @@ ecm_add_qml_module(nextcloudGuiSearch
      UnifiedSearchResultNothingFound.qml
      UnifiedSearchPlaceholderView.qml
      UnifiedSearchResultSectionItem.qml
 -)
++  )
++
++  qt_add_resources(nextcloudGuiSearch search_qml
++    PREFIX "/qt/qml/com/nextcloud/desktopclient/search"
++    BASE "${CMAKE_CURRENT_SOURCE_DIR}"
++    FILES ${_search_qml_files}
 +  )
 +
 +  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/nextcloudGuiSearchplugin.cpp"
