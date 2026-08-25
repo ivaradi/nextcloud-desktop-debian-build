@@ -49,7 +49,7 @@ index c19ede88ce..ee3db931ba 100644
  find_package(Qt${QT_MAJOR_VERSION}Core ${REQUIRED_QT_VERSION} CONFIG QUIET)
  set_package_properties(Qt${QT_MAJOR_VERSION}Core PROPERTIES
 diff --git a/src/cmd/cmd.cpp b/src/cmd/cmd.cpp
-index c3e9c50b9a..ce17f764ac 100644
+index 8134685676..384677d885 100644
 --- a/src/cmd/cmd.cpp
 +++ b/src/cmd/cmd.cpp
 @@ -48,6 +48,8 @@
@@ -80,10 +80,10 @@ index 0000000000..ccded5d62e
 +#include "qtcompat.h"
 diff --git a/src/common/qtcompat.h b/src/common/qtcompat.h
 new file mode 100644
-index 0000000000..626a362c8a
+index 0000000000..d518ca9718
 --- /dev/null
 +++ b/src/common/qtcompat.h
-@@ -0,0 +1,455 @@
+@@ -0,0 +1,467 @@
 +
 +#pragma once
 +
@@ -420,6 +420,18 @@ index 0000000000..626a362c8a
 +
 +//-----------------------------------------------------------------------------
 +
++#if QT_VERSION<QT_VERSION_CHECK(6, 3, 0)
++#include <QNetworkReply>
++// QNetworkReply::requestSent() signal was introduced in Qt 6.3
++// Use finished() as a fallback - it fires when the request is sent on older Qt versions
++#define QNetworkReplyRequestSent &QNetworkReply::finished
++#else
++#include <QNetworkReply>
++#define QNetworkReplyRequestSent &QNetworkReply::requestSent
++#endif
++
++//-----------------------------------------------------------------------------
++
 +#if QT_VERSION<QT_VERSION_CHECK(6, 7, 0)
 +#include <QNetworkReply>
 +inline bool QNetworkReplyHasRawHeader(QNetworkReply *reply, const char *header)
@@ -540,7 +552,7 @@ index 0000000000..626a362c8a
 +//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
 diff --git a/src/common/syncjournaldb.cpp b/src/common/syncjournaldb.cpp
-index ab99460a0f..6d911b7217 100644
+index 5f07877239..78d9cb0ab2 100644
 --- a/src/common/syncjournaldb.cpp
 +++ b/src/common/syncjournaldb.cpp
 @@ -24,6 +24,7 @@
@@ -586,7 +598,7 @@ index fe583120bf..2b9e1eb870 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index f9ea7f92f8..a1b9deea9b 100644
+index b3cdaf0f06..5acc8c2f8d 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -620,7 +632,7 @@ index f9ea7f92f8..a1b9deea9b 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -840,3 +847,76 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -844,3 +851,76 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -722,7 +734,7 @@ index ca1026e419..9252c314fb 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index 972e851673..08a618111b 100644
+index 525110410b..1248299802 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -747,7 +759,7 @@ index c7eee0d9f5..9a96ed8d52 100644
  #include "accountstate.h"
  #include "creds/abstractcredentials.h"
 diff --git a/src/gui/accountstate.cpp b/src/gui/accountstate.cpp
-index ec3311938d..777b2f5f92 100644
+index c0a2589f60..2f1376fe85 100644
 --- a/src/gui/accountstate.cpp
 +++ b/src/gui/accountstate.cpp
 @@ -17,6 +17,7 @@
@@ -771,7 +783,7 @@ index 8d41c85cdd..9f9395e84f 100644
  using namespace Qt::StringLiterals;
  
 diff --git a/src/gui/activity/activitylistmodel.cpp b/src/gui/activity/activitylistmodel.cpp
-index d31ce28883..4546bbc583 100644
+index 8a3285122c..2b865040dc 100644
 --- a/src/gui/activity/activitylistmodel.cpp
 +++ b/src/gui/activity/activitylistmodel.cpp
 @@ -19,6 +19,7 @@
@@ -783,7 +795,7 @@ index d31ce28883..4546bbc583 100644
  #include <QAbstractListModel>
  #include <QDesktopServices>
 diff --git a/src/gui/activity/notificationhandler.cpp b/src/gui/activity/notificationhandler.cpp
-index cf0624367a..cde9cec563 100644
+index 77547a021f..012fba7ab3 100644
 --- a/src/gui/activity/notificationhandler.cpp
 +++ b/src/gui/activity/notificationhandler.cpp
 @@ -8,6 +8,7 @@
@@ -923,7 +935,7 @@ index 3e6c2050df..d3934b29b2 100644
      }
  }
 diff --git a/src/gui/activity/talkreply.cpp b/src/gui/activity/talkreply.cpp
-index 8e8a1a8d61..f917c6d7ac 100644
+index bc21faee16..465ebb62a7 100644
 --- a/src/gui/activity/talkreply.cpp
 +++ b/src/gui/activity/talkreply.cpp
 @@ -7,6 +7,7 @@
@@ -988,7 +1000,7 @@ index 60d024b158..a2b7fc790f 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index 0e4b56610a..9b02868188 100644
+index 9e6732aea4..e90652f42d 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -31,6 +31,7 @@
@@ -1124,7 +1136,7 @@ index c061eff726..2a0751b07c 100644
                  }
              }
 diff --git a/src/gui/folderman.cpp b/src/gui/folderman.cpp
-index ffe045f402..92dd11df1a 100644
+index df30db89bc..11ba3a98db 100644
 --- a/src/gui/folderman.cpp
 +++ b/src/gui/folderman.cpp
 @@ -16,6 +16,7 @@
@@ -1136,7 +1148,7 @@ index ffe045f402..92dd11df1a 100644
  #include "logger.h"
  #include <pushnotifications.h>
 diff --git a/src/gui/folderstatusmodel.cpp b/src/gui/folderstatusmodel.cpp
-index 5c3504674f..b58163fa23 100644
+index 6697d4f38d..9f2f5c45eb 100644
 --- a/src/gui/folderstatusmodel.cpp
 +++ b/src/gui/folderstatusmodel.cpp
 @@ -8,6 +8,7 @@
@@ -1148,7 +1160,7 @@ index 5c3504674f..b58163fa23 100644
  #include "folderstatusdelegate.h"
  #include <account.h>
 diff --git a/src/gui/folderwizard.cpp b/src/gui/folderwizard.cpp
-index 703a3bbd20..d3378ccce8 100644
+index 865a34baaf..dfc3b4ee35 100644
 --- a/src/gui/folderwizard.cpp
 +++ b/src/gui/folderwizard.cpp
 @@ -15,6 +15,7 @@
@@ -1221,7 +1233,7 @@ index ac95577a50..8759c03264 100644
  
  namespace OCC
 diff --git a/src/gui/governance/governancelabelslistmodel.cpp b/src/gui/governance/governancelabelslistmodel.cpp
-index 7d4eae7751..f18f60506e 100644
+index 9a82bca90f..11493789b8 100644
 --- a/src/gui/governance/governancelabelslistmodel.cpp
 +++ b/src/gui/governance/governancelabelslistmodel.cpp
 @@ -13,6 +13,8 @@
@@ -1273,7 +1285,7 @@ index 81102ff000..716485424d 100644
  
  namespace OCC
 diff --git a/src/gui/owncloudsetupwizard.cpp b/src/gui/owncloudsetupwizard.cpp
-index 511059ba46..6abaf118ba 100644
+index 2516bb16d2..2de5f225fe 100644
 --- a/src/gui/owncloudsetupwizard.cpp
 +++ b/src/gui/owncloudsetupwizard.cpp
 @@ -4,6 +4,7 @@
@@ -1285,7 +1297,7 @@ index 511059ba46..6abaf118ba 100644
  
  #include "accountmanager.h"
 diff --git a/src/gui/search/CMakeLists.txt b/src/gui/search/CMakeLists.txt
-index 19894e5589..5b6dc332c1 100644
+index d4dbcddc13..ee32d03de0 100644
 --- a/src/gui/search/CMakeLists.txt
 +++ b/src/gui/search/CMakeLists.txt
 @@ -1,6 +1,8 @@
@@ -1336,7 +1348,7 @@ index 19894e5589..5b6dc332c1 100644
      SearchWindow.qml
      UnifiedSearchInputContainer.qml
      UnifiedSearchResultFetchMoreTrigger.qml
-@@ -26,6 +52,39 @@ ecm_add_qml_module(nextcloudGuiSearch
+@@ -26,7 +52,40 @@ ecm_add_qml_module(nextcloudGuiSearch
      UnifiedSearchResultNothingFound.qml
      UnifiedSearchPlaceholderView.qml
      UnifiedSearchResultSectionItem.qml
@@ -1377,6 +1389,7 @@ index 19894e5589..5b6dc332c1 100644
 +endif()
  
  target_link_libraries(nextcloudGuiSearch PRIVATE nextcloudCore)
+ target_compile_definitions(nextcloudGuiSearch PRIVATE QT_NO_KEYWORDS)
 diff --git a/src/gui/search/UnifiedSearchResultListItem.qml b/src/gui/search/UnifiedSearchResultListItem.qml
 index 6c998598fb..5866e1615a 100644
 --- a/src/gui/search/UnifiedSearchResultListItem.qml
@@ -1401,7 +1414,7 @@ index 6c998598fb..5866e1615a 100644
  
      Rectangle {
 diff --git a/src/gui/search/unifiedsearchresultslistmodel.cpp b/src/gui/search/unifiedsearchresultslistmodel.cpp
-index 21f1d1fb8a..19fbe9f24d 100644
+index 3f59109955..72d07f9651 100644
 --- a/src/gui/search/unifiedsearchresultslistmodel.cpp
 +++ b/src/gui/search/unifiedsearchresultslistmodel.cpp
 @@ -10,6 +10,7 @@
@@ -1413,7 +1426,7 @@ index 21f1d1fb8a..19fbe9f24d 100644
  #include <algorithm>
  
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
-index 454cea5cb0..8fbff8b439 100644
+index 939a1038da..d434870b18 100644
 --- a/src/gui/settingsdialog.cpp
 +++ b/src/gui/settingsdialog.cpp
 @@ -17,6 +17,7 @@
@@ -1425,7 +1438,7 @@ index 454cea5cb0..8fbff8b439 100644
  #include <QLabel>
  #include <QStandardItemModel>
 diff --git a/src/gui/sharemanager.cpp b/src/gui/sharemanager.cpp
-index 42a151dba2..d5d2128a06 100644
+index 9658bafdc0..b67ffd6151 100644
 --- a/src/gui/sharemanager.cpp
 +++ b/src/gui/sharemanager.cpp
 @@ -11,6 +11,7 @@
@@ -1437,7 +1450,7 @@ index 42a151dba2..d5d2128a06 100644
  #include <QUrl>
  #include <QJsonDocument>
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index 33f53ad242..e267eba311 100644
+index 6686cce15c..44a239caa2 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
 @@ -17,6 +17,7 @@
@@ -1470,7 +1483,7 @@ index b6ec909176..50716a585e 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index 7e843e3e39..1e3d135b10 100644
+index e40778acf9..df30e6f2a7 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -47,6 +47,8 @@
@@ -1591,7 +1604,7 @@ index 82b2640d61..141e608dcd 100644
  
  
 diff --git a/src/gui/tray/asyncimageresponse.cpp b/src/gui/tray/asyncimageresponse.cpp
-index 875310d96f..641be3b24e 100644
+index 53b9990609..49b3fe904b 100644
 --- a/src/gui/tray/asyncimageresponse.cpp
 +++ b/src/gui/tray/asyncimageresponse.cpp
 @@ -11,6 +11,8 @@
@@ -1604,7 +1617,7 @@ index 875310d96f..641be3b24e 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index 3e04f33798..fce7cd9db4 100644
+index ee0ae3bf5b..cd23a8c0be 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
 @@ -26,6 +26,7 @@
@@ -1616,7 +1629,7 @@ index 3e04f33798..fce7cd9db4 100644
  #ifdef BUILD_FILE_PROVIDER_MODULE
  #include "gui/macOS/fileprovider.h"
 diff --git a/src/gui/trayaccountpopup_qt.cpp b/src/gui/trayaccountpopup_qt.cpp
-index db8b021c43..e62baca9e2 100644
+index 4d8bf541f2..5b05ff58ac 100644
 --- a/src/gui/trayaccountpopup_qt.cpp
 +++ b/src/gui/trayaccountpopup_qt.cpp
 @@ -5,6 +5,8 @@
@@ -1629,7 +1642,7 @@ index db8b021c43..e62baca9e2 100644
  #include "accountstate.h"
  #include "iconjob.h"
 diff --git a/src/gui/userinfo.cpp b/src/gui/userinfo.cpp
-index b65a604b72..b15ac6c1e2 100644
+index bc14986d1f..0271059353 100644
 --- a/src/gui/userinfo.cpp
 +++ b/src/gui/userinfo.cpp
 @@ -10,6 +10,7 @@
@@ -1641,7 +1654,7 @@ index b65a604b72..b15ac6c1e2 100644
  #include <QTimer>
  #include <QJsonDocument>
 diff --git a/src/gui/wizard/accountwizardcontroller.cpp b/src/gui/wizard/accountwizardcontroller.cpp
-index b35e3ed5b3..61cd515ce4 100644
+index 901e61354f..e2af27e8da 100644
 --- a/src/gui/wizard/accountwizardcontroller.cpp
 +++ b/src/gui/wizard/accountwizardcontroller.cpp
 @@ -5,6 +5,8 @@
@@ -1679,7 +1692,7 @@ index 1a08d2445e..412cc6123f 100644
      WizardButton {
          enabled: !root.controller.busy
 diff --git a/src/libsync/CMakeLists.txt b/src/libsync/CMakeLists.txt
-index be060e8ce2..4a41f4fedc 100644
+index 9a1b7c6d84..c4e11bef6f 100644
 --- a/src/libsync/CMakeLists.txt
 +++ b/src/libsync/CMakeLists.txt
 @@ -2,7 +2,7 @@
@@ -1718,7 +1731,7 @@ index be060e8ce2..4a41f4fedc 100644
      PRIVATE
          cxx_std_17
 diff --git a/src/libsync/abstractnetworkjob.cpp b/src/libsync/abstractnetworkjob.cpp
-index 199f7c0546..588dc8ad3b 100644
+index 7811e0b043..792271b098 100644
 --- a/src/libsync/abstractnetworkjob.cpp
 +++ b/src/libsync/abstractnetworkjob.cpp
 @@ -5,6 +5,7 @@
@@ -1729,7 +1742,7 @@ index 199f7c0546..588dc8ad3b 100644
  #include "networkjobs.h"
  #include "account.h"
  #include "owncloudpropagator.h"
-@@ -281,9 +282,7 @@ void AbstractNetworkJob::slotFinished()
+@@ -287,9 +288,7 @@ void AbstractNetworkJob::slotFinished()
                          << " origin=" << requestedUrl.host() << ":" << requestedUrl.port()
                          << " target=" << redirectUrl.host() << ":" << redirectUrl.port();
  
@@ -1740,8 +1753,29 @@ index 199f7c0546..588dc8ad3b 100644
                      request.setAttribute(AbstractCredentials::DontAddCredentialsAttribute, true);
                  }
  
+diff --git a/src/libsync/accessmanager.cpp b/src/libsync/accessmanager.cpp
+index 6fb29e0a4f..8475cc8848 100644
+--- a/src/libsync/accessmanager.cpp
++++ b/src/libsync/accessmanager.cpp
+@@ -18,6 +18,7 @@
+ #include "cookiejar.h"
+ #include "accessmanager.h"
+ #include "common/utility.h"
++#include "common/qtcompat.h"
+ #include "httplogger.h"
+ 
+ using namespace Qt::StringLiterals;
+@@ -119,7 +120,7 @@ QNetworkReply *AccessManager::createRequest(QNetworkAccessManager::Operation op,
+ 
+     const auto reply = QNetworkAccessManager::createRequest(op, newRequest, outgoingData);
+     HttpLogger::logRequest(reply, op, outgoingData);
+-    QObject::connect(reply, &QNetworkReply::requestSent, reply, [reply] {
++    QObject::connect(reply, QNetworkReplyRequestSent, reply, [reply] {
+         qCInfo(lcAccessManager()) << "Request has been sent"
+                                   << reply->url().toString()
+                                   << reply->request().rawHeader("X-Request-ID"_ba)
 diff --git a/src/libsync/account.cpp b/src/libsync/account.cpp
-index a9ff3c9add..01f4ae7db2 100644
+index 983d984318..58b4235670 100644
 --- a/src/libsync/account.cpp
 +++ b/src/libsync/account.cpp
 @@ -24,6 +24,7 @@
@@ -1776,7 +1810,7 @@ index c1474e6d22..df9f7758b4 100644
  
  namespace OCC {
 diff --git a/src/libsync/clientsideencryption.cpp b/src/libsync/clientsideencryption.cpp
-index 6d3e7b9b19..d80c0b08b6 100644
+index 75b93576b4..f791f76654 100644
 --- a/src/libsync/clientsideencryption.cpp
 +++ b/src/libsync/clientsideencryption.cpp
 @@ -14,11 +14,12 @@
@@ -1849,7 +1883,7 @@ index 6d3e7b9b19..d80c0b08b6 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 705c399e0a..3f38d04a09 100644
+index f0a46dc3ed..da9069aff3 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1861,7 +1895,7 @@ index 705c399e0a..3f38d04a09 100644
  #include "csync.h"
  
 diff --git a/src/libsync/discoveryphase.cpp b/src/libsync/discoveryphase.cpp
-index 25d53130ee..9227167795 100644
+index 8830fcd44d..a91e4cb542 100644
 --- a/src/libsync/discoveryphase.cpp
 +++ b/src/libsync/discoveryphase.cpp
 @@ -18,6 +18,7 @@
@@ -1873,7 +1907,7 @@ index 25d53130ee..9227167795 100644
  #include <csync_exclude.h>
  #include "vio/csync_vio_local.h"
 diff --git a/src/libsync/encryptedfoldermetadatahandler.cpp b/src/libsync/encryptedfoldermetadatahandler.cpp
-index 7688d1a142..39ece6cc78 100644
+index c8a0bf3d73..b825c263d5 100644
 --- a/src/libsync/encryptedfoldermetadatahandler.cpp
 +++ b/src/libsync/encryptedfoldermetadatahandler.cpp
 @@ -10,6 +10,7 @@
@@ -1885,7 +1919,7 @@ index 7688d1a142..39ece6cc78 100644
  #include <QLoggingCategory>
  #include <QNetworkReply>
 diff --git a/src/libsync/encryptfolderjob.cpp b/src/libsync/encryptfolderjob.cpp
-index 92b3300359..f53e216891 100644
+index 56b90a2f27..e91294c11e 100644
 --- a/src/libsync/encryptfolderjob.cpp
 +++ b/src/libsync/encryptfolderjob.cpp
 @@ -8,6 +8,7 @@
@@ -1909,7 +1943,7 @@ index 99fdb8d5b0..56ed1884e5 100644
  #include "vio/csync_vio_local.h"
  #include "std/c_time.h"
 diff --git a/src/libsync/foldermetadata.cpp b/src/libsync/foldermetadata.cpp
-index 9ee4cfdc6f..6d70df1181 100644
+index 7d5da361b6..aded194f98 100644
 --- a/src/libsync/foldermetadata.cpp
 +++ b/src/libsync/foldermetadata.cpp
 @@ -4,6 +4,7 @@
@@ -2116,7 +2150,7 @@ index 0000000000..ba7eb44067
 +
 +QByteArray unGzipData(const QByteArray& inputData);
 diff --git a/src/libsync/networkjobs.cpp b/src/libsync/networkjobs.cpp
-index 5c3ef45333..e2555c20ed 100644
+index 61bc5ce5c6..c7a360a4a3 100644
 --- a/src/libsync/networkjobs.cpp
 +++ b/src/libsync/networkjobs.cpp
 @@ -10,6 +10,7 @@
@@ -2134,10 +2168,10 @@ index 5c3ef45333..e2555c20ed 100644
 -        if (const auto res = domDocument.setContent(reply(), QDomDocument::ParseOption::UseNamespaceProcessing); !res) {
 +        if (const auto res = QDomDocumentSetContentsUseNamespaceProcessing(domDocument, reply()); !res) {
              qCWarning(lcPropfindJob) << "XML parser error: " << res.errorMessage << res.errorLine << res.errorColumn;
-             emit finishedWithError(reply());
+             Q_EMIT finishedWithError(reply());
  
 diff --git a/src/libsync/ocsassistantconnector.cpp b/src/libsync/ocsassistantconnector.cpp
-index d15483e4a5..98661733c6 100644
+index 60b508a544..2e16205593 100644
 --- a/src/libsync/ocsassistantconnector.cpp
 +++ b/src/libsync/ocsassistantconnector.cpp
 @@ -7,6 +7,7 @@
@@ -2149,7 +2183,7 @@ index d15483e4a5..98661733c6 100644
  #include <QJsonDocument>
  #include <QLoggingCategory>
 diff --git a/src/libsync/ocsuserstatusconnector.cpp b/src/libsync/ocsuserstatusconnector.cpp
-index 62210c46b8..187c40cd13 100644
+index c3253ca31d..6bd2415f57 100644
 --- a/src/libsync/ocsuserstatusconnector.cpp
 +++ b/src/libsync/ocsuserstatusconnector.cpp
 @@ -6,6 +6,7 @@
@@ -2161,7 +2195,7 @@ index 62210c46b8..187c40cd13 100644
  #include <networkjobs.h>
  
 diff --git a/src/libsync/propagateuploadng.cpp b/src/libsync/propagateuploadng.cpp
-index 0582611616..617a0b5381 100644
+index b4ab937bff..39669afdb9 100644
 --- a/src/libsync/propagateuploadng.cpp
 +++ b/src/libsync/propagateuploadng.cpp
 @@ -18,6 +18,7 @@
@@ -2173,7 +2207,7 @@ index 0582611616..617a0b5381 100644
  #include <QNetworkAccessManager>
  #include <QFileInfo>
 diff --git a/src/libsync/pushnotifications.cpp b/src/libsync/pushnotifications.cpp
-index 74729921fe..fbf9fb6bc5 100644
+index 4bc20fc37e..0a13d680c4 100644
 --- a/src/libsync/pushnotifications.cpp
 +++ b/src/libsync/pushnotifications.cpp
 @@ -3,6 +3,7 @@
@@ -2221,7 +2255,7 @@ index 74729921fe..fbf9fb6bc5 100644
  
      if (parseError.error != QJsonParseError::NoError) {
 diff --git a/src/libsync/syncengine.cpp b/src/libsync/syncengine.cpp
-index e810d0750c..b81932fc00 100644
+index 9400022878..14bd61f3c2 100644
 --- a/src/libsync/syncengine.cpp
 +++ b/src/libsync/syncengine.cpp
 @@ -18,6 +18,7 @@
@@ -2245,7 +2279,7 @@ index d5aa8776a1..baf79a8e2e 100644
  #include "filesystem.h"
  
 diff --git a/src/libsync/theme.cpp b/src/libsync/theme.cpp
-index 3f86e61f6d..d45ed4846b 100644
+index 45c38956e7..04907d2b0b 100644
 --- a/src/libsync/theme.cpp
 +++ b/src/libsync/theme.cpp
 @@ -9,6 +9,7 @@
@@ -2313,7 +2347,7 @@ index 3f86e61f6d..d45ed4846b 100644
  
  bool Theme::displayLegacyImportDialog() const
 diff --git a/test/syncenginetestutils.cpp b/test/syncenginetestutils.cpp
-index 7893328465..8d47b26f90 100644
+index 346e88b430..0b429364b9 100644
 --- a/test/syncenginetestutils.cpp
 +++ b/test/syncenginetestutils.cpp
 @@ -438,7 +438,7 @@ FakePropfindReply::FakePropfindReply(FileInfo &remoteRootFileInfo, QNetworkAcces
@@ -2326,7 +2360,7 @@ index 7893328465..8d47b26f90 100644
          if (fileInfo.isShared) {
              if (fileInfo.downloadForbidden) {
 diff --git a/test/testaccount.cpp b/test/testaccount.cpp
-index 9f032c6ebe..5fefa5d295 100644
+index c127d38970..e7f24603ee 100644
 --- a/test/testaccount.cpp
 +++ b/test/testaccount.cpp
 @@ -12,6 +12,7 @@
@@ -2338,7 +2372,7 @@ index 9f032c6ebe..5fefa5d295 100644
  #include "accountstate.h"
  #include "logger.h"
 diff --git a/test/testaccountsettings.cpp b/test/testaccountsettings.cpp
-index b43723f630..93568774f0 100644
+index 9be70ce318..9ef5caa1e7 100644
 --- a/test/testaccountsettings.cpp
 +++ b/test/testaccountsettings.cpp
 @@ -16,6 +16,8 @@
@@ -2351,7 +2385,7 @@ index b43723f630..93568774f0 100644
  
  class TestAccountSettings : public QObject
 diff --git a/test/testactivitydata.cpp b/test/testactivitydata.cpp
-index 45cd5da659..9223802839 100644
+index 4bfaf2bb5a..a2c5237690 100644
 --- a/test/testactivitydata.cpp
 +++ b/test/testactivitydata.cpp
 @@ -8,6 +8,7 @@
@@ -2363,7 +2397,7 @@ index 45cd5da659..9223802839 100644
  #include <QTest>
  #include <QHash>
 diff --git a/test/testdatefieldbackend.cpp b/test/testdatefieldbackend.cpp
-index 850e9c919c..fc0371170e 100644
+index a0c21bd2d1..ba603fb759 100644
 --- a/test/testdatefieldbackend.cpp
 +++ b/test/testdatefieldbackend.cpp
 @@ -10,6 +10,7 @@
@@ -2387,7 +2421,7 @@ index 37abf3784f..57ae135aee 100644
  
  #include "libsync/filesystem.h"
 diff --git a/test/testfolder.cpp b/test/testfolder.cpp
-index b45cf49114..060f9aca0b 100644
+index bb0d5c4e6c..6a91b0f7c0 100644
 --- a/test/testfolder.cpp
 +++ b/test/testfolder.cpp
 @@ -12,6 +12,7 @@
@@ -2399,7 +2433,7 @@ index b45cf49114..060f9aca0b 100644
  
  #include "account.h"
 diff --git a/test/testfolderman.cpp b/test/testfolderman.cpp
-index 07e7a46b8d..4301a22fea 100644
+index b3d13af8d5..c8c5d5fedc 100644
 --- a/test/testfolderman.cpp
 +++ b/test/testfolderman.cpp
 @@ -14,6 +14,7 @@
@@ -2411,7 +2445,7 @@ index 07e7a46b8d..4301a22fea 100644
  #include "account.h"
  #include "accountstate.h"
 diff --git a/test/testlocaldiscovery.cpp b/test/testlocaldiscovery.cpp
-index f3e1f443d3..b82dafd1c0 100644
+index 2ee954ee5d..02604ded19 100644
 --- a/test/testlocaldiscovery.cpp
 +++ b/test/testlocaldiscovery.cpp
 @@ -18,6 +18,8 @@
@@ -2424,7 +2458,7 @@ index f3e1f443d3..b82dafd1c0 100644
  using namespace Qt::StringLiterals;
  
 diff --git a/test/testnextcloudpropagator.cpp b/test/testnextcloudpropagator.cpp
-index 1568313f4a..9deea92c6d 100644
+index ed1b30dde1..34414eff7e 100644
 --- a/test/testnextcloudpropagator.cpp
 +++ b/test/testnextcloudpropagator.cpp
 @@ -17,6 +17,8 @@
@@ -2437,7 +2471,7 @@ index 1568313f4a..9deea92c6d 100644
  
  #ifdef HAVE_QHTTPSERVER
 diff --git a/test/testsyncengine.cpp b/test/testsyncengine.cpp
-index e815e2a604..457b7da306 100644
+index d92bc0b77b..e0524d357e 100644
 --- a/test/testsyncengine.cpp
 +++ b/test/testsyncengine.cpp
 @@ -18,6 +18,7 @@
@@ -2449,7 +2483,7 @@ index e815e2a604..457b7da306 100644
  #include <QFile>
  #include <QtTest>
 diff --git a/test/testsyncjournaldb.cpp b/test/testsyncjournaldb.cpp
-index 38fb455f5b..cec9154e21 100644
+index eea8802e03..74b54fddab 100644
 --- a/test/testsyncjournaldb.cpp
 +++ b/test/testsyncjournaldb.cpp
 @@ -14,6 +14,7 @@
@@ -2461,7 +2495,7 @@ index 38fb455f5b..cec9154e21 100644
  
  using namespace OCC;
 diff --git a/test/testsyncvirtualfiles.cpp b/test/testsyncvirtualfiles.cpp
-index c4840c0308..c531e0424e 100644
+index 2a787fb6c7..15ee837861 100644
 --- a/test/testsyncvirtualfiles.cpp
 +++ b/test/testsyncvirtualfiles.cpp
 @@ -11,6 +11,7 @@
