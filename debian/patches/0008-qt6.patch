@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 22e88c28d7..32b00f20e1 100644
+index c0a151ada7..75238e14ca 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -31,7 +31,7 @@ set(BIN_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -11,7 +11,7 @@ index 22e88c28d7..32b00f20e1 100644
  
  # CfAPI Shell Extensions
  set( CFAPI_SHELL_EXTENSIONS_LIB_NAME CfApiShellExtensions )
-@@ -84,13 +84,11 @@ endif()
+@@ -82,13 +82,11 @@ endif()
  
  set(APPLE_SUPPRESS_X11_WARNING ON)
  
@@ -26,7 +26,7 @@ index 22e88c28d7..32b00f20e1 100644
  include(ECMMarkNonGuiExecutable)
  include(ECMSetupVersion)
  include(ECMQmlModule)
-@@ -153,7 +151,7 @@ if(APPLE AND BUILD_OWNCLOUD_OSX_BUNDLE)
+@@ -154,7 +152,7 @@ if(APPLE AND BUILD_OWNCLOUD_OSX_BUNDLE)
      add_definitions(-DBUILD_OWNCLOUD_OSX_BUNDLE)
  endif()
  
@@ -552,17 +552,16 @@ index 0000000000..d518ca9718
 +//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
 diff --git a/src/common/syncjournaldb.cpp b/src/common/syncjournaldb.cpp
-index 5f07877239..78d9cb0ab2 100644
+index f07ca54f18..5025b4ef09 100644
 --- a/src/common/syncjournaldb.cpp
 +++ b/src/common/syncjournaldb.cpp
-@@ -24,6 +24,7 @@
- #include "common/preparedsqlquerymanager.h"
+@@ -3318,4 +3318,4 @@ QDebug& operator<<(QDebug &stream, const SyncJournalFileRecord::EncryptionStatus
  
- #include "common/c_jhash.h"
-+#include "common/qtcompat.h"
+ } // namespace OCC
  
- // SQL expression to check whether path.startswith(prefix + '/')
- // Note: '/' + 1 == '0'
+-#include "moc_syncjournaldb.cpp"
+\ No newline at end of file
++#include "moc_syncjournaldb.cpp"
 diff --git a/src/csync/csync_exclude.cpp b/src/csync/csync_exclude.cpp
 index fe583120bf..2b9e1eb870 100644
 --- a/src/csync/csync_exclude.cpp
@@ -1450,7 +1449,7 @@ index 9658bafdc0..b67ffd6151 100644
  #include <QUrl>
  #include <QJsonDocument>
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index 6686cce15c..44a239caa2 100644
+index 74f107f74c..8c240e16a6 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
 @@ -17,6 +17,7 @@
@@ -1617,7 +1616,7 @@ index 53b9990609..49b3fe904b 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index ee0ae3bf5b..cd23a8c0be 100644
+index 722a6d2795..8a48c0033e 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
 @@ -26,6 +26,7 @@
@@ -1797,7 +1796,7 @@ index 983d984318..58b4235670 100644
  
      promise->start();
 diff --git a/src/libsync/capabilities.cpp b/src/libsync/capabilities.cpp
-index c1474e6d22..df9f7758b4 100644
+index 8edd994c66..8849c07bfc 100644
 --- a/src/libsync/capabilities.cpp
 +++ b/src/libsync/capabilities.cpp
 @@ -13,6 +13,8 @@
@@ -1883,7 +1882,7 @@ index 75b93576b4..f791f76654 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index f0a46dc3ed..da9069aff3 100644
+index 1c510370de..c489112bc6 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -1907,7 +1906,7 @@ index 8830fcd44d..a91e4cb542 100644
  #include <csync_exclude.h>
  #include "vio/csync_vio_local.h"
 diff --git a/src/libsync/encryptedfoldermetadatahandler.cpp b/src/libsync/encryptedfoldermetadatahandler.cpp
-index c8a0bf3d73..b825c263d5 100644
+index 718092f0b8..309e731cbe 100644
 --- a/src/libsync/encryptedfoldermetadatahandler.cpp
 +++ b/src/libsync/encryptedfoldermetadatahandler.cpp
 @@ -10,6 +10,7 @@
@@ -1919,7 +1918,7 @@ index c8a0bf3d73..b825c263d5 100644
  #include <QLoggingCategory>
  #include <QNetworkReply>
 diff --git a/src/libsync/encryptfolderjob.cpp b/src/libsync/encryptfolderjob.cpp
-index 56b90a2f27..e91294c11e 100644
+index ac7b14ec71..f0592a3feb 100644
 --- a/src/libsync/encryptfolderjob.cpp
 +++ b/src/libsync/encryptfolderjob.cpp
 @@ -8,6 +8,7 @@
@@ -1943,7 +1942,7 @@ index 99fdb8d5b0..56ed1884e5 100644
  #include "vio/csync_vio_local.h"
  #include "std/c_time.h"
 diff --git a/src/libsync/foldermetadata.cpp b/src/libsync/foldermetadata.cpp
-index 7d5da361b6..aded194f98 100644
+index a4b7c6fdbb..72c734b8bd 100644
 --- a/src/libsync/foldermetadata.cpp
 +++ b/src/libsync/foldermetadata.cpp
 @@ -4,6 +4,7 @@
