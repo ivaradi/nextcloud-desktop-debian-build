@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c0a151ada7..75238e14ca 100644
+index 5554449ac7..d15bbcc185 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -31,7 +31,7 @@ set(BIN_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+@@ -30,7 +30,7 @@ set(BIN_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
  include(${CMAKE_SOURCE_DIR}/NEXTCLOUD.cmake)
  
  set(QT_VERSION_MAJOR "6")
@@ -11,7 +11,7 @@ index c0a151ada7..75238e14ca 100644
  
  # CfAPI Shell Extensions
  set( CFAPI_SHELL_EXTENSIONS_LIB_NAME CfApiShellExtensions )
-@@ -82,13 +82,11 @@ endif()
+@@ -81,13 +81,11 @@ endif()
  
  set(APPLE_SUPPRESS_X11_WARNING ON)
  
@@ -26,7 +26,7 @@ index c0a151ada7..75238e14ca 100644
  include(ECMMarkNonGuiExecutable)
  include(ECMSetupVersion)
  include(ECMQmlModule)
-@@ -154,7 +152,7 @@ if(APPLE AND BUILD_OWNCLOUD_OSX_BUNDLE)
+@@ -153,7 +151,7 @@ if(APPLE AND BUILD_OWNCLOUD_OSX_BUNDLE)
      add_definitions(-DBUILD_OWNCLOUD_OSX_BUNDLE)
  endif()
  
@@ -36,7 +36,7 @@ index c0a151ada7..75238e14ca 100644
  
  # this option removes Http authentication, keychain, shibboleth etc and is intended for
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index c19ede88ce..ee3db931ba 100644
+index e2669c5e56..f7d743c398 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -552,10 +552,19 @@ index 0000000000..d518ca9718
 +//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
 diff --git a/src/common/syncjournaldb.cpp b/src/common/syncjournaldb.cpp
-index f07ca54f18..5025b4ef09 100644
+index f07ca54f18..0d6fc7ec18 100644
 --- a/src/common/syncjournaldb.cpp
 +++ b/src/common/syncjournaldb.cpp
-@@ -3318,4 +3318,4 @@ QDebug& operator<<(QDebug &stream, const SyncJournalFileRecord::EncryptionStatus
+@@ -28,6 +28,8 @@
+ 
+ #include <cstring>
+ 
++#include "common/qtcompat.h"
++
+ // SQL expression to check whether path.startswith(prefix + '/')
+ // Note: '/' + 1 == '0'
+ #define IS_PREFIX_PATH_OF(prefix, path) \
+@@ -3318,4 +3320,4 @@ QDebug& operator<<(QDebug &stream, const SyncJournalFileRecord::EncryptionStatus
  
  } // namespace OCC
  
@@ -597,7 +606,7 @@ index fe583120bf..2b9e1eb870 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index b3cdaf0f06..5acc8c2f8d 100644
+index cae07f9c9f..f64c67df4f 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -1296,7 +1305,7 @@ index 2516bb16d2..2de5f225fe 100644
  
  #include "accountmanager.h"
 diff --git a/src/gui/search/CMakeLists.txt b/src/gui/search/CMakeLists.txt
-index d4dbcddc13..ee32d03de0 100644
+index 369da1cf08..8ec9586cd9 100644
 --- a/src/gui/search/CMakeLists.txt
 +++ b/src/gui/search/CMakeLists.txt
 @@ -1,6 +1,8 @@
@@ -1308,8 +1317,8 @@ index d4dbcddc13..ee32d03de0 100644
  add_library(nextcloudGuiSearch STATIC)
  
  target_sources(nextcloudGuiSearch
-@@ -11,10 +13,34 @@ target_sources(nextcloudGuiSearch
-     unifiedsearchresultslistmodel.cpp
+@@ -13,10 +15,34 @@ target_sources(nextcloudGuiSearch
+     unifiedsearchpeoplemodel.cpp
  )
  
 -ecm_add_qml_module(nextcloudGuiSearch
@@ -1345,9 +1354,9 @@ index d4dbcddc13..ee32d03de0 100644
 +
 +  set(_search_qml_files
      SearchWindow.qml
-     UnifiedSearchInputContainer.qml
-     UnifiedSearchResultFetchMoreTrigger.qml
-@@ -26,7 +52,40 @@ ecm_add_qml_module(nextcloudGuiSearch
+     UnifiedSearchCustomDateRangeDialog.qml
+     UnifiedSearchDetailHeader.qml
+@@ -34,7 +60,40 @@ ecm_add_qml_module(nextcloudGuiSearch
      UnifiedSearchResultNothingFound.qml
      UnifiedSearchPlaceholderView.qml
      UnifiedSearchResultSectionItem.qml
@@ -1413,17 +1422,17 @@ index 6c998598fb..5866e1615a 100644
  
      Rectangle {
 diff --git a/src/gui/search/unifiedsearchresultslistmodel.cpp b/src/gui/search/unifiedsearchresultslistmodel.cpp
-index 3f59109955..72d07f9651 100644
+index f0b56cec5e..85dd8d3466 100644
 --- a/src/gui/search/unifiedsearchresultslistmodel.cpp
 +++ b/src/gui/search/unifiedsearchresultslistmodel.cpp
 @@ -10,6 +10,7 @@
- #include "guiutility.h"
  #include "folderman.h"
+ #include "guiutility.h"
  #include "networkjobs.h"
 +#include "common/qtcompat.h"
  
- #include <algorithm>
- 
+ #include <QDesktopServices>
+ #include <QFileInfo>
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
 index 939a1038da..d434870b18 100644
 --- a/src/gui/settingsdialog.cpp
@@ -1437,7 +1446,7 @@ index 939a1038da..d434870b18 100644
  #include <QLabel>
  #include <QStandardItemModel>
 diff --git a/src/gui/sharemanager.cpp b/src/gui/sharemanager.cpp
-index 9658bafdc0..b67ffd6151 100644
+index 8545c7e0cd..ec70e4860c 100644
 --- a/src/gui/sharemanager.cpp
 +++ b/src/gui/sharemanager.cpp
 @@ -11,6 +11,7 @@
@@ -1482,7 +1491,7 @@ index b6ec909176..50716a585e 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index e40778acf9..df30e6f2a7 100644
+index 50d4aafcfb..0d8b0f90b3 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -47,6 +47,8 @@
@@ -1510,7 +1519,7 @@ index e40778acf9..df30e6f2a7 100644
          return;
      }
  
-@@ -470,7 +472,7 @@ void Systray::showSearchWindow(int userIndex)
+@@ -471,7 +473,7 @@ void Systray::showSearchWindow(int userIndex)
                      }},
          {"searchModel", QVariant::fromValue(searchModel)},
      };
@@ -1691,7 +1700,7 @@ index 1a08d2445e..412cc6123f 100644
      WizardButton {
          enabled: !root.controller.busy
 diff --git a/src/libsync/CMakeLists.txt b/src/libsync/CMakeLists.txt
-index 9a1b7c6d84..c4e11bef6f 100644
+index 85b3363e03..08829a2593 100644
 --- a/src/libsync/CMakeLists.txt
 +++ b/src/libsync/CMakeLists.txt
 @@ -2,7 +2,7 @@
