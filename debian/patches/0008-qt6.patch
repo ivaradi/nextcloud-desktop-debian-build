@@ -49,10 +49,10 @@ index e2669c5e56..f7d743c398 100644
  find_package(Qt${QT_MAJOR_VERSION}Core ${REQUIRED_QT_VERSION} CONFIG QUIET)
  set_package_properties(Qt${QT_MAJOR_VERSION}Core PROPERTIES
 diff --git a/src/cmd/cmd.cpp b/src/cmd/cmd.cpp
-index 3eafd01fc3..61cc2b7137 100644
+index 5e78908621..22ed230061 100644
 --- a/src/cmd/cmd.cpp
 +++ b/src/cmd/cmd.cpp
-@@ -48,6 +48,8 @@
+@@ -49,6 +49,8 @@
  
  #include "config.h"
  
@@ -735,7 +735,7 @@ index ca1026e419..9252c314fb 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index 189278e86a..fa6a74f9d2 100644
+index 3f6daba9ab..6610adf142 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -747,7 +747,7 @@ index 189278e86a..fa6a74f9d2 100644
  #include "theme.h"
  #include "foldercreationdialog.h"
 diff --git a/src/gui/accountsetupfromcommandlinejob.cpp b/src/gui/accountsetupfromcommandlinejob.cpp
-index c7eee0d9f5..9a96ed8d52 100644
+index 0ad321754d..3d80caa918 100644
 --- a/src/gui/accountsetupfromcommandlinejob.cpp
 +++ b/src/gui/accountsetupfromcommandlinejob.cpp
 @@ -5,6 +5,8 @@
@@ -758,15 +758,15 @@ index c7eee0d9f5..9a96ed8d52 100644
 +
  #include "accountmanager.h"
  #include "accountstate.h"
- #include "creds/abstractcredentials.h"
+ #include "common/filesystembase.h"
 diff --git a/src/gui/accountstate.cpp b/src/gui/accountstate.cpp
-index 965704ab54..0624944cf5 100644
+index c9cf0a6e5a..0dec40e1e1 100644
 --- a/src/gui/accountstate.cpp
 +++ b/src/gui/accountstate.cpp
-@@ -17,6 +17,7 @@
- #include "ocsuserstatusconnector.h"
+@@ -18,6 +18,7 @@
  #include "pushnotifications.h"
  #include "networkjobs.h"
+ #include "settings/migration.h"
 +#include "common/qtcompat.h"
  
  #include <QSettings>
@@ -1001,18 +1001,18 @@ index 60d024b158..a2b7fc790f 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index fd5103e875..759488f0c3 100644
+index 30cb93af86..81cf9e1393 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
-@@ -31,6 +31,7 @@
- #include "version.h"
+@@ -32,6 +32,7 @@
  #include "csync_exclude.h"
- #include "common/vfs.h"
+ #include "owncloudsetupwizard.h"
+ #include "version.h"
 +#include "common/qtcompat.h"
  
  #include "config.h"
- 
-@@ -1276,7 +1277,7 @@ void Application::setupTranslations()
+ #include "settings/migration.h"
+@@ -1260,7 +1261,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -1254,7 +1254,7 @@ index c061eff726..2a0751b07c 100644
                  }
              }
 diff --git a/src/gui/folderman.cpp b/src/gui/folderman.cpp
-index 1c9a149417..af4f96b0c3 100644
+index 8458f0438f..9c4e785344 100644
 --- a/src/gui/folderman.cpp
 +++ b/src/gui/folderman.cpp
 @@ -16,6 +16,7 @@
@@ -1601,7 +1601,7 @@ index dc2cfe6022..9eb7a4ad9a 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index c8c42374ff..72b79d4132 100644
+index 0d39042cc5..d272ad2abf 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -46,6 +46,8 @@
@@ -1613,7 +1613,7 @@ index c8c42374ff..72b79d4132 100644
  using namespace Qt::StringLiterals;
  
  namespace OCC {
-@@ -406,11 +408,11 @@ void Systray::showSearchWindow(int userIndex)
+@@ -407,11 +409,11 @@ void Systray::showSearchWindow(int userIndex)
          return;
      }
  
@@ -1629,7 +1629,7 @@ index c8c42374ff..72b79d4132 100644
          return;
      }
  
-@@ -424,7 +426,7 @@ void Systray::showSearchWindow(int userIndex)
+@@ -425,7 +427,7 @@ void Systray::showSearchWindow(int userIndex)
                      }},
          {"searchModel", QVariant::fromValue(searchModel)},
      };
@@ -1752,7 +1752,7 @@ index 1a08d2445e..412cc6123f 100644
      WizardButton {
          enabled: !root.controller.busy
 diff --git a/src/libsync/CMakeLists.txt b/src/libsync/CMakeLists.txt
-index bc9f1b7d40..374fa1f1b1 100644
+index f2e44bafdd..0ed1b5ee1d 100644
 --- a/src/libsync/CMakeLists.txt
 +++ b/src/libsync/CMakeLists.txt
 @@ -2,7 +2,7 @@
@@ -1764,16 +1764,16 @@ index bc9f1b7d40..374fa1f1b1 100644
  include(DefinePlatformDefaults)
  
  set(CMAKE_AUTOMOC TRUE)
-@@ -164,6 +164,8 @@ set(libsync_SRCS
-     creds/keychainchunk.cpp
-     caseclashconflictsolver.h
+@@ -166,6 +166,8 @@ set(libsync_SRCS
      caseclashconflictsolver.cpp
+     settings/migration.h
+     settings/migration.cpp
 +    kfcompat.h
 +    kfcompat.cpp
  )
  
  if (WIN32)
-@@ -237,10 +239,15 @@ target_link_libraries(nextcloudsync
+@@ -239,10 +241,15 @@ target_link_libraries(nextcloudsync
    Qt::Gui
    Qt::Svg
    Qt::Widgets
@@ -2420,10 +2420,10 @@ index c127d38970..e7f24603ee 100644
  #include "accountstate.h"
  #include "logger.h"
 diff --git a/test/testaccountsettings.cpp b/test/testaccountsettings.cpp
-index 9be70ce318..9ef5caa1e7 100644
+index 73a78d178e..4815564646 100644
 --- a/test/testaccountsettings.cpp
 +++ b/test/testaccountsettings.cpp
-@@ -16,6 +16,8 @@
+@@ -22,6 +22,8 @@
  
  #include "accountsettings.h"
  
