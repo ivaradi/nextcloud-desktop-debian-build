@@ -1870,7 +1870,7 @@ index 0b30ec3277..c8bf64660c 100644
  
  namespace OCC {
 diff --git a/src/libsync/clientsideencryption.cpp b/src/libsync/clientsideencryption.cpp
-index 496d45d4de..15e6fc84fb 100644
+index 73a10d4eb2..f0cab6c0cb 100644
 --- a/src/libsync/clientsideencryption.cpp
 +++ b/src/libsync/clientsideencryption.cpp
 @@ -14,11 +14,12 @@
@@ -1887,52 +1887,7 @@ index 496d45d4de..15e6fc84fb 100644
  
  #include <QDebug>
  #include <QLoggingCategory>
-@@ -45,7 +46,6 @@
- #include <openssl/evp.h>
- #include <openssl/pem.h>
- #include <openssl/err.h>
--#include <openssl/engine.h>
- #include <openssl/rand.h>
- #include <openssl/cms.h>
- 
-@@ -749,10 +749,9 @@ OCC::Result<QByteArray, OCC::ClientSideEncryption::EncryptionErrorType> decryptS
-                                                                                                 int pad_mode,
-                                                                                                 const QByteArray& binaryData)
- {
--    const auto sslEngine = encryptionEngine.sslEngine();
-     int err = -1;
- 
--    auto ctx = PKeyCtx::forKey(privateKey, sslEngine);
-+    auto ctx = PKeyCtx::forKey(privateKey);
-     if (!ctx) {
-         qCInfo(lcCseDecryption()) << "Could not create the PKEY context." << handleErrors();
-         return {OCC::ClientSideEncryption::EncryptionErrorType::FatalError};
-@@ -806,10 +805,9 @@ OCC::Result<QByteArray, ClientSideEncryption::EncryptionErrorType> encryptString
-                                                                                            EVP_PKEY *publicKey,
-                                                                                            int pad_mode,
-                                                                                            const QByteArray& binaryData) {
--    const auto sslEngine = encryptionEngine.sslEngine();
--    auto ctx = PKeyCtx::forKey(publicKey, sslEngine);
-+    auto ctx = PKeyCtx::forKey(publicKey);
-     if (!ctx) {
--        qCInfo(lcCseEncryption()) << "Could not initialize the pkey context." << publicKey << sslEngine;
-+        qCInfo(lcCseEncryption()) << "Could not initialize the pkey context." << publicKey;
-         return {OCC::ClientSideEncryption::EncryptionErrorType::FatalError};
-     }
- 
-@@ -979,11 +977,6 @@ const QSslCertificate& ClientSideEncryption::getCertificate() const
-     return _encryptionCertificate.getCertificate();
- }
- 
--ENGINE* ClientSideEncryption::sslEngine() const
--{
--    return ENGINE_get_default_RSA();
--}
--
- ClientSideEncryptionTokenSelector *ClientSideEncryption::usbTokenInformation()
- {
-     return &_usbTokenInformation;
-@@ -2754,26 +2747,12 @@ bool EncryptionHelper::dataDecryption(const QByteArray &key, const QByteArray &i
+@@ -2746,26 +2747,12 @@ bool EncryptionHelper::dataDecryption(const QByteArray &key, const QByteArray &i
  
  QByteArray EncryptionHelper::gzipThenEncryptData(const QByteArray &key, const QByteArray &inputData, const QByteArray &iv, QByteArray &returnTag)
  {
@@ -1962,7 +1917,7 @@ index 496d45d4de..15e6fc84fb 100644
      return outputData;
  }
  
-@@ -2785,23 +2764,7 @@ QByteArray EncryptionHelper::decryptThenUnGzipData(const QByteArray &key, const
+@@ -2777,23 +2764,7 @@ QByteArray EncryptionHelper::decryptThenUnGzipData(const QByteArray &key, const
          return {};
      }
  
@@ -1987,69 +1942,6 @@ index 496d45d4de..15e6fc84fb 100644
  
      return decryptedAndUnGzipped;
  }
-diff --git a/src/libsync/clientsideencryption.h b/src/libsync/clientsideencryption.h
-index 55680e844e..191c105527 100644
---- a/src/libsync/clientsideencryption.h
-+++ b/src/libsync/clientsideencryption.h
-@@ -275,8 +275,6 @@ public:
- 
-     [[nodiscard]] const QSslCertificate& getCertificate() const;
- 
--    [[nodiscard]] ENGINE* sslEngine() const;
--
-     [[nodiscard]] QByteArray generateSignatureCryptographicMessageSyntax(const QByteArray &data) const;
- 
-     [[nodiscard]] bool verifySignatureCryptographicMessageSyntax(const QByteArray &cmsContent, const QByteArray &data, const QVector<QByteArray> &certificatePems) const;
-diff --git a/src/libsync/clientsideencryptionprimitives.cpp b/src/libsync/clientsideencryptionprimitives.cpp
-index eef23891a3..f7c28ebf63 100644
---- a/src/libsync/clientsideencryptionprimitives.cpp
-+++ b/src/libsync/clientsideencryptionprimitives.cpp
-@@ -24,8 +24,8 @@ Bio::operator BIO *()
-     return _bio;
- }
- 
--PKeyCtx::PKeyCtx(int id, ENGINE *e)
--    : _ctx(EVP_PKEY_CTX_new_id(id, e))
-+PKeyCtx::PKeyCtx(int id)
-+    : _ctx(EVP_PKEY_CTX_new_id(id, nullptr))
- {
- }
- 
-@@ -39,10 +39,10 @@ PKeyCtx::~PKeyCtx()
-     EVP_PKEY_CTX_free(_ctx);
- }
- 
--PKeyCtx PKeyCtx::forKey(EVP_PKEY *pkey, ENGINE *e)
-+PKeyCtx PKeyCtx::forKey(EVP_PKEY *pkey)
- {
-     PKeyCtx ctx;
--    ctx._ctx = EVP_PKEY_CTX_new(pkey, e);
-+    ctx._ctx = EVP_PKEY_CTX_new(pkey, nullptr);
-     Q_ASSERT(ctx._ctx);
-     return ctx;
- }
-diff --git a/src/libsync/clientsideencryptionprimitives.h b/src/libsync/clientsideencryptionprimitives.h
-index b8cfb60af7..81bdfd9a34 100644
---- a/src/libsync/clientsideencryptionprimitives.h
-+++ b/src/libsync/clientsideencryptionprimitives.h
-@@ -37,7 +37,7 @@ private:
- class PKeyCtx
- {
- public:
--    explicit PKeyCtx(int id, ENGINE *e = nullptr);
-+    explicit PKeyCtx(int id);
- 
-     ~PKeyCtx();
- 
-@@ -48,7 +48,7 @@ public:
-     PKeyCtx(PKeyCtx &&other);
-     PKeyCtx &operator=(PKeyCtx &&other) = delete;
- 
--    static PKeyCtx forKey(EVP_PKEY *pkey, ENGINE *e = nullptr);
-+    static PKeyCtx forKey(EVP_PKEY *pkey);
- 
-     operator EVP_PKEY_CTX *();
- 
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
 index 645d57058a..95390d25f9 100644
 --- a/src/libsync/discovery.cpp
