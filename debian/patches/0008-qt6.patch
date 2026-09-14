@@ -735,7 +735,7 @@ index ca1026e419..9252c314fb 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index 3f6daba9ab..6610adf142 100644
+index f2be437d41..8f6db6cac3 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -913,7 +913,7 @@ index 253c164e7c..f7c6eb0ae1 100644
  
                      visible: root.showDismissButton
 diff --git a/src/gui/activity/qml/TalkReplyTextField.qml b/src/gui/activity/qml/TalkReplyTextField.qml
-index 3e6c2050df..d3934b29b2 100644
+index 049a6da2eb..50c2fd68b1 100644
 --- a/src/gui/activity/qml/TalkReplyTextField.qml
 +++ b/src/gui/activity/qml/TalkReplyTextField.qml
 @@ -54,9 +54,17 @@ NCContextMenuTextField {
@@ -1544,7 +1544,7 @@ index ab2e3554d9..70ba51c0db 100644
  #include <QDesktopServices>
  #include <QFileInfo>
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
-index 2ddf2058e0..632711897d 100644
+index ce5a1afadf..a3cfa7c5b5 100644
 --- a/src/gui/settingsdialog.cpp
 +++ b/src/gui/settingsdialog.cpp
 @@ -17,6 +17,7 @@
@@ -1601,7 +1601,7 @@ index dc2cfe6022..9eb7a4ad9a 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index 0d39042cc5..d272ad2abf 100644
+index 8a68378a7f..d46cd5814d 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -46,6 +46,8 @@
@@ -1613,7 +1613,7 @@ index 0d39042cc5..d272ad2abf 100644
  using namespace Qt::StringLiterals;
  
  namespace OCC {
-@@ -407,11 +409,11 @@ void Systray::showSearchWindow(int userIndex)
+@@ -414,11 +416,11 @@ void Systray::showSearchWindow(int userIndex)
          return;
      }
  
@@ -1629,7 +1629,7 @@ index 0d39042cc5..d272ad2abf 100644
          return;
      }
  
-@@ -425,7 +427,7 @@ void Systray::showSearchWindow(int userIndex)
+@@ -432,7 +434,7 @@ void Systray::showSearchWindow(int userIndex)
                      }},
          {"searchModel", QVariant::fromValue(searchModel)},
      };
@@ -1689,7 +1689,7 @@ index f92e2f5c82..5da137c6bf 100644
  #ifdef BUILD_FILE_PROVIDER_MODULE
  #include "gui/macOS/fileprovider.h"
 diff --git a/src/gui/trayaccountpopup_qt.cpp b/src/gui/trayaccountpopup_qt.cpp
-index e04837de6f..e87d097216 100644
+index 636533c9ea..6e4a5dba61 100644
 --- a/src/gui/trayaccountpopup_qt.cpp
 +++ b/src/gui/trayaccountpopup_qt.cpp
 @@ -5,6 +5,8 @@
@@ -2435,7 +2435,7 @@ index 00b7203655..7a364f3ac6 100644
  #include "filesystem.h"
  
 diff --git a/src/libsync/theme.cpp b/src/libsync/theme.cpp
-index 68b38882c6..bfb31be497 100644
+index 122cb6ff4c..23b325d0a9 100644
 --- a/src/libsync/theme.cpp
 +++ b/src/libsync/theme.cpp
 @@ -9,6 +9,7 @@
@@ -2446,7 +2446,7 @@ index 68b38882c6..bfb31be497 100644
  
  #include <QtCore>
  #ifndef TOKEN_AUTH_ONLY
-@@ -924,14 +925,12 @@ QString Theme::versionSwitchOutput() const
+@@ -933,14 +934,12 @@ QString Theme::versionSwitchOutput() const
  
  double Theme::getColorDarkness(const QColor &color)
  {
@@ -2462,8 +2462,8 @@ index 68b38882c6..bfb31be497 100644
 +    return ::isDarkColor(color);
  }
  
- QColor Theme::getBackgroundAwareLinkColor(const QColor &backgroundColor)
-@@ -1051,7 +1050,7 @@ QColor Theme::destructiveActionTextColor() const
+ QColor Theme::settingsPanelColor(const QPalette &palette)
+@@ -1078,7 +1077,7 @@ QColor Theme::destructiveActionTextColor() const
  void Theme::connectToPaletteSignal() const
  {
      if (const auto ptr = qobject_cast<QGuiApplication*>(qApp)) {
@@ -2472,7 +2472,7 @@ index 68b38882c6..bfb31be497 100644
      }
  }
  
-@@ -1094,19 +1093,6 @@ QVariantMap Theme::systemPalette() const
+@@ -1121,19 +1120,6 @@ QVariantMap Theme::systemPalette() const
  bool Theme::darkMode() const
  {
      connectToPaletteSignal();
@@ -2492,7 +2492,7 @@ index 68b38882c6..bfb31be497 100644
  
  #ifdef Q_OS_WIN
      static const auto darkModeSubkey = QStringLiteral("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
-@@ -1117,7 +1103,8 @@ bool Theme::darkMode() const
+@@ -1144,7 +1130,8 @@ bool Theme::darkMode() const
          }
      }
  #endif
@@ -2528,10 +2528,10 @@ index c127d38970..e7f24603ee 100644
  #include "accountstate.h"
  #include "logger.h"
 diff --git a/test/testaccountsettings.cpp b/test/testaccountsettings.cpp
-index 73a78d178e..4815564646 100644
+index 190a58b0f9..95accbfa30 100644
 --- a/test/testaccountsettings.cpp
 +++ b/test/testaccountsettings.cpp
-@@ -22,6 +22,8 @@
+@@ -28,6 +28,8 @@
  
  #include "accountsettings.h"
  
