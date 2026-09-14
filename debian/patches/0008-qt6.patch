@@ -735,7 +735,7 @@ index ca1026e419..9252c314fb 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index 3f6daba9ab..6610adf142 100644
+index f2be437d41..8f6db6cac3 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -913,7 +913,7 @@ index 253c164e7c..f7c6eb0ae1 100644
  
                      visible: root.showDismissButton
 diff --git a/src/gui/activity/qml/TalkReplyTextField.qml b/src/gui/activity/qml/TalkReplyTextField.qml
-index 3e6c2050df..d3934b29b2 100644
+index 049a6da2eb..50c2fd68b1 100644
 --- a/src/gui/activity/qml/TalkReplyTextField.qml
 +++ b/src/gui/activity/qml/TalkReplyTextField.qml
 @@ -54,9 +54,17 @@ NCContextMenuTextField {
@@ -1427,7 +1427,7 @@ index 3f59109955..72d07f9651 100644
  #include <algorithm>
  
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
-index 2ddf2058e0..632711897d 100644
+index 37e39068cc..ae6488057e 100644
 --- a/src/gui/settingsdialog.cpp
 +++ b/src/gui/settingsdialog.cpp
 @@ -17,6 +17,7 @@
@@ -1484,7 +1484,7 @@ index dc2cfe6022..9eb7a4ad9a 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index f6a500a1bb..d8735a16a2 100644
+index a67b7bf328..1e805ea40b 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -45,6 +45,8 @@
@@ -1496,7 +1496,7 @@ index f6a500a1bb..d8735a16a2 100644
  using namespace Qt::StringLiterals;
  
  namespace OCC {
-@@ -424,11 +426,11 @@ void Systray::showSearchWindow(int userIndex)
+@@ -431,11 +433,11 @@ void Systray::showSearchWindow(int userIndex)
          return;
      }
  
@@ -1512,7 +1512,7 @@ index f6a500a1bb..d8735a16a2 100644
          return;
      }
  
-@@ -441,7 +443,7 @@ void Systray::showSearchWindow(int userIndex)
+@@ -448,7 +450,7 @@ void Systray::showSearchWindow(int userIndex)
                      }},
          {"searchModel", QVariant::fromValue(searchModel)},
      };
@@ -1572,7 +1572,7 @@ index 43c2a1e85d..dfe890da30 100644
  #ifdef BUILD_FILE_PROVIDER_MODULE
  #include "gui/macOS/fileprovider.h"
 diff --git a/src/gui/trayaccountpopup_qt.cpp b/src/gui/trayaccountpopup_qt.cpp
-index e04837de6f..e87d097216 100644
+index 636533c9ea..6e4a5dba61 100644
 --- a/src/gui/trayaccountpopup_qt.cpp
 +++ b/src/gui/trayaccountpopup_qt.cpp
 @@ -5,6 +5,8 @@
@@ -1753,7 +1753,7 @@ index 25d31ee499..babbaaa60b 100644
  
  namespace OCC {
 diff --git a/src/libsync/clientsideencryption.cpp b/src/libsync/clientsideencryption.cpp
-index 496d45d4de..6ae57ab9e9 100644
+index 496d45d4de..15e6fc84fb 100644
 --- a/src/libsync/clientsideencryption.cpp
 +++ b/src/libsync/clientsideencryption.cpp
 @@ -14,11 +14,12 @@
@@ -1770,7 +1770,52 @@ index 496d45d4de..6ae57ab9e9 100644
  
  #include <QDebug>
  #include <QLoggingCategory>
-@@ -2754,26 +2755,12 @@ bool EncryptionHelper::dataDecryption(const QByteArray &key, const QByteArray &i
+@@ -45,7 +46,6 @@
+ #include <openssl/evp.h>
+ #include <openssl/pem.h>
+ #include <openssl/err.h>
+-#include <openssl/engine.h>
+ #include <openssl/rand.h>
+ #include <openssl/cms.h>
+ 
+@@ -749,10 +749,9 @@ OCC::Result<QByteArray, OCC::ClientSideEncryption::EncryptionErrorType> decryptS
+                                                                                                 int pad_mode,
+                                                                                                 const QByteArray& binaryData)
+ {
+-    const auto sslEngine = encryptionEngine.sslEngine();
+     int err = -1;
+ 
+-    auto ctx = PKeyCtx::forKey(privateKey, sslEngine);
++    auto ctx = PKeyCtx::forKey(privateKey);
+     if (!ctx) {
+         qCInfo(lcCseDecryption()) << "Could not create the PKEY context." << handleErrors();
+         return {OCC::ClientSideEncryption::EncryptionErrorType::FatalError};
+@@ -806,10 +805,9 @@ OCC::Result<QByteArray, ClientSideEncryption::EncryptionErrorType> encryptString
+                                                                                            EVP_PKEY *publicKey,
+                                                                                            int pad_mode,
+                                                                                            const QByteArray& binaryData) {
+-    const auto sslEngine = encryptionEngine.sslEngine();
+-    auto ctx = PKeyCtx::forKey(publicKey, sslEngine);
++    auto ctx = PKeyCtx::forKey(publicKey);
+     if (!ctx) {
+-        qCInfo(lcCseEncryption()) << "Could not initialize the pkey context." << publicKey << sslEngine;
++        qCInfo(lcCseEncryption()) << "Could not initialize the pkey context." << publicKey;
+         return {OCC::ClientSideEncryption::EncryptionErrorType::FatalError};
+     }
+ 
+@@ -979,11 +977,6 @@ const QSslCertificate& ClientSideEncryption::getCertificate() const
+     return _encryptionCertificate.getCertificate();
+ }
+ 
+-ENGINE* ClientSideEncryption::sslEngine() const
+-{
+-    return ENGINE_get_default_RSA();
+-}
+-
+ ClientSideEncryptionTokenSelector *ClientSideEncryption::usbTokenInformation()
+ {
+     return &_usbTokenInformation;
+@@ -2754,26 +2747,12 @@ bool EncryptionHelper::dataDecryption(const QByteArray &key, const QByteArray &i
  
  QByteArray EncryptionHelper::gzipThenEncryptData(const QByteArray &key, const QByteArray &inputData, const QByteArray &iv, QByteArray &returnTag)
  {
@@ -1800,7 +1845,7 @@ index 496d45d4de..6ae57ab9e9 100644
      return outputData;
  }
  
-@@ -2785,23 +2772,7 @@ QByteArray EncryptionHelper::decryptThenUnGzipData(const QByteArray &key, const
+@@ -2785,23 +2764,7 @@ QByteArray EncryptionHelper::decryptThenUnGzipData(const QByteArray &key, const
          return {};
      }
  
@@ -1825,6 +1870,69 @@ index 496d45d4de..6ae57ab9e9 100644
  
      return decryptedAndUnGzipped;
  }
+diff --git a/src/libsync/clientsideencryption.h b/src/libsync/clientsideencryption.h
+index 55680e844e..191c105527 100644
+--- a/src/libsync/clientsideencryption.h
++++ b/src/libsync/clientsideencryption.h
+@@ -275,8 +275,6 @@ public:
+ 
+     [[nodiscard]] const QSslCertificate& getCertificate() const;
+ 
+-    [[nodiscard]] ENGINE* sslEngine() const;
+-
+     [[nodiscard]] QByteArray generateSignatureCryptographicMessageSyntax(const QByteArray &data) const;
+ 
+     [[nodiscard]] bool verifySignatureCryptographicMessageSyntax(const QByteArray &cmsContent, const QByteArray &data, const QVector<QByteArray> &certificatePems) const;
+diff --git a/src/libsync/clientsideencryptionprimitives.cpp b/src/libsync/clientsideencryptionprimitives.cpp
+index eef23891a3..f7c28ebf63 100644
+--- a/src/libsync/clientsideencryptionprimitives.cpp
++++ b/src/libsync/clientsideencryptionprimitives.cpp
+@@ -24,8 +24,8 @@ Bio::operator BIO *()
+     return _bio;
+ }
+ 
+-PKeyCtx::PKeyCtx(int id, ENGINE *e)
+-    : _ctx(EVP_PKEY_CTX_new_id(id, e))
++PKeyCtx::PKeyCtx(int id)
++    : _ctx(EVP_PKEY_CTX_new_id(id, nullptr))
+ {
+ }
+ 
+@@ -39,10 +39,10 @@ PKeyCtx::~PKeyCtx()
+     EVP_PKEY_CTX_free(_ctx);
+ }
+ 
+-PKeyCtx PKeyCtx::forKey(EVP_PKEY *pkey, ENGINE *e)
++PKeyCtx PKeyCtx::forKey(EVP_PKEY *pkey)
+ {
+     PKeyCtx ctx;
+-    ctx._ctx = EVP_PKEY_CTX_new(pkey, e);
++    ctx._ctx = EVP_PKEY_CTX_new(pkey, nullptr);
+     Q_ASSERT(ctx._ctx);
+     return ctx;
+ }
+diff --git a/src/libsync/clientsideencryptionprimitives.h b/src/libsync/clientsideencryptionprimitives.h
+index b8cfb60af7..81bdfd9a34 100644
+--- a/src/libsync/clientsideencryptionprimitives.h
++++ b/src/libsync/clientsideencryptionprimitives.h
+@@ -37,7 +37,7 @@ private:
+ class PKeyCtx
+ {
+ public:
+-    explicit PKeyCtx(int id, ENGINE *e = nullptr);
++    explicit PKeyCtx(int id);
+ 
+     ~PKeyCtx();
+ 
+@@ -48,7 +48,7 @@ public:
+     PKeyCtx(PKeyCtx &&other);
+     PKeyCtx &operator=(PKeyCtx &&other) = delete;
+ 
+-    static PKeyCtx forKey(EVP_PKEY *pkey, ENGINE *e = nullptr);
++    static PKeyCtx forKey(EVP_PKEY *pkey);
+ 
+     operator EVP_PKEY_CTX *();
+ 
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
 index 645d57058a..95390d25f9 100644
 --- a/src/libsync/discovery.cpp
@@ -2315,10 +2423,10 @@ index c127d38970..e7f24603ee 100644
  #include "accountstate.h"
  #include "logger.h"
 diff --git a/test/testaccountsettings.cpp b/test/testaccountsettings.cpp
-index 73a78d178e..4815564646 100644
+index 190a58b0f9..95accbfa30 100644
 --- a/test/testaccountsettings.cpp
 +++ b/test/testaccountsettings.cpp
-@@ -22,6 +22,8 @@
+@@ -28,6 +28,8 @@
  
  #include "accountsettings.h"
  
