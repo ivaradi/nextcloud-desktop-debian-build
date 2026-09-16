@@ -1427,7 +1427,7 @@ index 3f59109955..72d07f9651 100644
  #include <algorithm>
  
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
-index 37e39068cc..ae6488057e 100644
+index 0291dc8f1e..aa1454a421 100644
 --- a/src/gui/settingsdialog.cpp
 +++ b/src/gui/settingsdialog.cpp
 @@ -17,6 +17,7 @@
@@ -1560,7 +1560,7 @@ index 53b9990609..49b3fe904b 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index 43c2a1e85d..dfe890da30 100644
+index af2904f748..db57b971ff 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
 @@ -26,6 +26,7 @@
@@ -1826,7 +1826,7 @@ index 73a10d4eb2..f0cab6c0cb 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 645d57058a..95390d25f9 100644
+index b9a1a44ed3..f44b328be9 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -2222,7 +2222,7 @@ index 00b7203655..7a364f3ac6 100644
  #include "filesystem.h"
  
 diff --git a/src/libsync/theme.cpp b/src/libsync/theme.cpp
-index 68b38882c6..bfb31be497 100644
+index 122cb6ff4c..23b325d0a9 100644
 --- a/src/libsync/theme.cpp
 +++ b/src/libsync/theme.cpp
 @@ -9,6 +9,7 @@
@@ -2233,7 +2233,7 @@ index 68b38882c6..bfb31be497 100644
  
  #include <QtCore>
  #ifndef TOKEN_AUTH_ONLY
-@@ -924,14 +925,12 @@ QString Theme::versionSwitchOutput() const
+@@ -933,14 +934,12 @@ QString Theme::versionSwitchOutput() const
  
  double Theme::getColorDarkness(const QColor &color)
  {
@@ -2249,8 +2249,8 @@ index 68b38882c6..bfb31be497 100644
 +    return ::isDarkColor(color);
  }
  
- QColor Theme::getBackgroundAwareLinkColor(const QColor &backgroundColor)
-@@ -1051,7 +1050,7 @@ QColor Theme::destructiveActionTextColor() const
+ QColor Theme::settingsPanelColor(const QPalette &palette)
+@@ -1078,7 +1077,7 @@ QColor Theme::destructiveActionTextColor() const
  void Theme::connectToPaletteSignal() const
  {
      if (const auto ptr = qobject_cast<QGuiApplication*>(qApp)) {
@@ -2259,7 +2259,7 @@ index 68b38882c6..bfb31be497 100644
      }
  }
  
-@@ -1094,19 +1093,6 @@ QVariantMap Theme::systemPalette() const
+@@ -1121,19 +1120,6 @@ QVariantMap Theme::systemPalette() const
  bool Theme::darkMode() const
  {
      connectToPaletteSignal();
@@ -2279,7 +2279,7 @@ index 68b38882c6..bfb31be497 100644
  
  #ifdef Q_OS_WIN
      static const auto darkModeSubkey = QStringLiteral("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
-@@ -1117,7 +1103,8 @@ bool Theme::darkMode() const
+@@ -1144,7 +1130,8 @@ bool Theme::darkMode() const
          }
      }
  #endif
