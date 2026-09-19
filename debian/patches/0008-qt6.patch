@@ -92,10 +92,10 @@ index 0000000000..ccded5d62e
 +#include "qtcompat.h"
 diff --git a/src/common/qtcompat.h b/src/common/qtcompat.h
 new file mode 100644
-index 0000000000..2b7c8f77f0
+index 0000000000..c9284a416a
 --- /dev/null
 +++ b/src/common/qtcompat.h
-@@ -0,0 +1,467 @@
+@@ -0,0 +1,485 @@
 +
 +#pragma once
 +
@@ -188,12 +188,26 @@ index 0000000000..2b7c8f77f0
 +
 +//-----------------------------------------------------------------------------
 +
-+#if QT_VERSION<QT_VERSION_CHECK(6, 3, 0)
++#if QT_VERSION<QT_VERSION_CHECK(6, 4, 0)
 +#define QLatin1StringOrView QLatin1String
++#define QLatin1StringViewOrStringHeader <QLatin1String>
 +#else
 +#define QLatin1StringOrView QLatin1StringView
++#define QLatin1StringViewOrStringHeader <QLatin1StringView>
 +#endif
 +
++
++//-----------------------------------------------------------------------------
++//-----------------------------------------------------------------------------
++
++#if QT_VERSION<QT_VERSION_CHECK(6, 5, 0)
++#define QmlIntegrationHeader <QtQml/qqmlregistration.h>
++#else
++// QtQmlIntegration lives in its own Qt module (Qt6::QmlIntegration). Using
++// the older header is preferable for compatibility: it works in all Qt 6
++// versions as long as the target links to Qt6::Qml, which it already does.
++#define QmlIntegrationHeader <QtQml/qqmlregistration.h>
++#endif
 +
 +//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
@@ -230,6 +244,10 @@ index 0000000000..2b7c8f77f0
 +#if QT_VERSION<QT_VERSION_CHECK(6, 5, 0)
 +#include <QDebug>
 +#define qCFatal(category) QDebug(QtFatalMsg)
++
++// Q_UNREACHABLE_RETURN() was introduced in Qt 6.5 (in qassert.h).
++// For older Qt versions, provide an equivalent implementation.
++#define Q_UNREACHABLE_RETURN(...) do { Q_UNREACHABLE(); return __VA_ARGS__; } while (false)
 +#endif
 +
 +//-----------------------------------------------------------------------------
@@ -618,7 +636,7 @@ index a48d341c2e..09577a4eee 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index dea6d0355b..4336628e1b 100644
+index c708f20e5e..01035284dc 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -630,15 +648,12 @@ index dea6d0355b..4336628e1b 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -586,13 +586,20 @@ target_link_libraries(nextcloudCore
+@@ -587,10 +587,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
 -  KF6::Archive
    KDAB::kdsingleapplication
- 
-   nextcloudGuiSearch
-   nextcloudGuiSearchplugin
    )
  
 +if(KF6Archive_FOUND)
@@ -652,7 +667,7 @@ index dea6d0355b..4336628e1b 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -850,3 +857,69 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -854,3 +861,69 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -1427,7 +1442,7 @@ index 2516bb16d2..2de5f225fe 100644
  
  #include "accountmanager.h"
 diff --git a/src/gui/search/CMakeLists.txt b/src/gui/search/CMakeLists.txt
-index 369da1cf08..8ec9586cd9 100644
+index 369da1cf08..9b47d2656c 100644
 --- a/src/gui/search/CMakeLists.txt
 +++ b/src/gui/search/CMakeLists.txt
 @@ -1,6 +1,8 @@
@@ -1478,7 +1493,7 @@ index 369da1cf08..8ec9586cd9 100644
      SearchWindow.qml
      UnifiedSearchCustomDateRangeDialog.qml
      UnifiedSearchDetailHeader.qml
-@@ -34,7 +60,40 @@ ecm_add_qml_module(nextcloudGuiSearch
+@@ -34,7 +60,44 @@ ecm_add_qml_module(nextcloudGuiSearch
      UnifiedSearchResultNothingFound.qml
      UnifiedSearchPlaceholderView.qml
      UnifiedSearchResultSectionItem.qml
@@ -1494,7 +1509,7 @@ index 369da1cf08..8ec9586cd9 100644
 +  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/nextcloudGuiSearchplugin.cpp"
 +    "#include <QQmlEngineExtensionPlugin>\n"
 +    "\n"
-+    "class NextcloudGuiSearchPlugin : public QQmlEngineExtensionPlugin\n"
++    "class com_nextcloud_desktopclient_searchPlugin : public QQmlEngineExtensionPlugin\n"
 +    "{\n"
 +    "    Q_OBJECT\n"
 +    "    Q_PLUGIN_METADATA(IID \"org.qt-project.Qt.QQmlEngineExtensionInterface\")\n"
@@ -1516,6 +1531,10 @@ index 369da1cf08..8ec9586cd9 100644
 +    AUTOMOC ON
 +    AUTOMOC_MOC_OPTIONS "-Muri=com.nextcloud.desktopclient.search"
 +  )
++  # QT_STATICPLUGIN is required so that the moc-generated QT_MOC_EXPORT_PLUGIN
++  # code emits the qt_static_plugin_*() function referenced by Q_IMPORT_QML_PLUGIN
++  # in main.cpp.
++  target_compile_definitions(nextcloudGuiSearchplugin PUBLIC QT_STATICPLUGIN)
 +endif()
  
  target_link_libraries(nextcloudGuiSearch PRIVATE nextcloudCore)
@@ -1543,18 +1562,81 @@ index 6c998598fb..5866e1615a 100644
      }
  
      Rectangle {
+diff --git a/src/gui/search/unifiedsearchpeoplemodel.cpp b/src/gui/search/unifiedsearchpeoplemodel.cpp
+index 69257c11c7..6543560600 100644
+--- a/src/gui/search/unifiedsearchpeoplemodel.cpp
++++ b/src/gui/search/unifiedsearchpeoplemodel.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "unifiedsearchpeoplemodel.h"
+ 
++#include "common/qtcompat.h"
++
+ #include "account.h"
+ #include "accountstate.h"
+ #include "common/utility.h"
+diff --git a/src/gui/search/unifiedsearchpeoplemodel.h b/src/gui/search/unifiedsearchpeoplemodel.h
+index 871f27bb9a..4344bdf66b 100644
+--- a/src/gui/search/unifiedsearchpeoplemodel.h
++++ b/src/gui/search/unifiedsearchpeoplemodel.h
+@@ -5,12 +5,14 @@
+ 
+ #pragma once
+ 
++#include "common/qtcompat.h"
++
+ #include "accountstate.h"
+ 
+ #include <QAbstractListModel>
+ #include <QPointer>
+ #include <QTimer>
+-#include <QtQmlIntegration>
++#include QmlIntegrationHeader
+ 
+ namespace OCC {
+ 
 diff --git a/src/gui/search/unifiedsearchresultslistmodel.cpp b/src/gui/search/unifiedsearchresultslistmodel.cpp
-index ab2e3554d9..70ba51c0db 100644
+index 34934e66e7..dc22d8a0cc 100644
 --- a/src/gui/search/unifiedsearchresultslistmodel.cpp
 +++ b/src/gui/search/unifiedsearchresultslistmodel.cpp
-@@ -10,6 +10,7 @@
- #include "folderman.h"
+@@ -11,6 +11,7 @@
  #include "guiutility.h"
  #include "networkjobs.h"
+ #include "tray/usermodel.h"
 +#include "common/qtcompat.h"
  
  #include <QDesktopServices>
  #include <QFileInfo>
+diff --git a/src/gui/search/unifiedsearchresultslistmodel.h b/src/gui/search/unifiedsearchresultslistmodel.h
+index 361953572e..972c9ac746 100644
+--- a/src/gui/search/unifiedsearchresultslistmodel.h
++++ b/src/gui/search/unifiedsearchresultslistmodel.h
+@@ -5,6 +5,8 @@
+ 
+ #pragma once
+ 
++#include "common/qtcompat.h"
++
+ #include <QAbstractListModel>
+ #include <QDateTime>
+ #include <QJsonArray>
+@@ -15,14 +17,14 @@
+ #include <QtCore>
+ #include <QTimer>
+ #include <QUrlQuery>
+-#include <QtQmlIntegration>
++#include QmlIntegrationHeader
+ 
+ #include <limits>
+ 
++#include "accountstate.h"
+ #include "unifiedsearchresult.h"
+ 
+ namespace OCC {
+-class AccountState;
+ 
+ /**
+  * @brief Account-scoped presentation model for Nextcloud Unified Search.
 diff --git a/src/gui/settingsdialog.cpp b/src/gui/settingsdialog.cpp
 index 0291dc8f1e..aa1454a421 100644
 --- a/src/gui/settingsdialog.cpp
@@ -1579,8 +1661,660 @@ index a57349d15e..5b57d47e8f 100644
  
  #include <QUrl>
  #include <QJsonDocument>
+diff --git a/src/gui/sharing/CMakeLists.txt b/src/gui/sharing/CMakeLists.txt
+index 3e82ce426a..3fcf03a7fe 100644
+--- a/src/gui/sharing/CMakeLists.txt
++++ b/src/gui/sharing/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ # SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ # SPDX-License-Identifier: GPL-2.0-or-later
+ 
++set(CMAKE_AUTOMOC ON)
++
+ add_library(nextcloudGuiSharing STATIC)
+ 
+ set_source_files_properties(RecipientIcon.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+@@ -70,10 +72,29 @@ target_sources(nextcloudGuiSharing
+     unifiedsharelistmodel.cpp
+ )
+ 
+-ecm_add_qml_module(nextcloudGuiSharing
+-  URI com.nextcloud.desktopclient.sharing
+-  GENERATE_PLUGIN_SOURCE
+-  QML_FILES
++if(ECM_VERSION VERSION_GREATER_EQUAL "6.0.0")
++  ecm_add_qml_module(nextcloudGuiSharing
++    URI com.nextcloud.desktopclient.sharing
++    GENERATE_PLUGIN_SOURCE
++    QML_FILES
++      FieldDelegate.qml
++      PermissionList.qml
++      RecipientPermissionDialog.qml
++      DeleteShareConfirmation.qml
++      RecipientAvatar.qml
++      RecipientIcon.qml
++      RecipientSearchField.qml
++      ShareActionRow.qml
++      ShareDetailsPage.qml
++      ShareAdvancedSettingsPage.qml
++      ShareDetailsFrame.qml
++      ShareListPage.qml
++      ShareRow.qml
++      SettingsPanel.qml
++      ShareDialog.qml
++  )
++else()
++  set(_sharing_qml_files
+     FieldDelegate.qml
+     PermissionList.qml
+     RecipientPermissionDialog.qml
+@@ -89,6 +110,45 @@ ecm_add_qml_module(nextcloudGuiSharing
+     ShareRow.qml
+     SettingsPanel.qml
+     ShareDialog.qml
+-)
++  )
++
++  qt_add_resources(nextcloudGuiSharing sharing_qml
++    PREFIX "/qt/qml/com/nextcloud/desktopclient/sharing"
++    BASE "${CMAKE_CURRENT_SOURCE_DIR}"
++    FILES ${_sharing_qml_files}
++  )
++
++  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/nextcloudGuiSharingplugin.cpp"
++    "#include <QQmlEngineExtensionPlugin>\n"
++    "\n"
++    "class com_nextcloud_desktopclient_sharingPlugin : public QQmlEngineExtensionPlugin\n"
++    "{\n"
++    "    Q_OBJECT\n"
++    "    Q_PLUGIN_METADATA(IID \"org.qt-project.Qt.QQmlEngineExtensionInterface\")\n"
++    "};\n"
++    "\n"
++    "#include \"nextcloudGuiSharingplugin.moc\"\n"
++  )
++  add_library(nextcloudGuiSharingplugin STATIC)
++  target_sources(nextcloudGuiSharingplugin PRIVATE
++    "${CMAKE_CURRENT_BINARY_DIR}/nextcloudGuiSharingplugin.cpp"
++  )
++  target_link_libraries(nextcloudGuiSharingplugin
++    PUBLIC
++      nextcloudGuiSharing
++    PRIVATE
++      Qt::Qml
++  )
++  set_target_properties(nextcloudGuiSharingplugin PROPERTIES
++    AUTOMOC ON
++    AUTOMOC_MOC_OPTIONS "-Muri=com.nextcloud.desktopclient.sharing"
++  )
++  # QT_STATICPLUGIN is required so that the moc-generated QT_MOC_EXPORT_PLUGIN
++  # code emits the qt_static_plugin_*() function referenced by Q_IMPORT_QML_PLUGIN
++  # in main.cpp.
++  target_compile_definitions(nextcloudGuiSharingplugin PUBLIC QT_STATICPLUGIN)
++endif()
+ 
+ target_link_libraries(nextcloudGuiSharing PRIVATE nextcloudCore)
++target_compile_definitions(nextcloudGuiSharing PRIVATE QT_NO_KEYWORDS)
++target_compile_definitions(nextcloudGuiSharingplugin PRIVATE QT_NO_KEYWORDS)
+diff --git a/src/gui/sharing/addrecipientjob.cpp b/src/gui/sharing/addrecipientjob.cpp
+index e58a20eed8..40d4e99bee 100644
+--- a/src/gui/sharing/addrecipientjob.cpp
++++ b/src/gui/sharing/addrecipientjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "addrecipientjob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC::Gui::Sharing
+diff --git a/src/gui/sharing/addsourcejob.cpp b/src/gui/sharing/addsourcejob.cpp
+index 11d0b70477..47ea908b46 100644
+--- a/src/gui/sharing/addsourcejob.cpp
++++ b/src/gui/sharing/addsourcejob.cpp
+@@ -5,6 +5,7 @@
+ 
+ #include "addsourcejob.h"
+ 
++#include "common/qtcompat.h"
+ #include "sharingconstants.h"
+ 
+ using namespace Qt::StringLiterals;
+diff --git a/src/gui/sharing/createsharejob.cpp b/src/gui/sharing/createsharejob.cpp
+index 8457d87f20..0aef0b0d26 100644
+--- a/src/gui/sharing/createsharejob.cpp
++++ b/src/gui/sharing/createsharejob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "createsharejob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC::Gui::Sharing
+diff --git a/src/gui/sharing/deletesharejob.cpp b/src/gui/sharing/deletesharejob.cpp
+index 3fb7d7085a..fdf9113519 100644
+--- a/src/gui/sharing/deletesharejob.cpp
++++ b/src/gui/sharing/deletesharejob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "deletesharejob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC::Gui::Sharing
+diff --git a/src/gui/sharing/generatesecretjob.cpp b/src/gui/sharing/generatesecretjob.cpp
+index 18ae7e1f52..455e6b064b 100644
+--- a/src/gui/sharing/generatesecretjob.cpp
++++ b/src/gui/sharing/generatesecretjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "generatesecretjob.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <QJsonDocument>
+ #include <QJsonObject>
+ 
+diff --git a/src/gui/sharing/getsharejob.cpp b/src/gui/sharing/getsharejob.cpp
+index a12d761e49..9c711735fb 100644
+--- a/src/gui/sharing/getsharejob.cpp
++++ b/src/gui/sharing/getsharejob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "getsharejob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC::Gui::Sharing
+diff --git a/src/gui/sharing/getsharesjob.cpp b/src/gui/sharing/getsharesjob.cpp
+index f757c9bc47..772ecd2e84 100644
+--- a/src/gui/sharing/getsharesjob.cpp
++++ b/src/gui/sharing/getsharesjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "getsharesjob.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <QJsonDocument>
+ 
+ using namespace Qt::StringLiterals;
+diff --git a/src/gui/sharing/permission.cpp b/src/gui/sharing/permission.cpp
+index 5665e592d7..2bc86a7ebf 100644
+--- a/src/gui/sharing/permission.cpp
++++ b/src/gui/sharing/permission.cpp
+@@ -6,6 +6,8 @@
+ 
+ #include "permission.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <QJsonObject>
+ 
+ using namespace Qt::StringLiterals;
+diff --git a/src/gui/sharing/permissionmodel.cpp b/src/gui/sharing/permissionmodel.cpp
+index 8d1321d7ec..99e6a75c3d 100644
+--- a/src/gui/sharing/permissionmodel.cpp
++++ b/src/gui/sharing/permissionmodel.cpp
+@@ -5,6 +5,7 @@
+ 
+ #include "permissionmodel.h"
+ 
++#include "common/qtcompat.h"
+ #include "permission.h"
+ #include "recipient.h"
+ #include "unifiedshare.h"
+diff --git a/src/gui/sharing/permissionmodel.h b/src/gui/sharing/permissionmodel.h
+index 0c1b8a7f34..20b8c276c6 100644
+--- a/src/gui/sharing/permissionmodel.h
++++ b/src/gui/sharing/permissionmodel.h
+@@ -5,9 +5,10 @@
+ 
+ #pragma once
+ 
++#include "common/qtcompat.h"
+ #include "sharedetailslistmodel.h"
+ 
+-#include <QtQmlIntegration>
++#include QmlIntegrationHeader
+ 
+ namespace OCC::Gui::Sharing {
+ 
+diff --git a/src/gui/sharing/property.cpp b/src/gui/sharing/property.cpp
+index 20d1d860d0..ff58c8c9a4 100644
+--- a/src/gui/sharing/property.cpp
++++ b/src/gui/sharing/property.cpp
+@@ -6,6 +6,8 @@
+ 
+ #include "property.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <QJsonArray>
+ #include <QJsonObject>
+ 
+diff --git a/src/gui/sharing/propertymodel.cpp b/src/gui/sharing/propertymodel.cpp
+index 05a041e6b4..71db7db630 100644
+--- a/src/gui/sharing/propertymodel.cpp
++++ b/src/gui/sharing/propertymodel.cpp
+@@ -5,6 +5,7 @@
+ 
+ #include "propertymodel.h"
+ 
++#include "common/qtcompat.h"
+ #include "unifiedshare.h"
+ #include "property.h"
+ 
+diff --git a/src/gui/sharing/propertymodel.h b/src/gui/sharing/propertymodel.h
+index cf06c93591..95ede1f7eb 100644
+--- a/src/gui/sharing/propertymodel.h
++++ b/src/gui/sharing/propertymodel.h
+@@ -5,10 +5,11 @@
+ 
+ #pragma once
+ 
++#include "common/qtcompat.h"
+ #include "sharedetailslistmodel.h"
+ #include "property.h"
+ 
+-#include <QtQmlIntegration>
++#include QmlIntegrationHeader
+ 
+ namespace OCC::Gui::Sharing {
+ 
+diff --git a/src/gui/sharing/recipient.cpp b/src/gui/sharing/recipient.cpp
+index 60ea7820a5..98ada8d639 100644
+--- a/src/gui/sharing/recipient.cpp
++++ b/src/gui/sharing/recipient.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "recipient.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <algorithm>
+ 
+ #include <QJsonArray>
+diff --git a/src/gui/sharing/recipient.h b/src/gui/sharing/recipient.h
+index 55b51f0c35..eb1d0a4cfd 100644
+--- a/src/gui/sharing/recipient.h
++++ b/src/gui/sharing/recipient.h
+@@ -5,12 +5,14 @@
+ 
+ #pragma once
+ 
++#include "common/qtcompat.h"
++
+ #include <QHash>
+ #include <QJsonObject>
+ #include <QList>
+ #include <QObject>
+ 
+-#include <QtQmlIntegration>
++#include QmlIntegrationHeader
+ 
+ #include <memory>
+ #include <vector>
+diff --git a/src/gui/sharing/recipienticonutils.cpp b/src/gui/sharing/recipienticonutils.cpp
+index 35a71f59d6..fe284f1b30 100644
+--- a/src/gui/sharing/recipienticonutils.cpp
++++ b/src/gui/sharing/recipienticonutils.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "recipienticonutils.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ QString OCC::Gui::Sharing::RecipientIconUtils::svgDataUrl(const QString &svg)
+diff --git a/src/gui/sharing/recipientmodel.cpp b/src/gui/sharing/recipientmodel.cpp
+index 2286699047..1793df0591 100644
+--- a/src/gui/sharing/recipientmodel.cpp
++++ b/src/gui/sharing/recipientmodel.cpp
+@@ -5,6 +5,7 @@
+ 
+ #include "recipientmodel.h"
+ 
++#include "common/qtcompat.h"
+ #include "recipient.h"
+ #include "recipienticonutils.h"
+ #include "unifiedshare.h"
+diff --git a/src/gui/sharing/recipientmodel.h b/src/gui/sharing/recipientmodel.h
+index 235d273337..ad9eff687d 100644
+--- a/src/gui/sharing/recipientmodel.h
++++ b/src/gui/sharing/recipientmodel.h
+@@ -5,9 +5,10 @@
+ 
+ #pragma once
+ 
++#include "common/qtcompat.h"
+ #include "sharedetailslistmodel.h"
+ 
+-#include <QtQmlIntegration>
++#include QmlIntegrationHeader
+ 
+ namespace OCC::Gui::Sharing
+ {
+diff --git a/src/gui/sharing/recipientsearchmodel.cpp b/src/gui/sharing/recipientsearchmodel.cpp
+index df4046d7bb..c50e5db185 100644
+--- a/src/gui/sharing/recipientsearchmodel.cpp
++++ b/src/gui/sharing/recipientsearchmodel.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "recipientsearchmodel.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <QJsonObject>
+ #include <QLoggingCategory>
+ 
+diff --git a/src/gui/sharing/recipientsearchmodel.h b/src/gui/sharing/recipientsearchmodel.h
+index 19aa51230f..65d02f3d14 100644
+--- a/src/gui/sharing/recipientsearchmodel.h
++++ b/src/gui/sharing/recipientsearchmodel.h
+@@ -5,11 +5,13 @@
+ 
+ #pragma once
+ 
++#include "common/qtcompat.h"
++
+ #include <QAbstractListModel>
+ #include <QTimer>
+ 
+ #include <QJsonArray>
+-#include <QtQmlIntegration>
++#include QmlIntegrationHeader
+ 
+ #include "accountfwd.h"
+ 
+@@ -21,6 +23,9 @@ class RecipientSearchModel : public QAbstractListModel
+     Q_OBJECT
+     QML_ELEMENT
+ 
++    // The moc-generated qt_metaTypeArray requires the full type definition of
++    // OCC::Account to instantiate the metatype for AccountPtr.
++    Q_MOC_INCLUDE("libsync/account.h")
+     Q_PROPERTY(AccountPtr account READ account WRITE setAccount NOTIFY accountChanged)
+     Q_PROPERTY(QString query READ query WRITE setQuery NOTIFY queryChanged)
+     Q_PROPERTY(QString shareId READ shareId WRITE setShareId NOTIFY shareIdChanged)
+diff --git a/src/gui/sharing/removerecipientjob.cpp b/src/gui/sharing/removerecipientjob.cpp
+index 29877dae1b..069566b52b 100644
+--- a/src/gui/sharing/removerecipientjob.cpp
++++ b/src/gui/sharing/removerecipientjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "removerecipientjob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC::Gui::Sharing
+diff --git a/src/gui/sharing/removesourcejob.cpp b/src/gui/sharing/removesourcejob.cpp
+index fd1370f0b2..c9d52bc20a 100644
+--- a/src/gui/sharing/removesourcejob.cpp
++++ b/src/gui/sharing/removesourcejob.cpp
+@@ -5,6 +5,7 @@
+ 
+ #include "removesourcejob.h"
+ 
++#include "common/qtcompat.h"
+ #include "sharingconstants.h"
+ 
+ using namespace Qt::StringLiterals;
+diff --git a/src/gui/sharing/searchrecipientsjob.cpp b/src/gui/sharing/searchrecipientsjob.cpp
+index 608b3401ac..9487420547 100644
+--- a/src/gui/sharing/searchrecipientsjob.cpp
++++ b/src/gui/sharing/searchrecipientsjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "searchrecipientsjob.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <QJsonDocument>
+ #include <QJsonObject>
+ 
+diff --git a/src/gui/sharing/setpermissionjob.cpp b/src/gui/sharing/setpermissionjob.cpp
+index 40b863fa4a..94dee4d30d 100644
+--- a/src/gui/sharing/setpermissionjob.cpp
++++ b/src/gui/sharing/setpermissionjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "setpermissionjob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC::Gui::Sharing
+diff --git a/src/gui/sharing/setpermissionpresetjob.cpp b/src/gui/sharing/setpermissionpresetjob.cpp
+index 603b6a6a20..c894968271 100644
+--- a/src/gui/sharing/setpermissionpresetjob.cpp
++++ b/src/gui/sharing/setpermissionpresetjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "setpermissionpresetjob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC::Gui::Sharing
+diff --git a/src/gui/sharing/setpropertyjob.cpp b/src/gui/sharing/setpropertyjob.cpp
+index fc09bf52a5..47d031a01d 100644
+--- a/src/gui/sharing/setpropertyjob.cpp
++++ b/src/gui/sharing/setpropertyjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "setpropertyjob.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <QJsonValue>
+ 
+ using namespace Qt::StringLiterals;
+diff --git a/src/gui/sharing/setrecipientpermissionjob.cpp b/src/gui/sharing/setrecipientpermissionjob.cpp
+index b3e5d96e12..6334915212 100644
+--- a/src/gui/sharing/setrecipientpermissionjob.cpp
++++ b/src/gui/sharing/setrecipientpermissionjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "setrecipientpermissionjob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC::Gui::Sharing
+diff --git a/src/gui/sharing/setrecipientsecretjob.cpp b/src/gui/sharing/setrecipientsecretjob.cpp
+index aa795d51c6..2ca0f42e3a 100644
+--- a/src/gui/sharing/setrecipientsecretjob.cpp
++++ b/src/gui/sharing/setrecipientsecretjob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "setrecipientsecretjob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC::Gui::Sharing
+diff --git a/src/gui/sharing/setsharestatejob.cpp b/src/gui/sharing/setsharestatejob.cpp
+index d2bf7ec9a1..c468e5eafb 100644
+--- a/src/gui/sharing/setsharestatejob.cpp
++++ b/src/gui/sharing/setsharestatejob.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "setsharestatejob.h"
+ 
++#include "common/qtcompat.h"
++
+ using namespace Qt::StringLiterals;
+ 
+ namespace OCC::Gui::Sharing
+diff --git a/src/gui/sharing/sharedetailslistmodel.cpp b/src/gui/sharing/sharedetailslistmodel.cpp
+index 80da517577..d098ff59cf 100644
+--- a/src/gui/sharing/sharedetailslistmodel.cpp
++++ b/src/gui/sharing/sharedetailslistmodel.cpp
+@@ -5,6 +5,7 @@
+ 
+ #include "sharedetailslistmodel.h"
+ 
++#include "common/qtcompat.h"
+ #include "unifiedshare.h"
+ 
+ using namespace Qt::StringLiterals;
+diff --git a/src/gui/sharing/sharingconstants.h b/src/gui/sharing/sharingconstants.h
+index 3d29f46fbd..60d8e78fa4 100644
+--- a/src/gui/sharing/sharingconstants.h
++++ b/src/gui/sharing/sharingconstants.h
+@@ -5,22 +5,24 @@
+ 
+ #pragma once
+ 
+-#include <QLatin1StringView>
++#include "common/qtcompat.h"
++
++#include QLatin1StringViewOrStringHeader
+ 
+ namespace OCC::Gui::Sharing::SourceTypeClasses
+ {
+ 
+-inline constexpr auto node = QLatin1StringView{"OCA\\Files\\Sharing\\Source\\NodeShareSourceType"};
++inline constexpr auto node = QLatin1StringOrView{"OCA\\Files\\Sharing\\Source\\NodeShareSourceType"};
+ 
+ }
+ 
+ namespace OCC::Gui::Sharing::RecipientTypeClasses
+ {
+ 
+-inline constexpr auto email = QLatin1StringView{"OC\\Core\\Sharing\\Recipient\\EmailShareRecipientType"};
+-inline constexpr auto group = QLatin1StringView{"OC\\Core\\Sharing\\Recipient\\GroupShareRecipientType"};
+-inline constexpr auto team = QLatin1StringView{"OC\\Core\\Sharing\\Recipient\\TeamShareRecipientType"};
+-inline constexpr auto token = QLatin1StringView{"OC\\Core\\Sharing\\Recipient\\TokenShareRecipientType"};
+-inline constexpr auto user = QLatin1StringView{"OC\\Core\\Sharing\\Recipient\\UserShareRecipientType"};
++inline constexpr auto email = QLatin1StringOrView{"OC\\Core\\Sharing\\Recipient\\EmailShareRecipientType"};
++inline constexpr auto group = QLatin1StringOrView{"OC\\Core\\Sharing\\Recipient\\GroupShareRecipientType"};
++inline constexpr auto team = QLatin1StringOrView{"OC\\Core\\Sharing\\Recipient\\TeamShareRecipientType"};
++inline constexpr auto token = QLatin1StringOrView{"OC\\Core\\Sharing\\Recipient\\TokenShareRecipientType"};
++inline constexpr auto user = QLatin1StringOrView{"OC\\Core\\Sharing\\Recipient\\UserShareRecipientType"};
+ 
+ }
+diff --git a/src/gui/sharing/sharingcontroller.cpp b/src/gui/sharing/sharingcontroller.cpp
+index cd89540c2a..3b944735f8 100644
+--- a/src/gui/sharing/sharingcontroller.cpp
++++ b/src/gui/sharing/sharingcontroller.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "sharingcontroller.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <QJsonArray>
+ #include <QJsonDocument>
+ #include <QJsonObject>
+diff --git a/src/gui/sharing/sharingcontroller.h b/src/gui/sharing/sharingcontroller.h
+index 077531853f..e141cf0e62 100644
+--- a/src/gui/sharing/sharingcontroller.h
++++ b/src/gui/sharing/sharingcontroller.h
+@@ -5,12 +5,14 @@
+ 
+ #pragma once
+ 
++#include "common/qtcompat.h"
++
+ #include <QHash>
+ #include <QJsonDocument>
+ #include <QList>
+ #include <QObject>
+ #include <QSet>
+-#include <QtQmlIntegration>
++#include QmlIntegrationHeader
+ 
+ #include <memory>
+ #include <vector>
+@@ -27,6 +29,9 @@ class SharingController : public QObject
+     Q_OBJECT
+     QML_ELEMENT
+ 
++    // The moc-generated qt_metaTypeArray requires the full type definition of
++    // OCC::Account to instantiate the metatype for AccountPtr.
++    Q_MOC_INCLUDE("libsync/account.h")
+     Q_PROPERTY(AccountPtr account READ account WRITE setAccount NOTIFY accountChanged)
+     Q_PROPERTY(QList<Share *> shares READ shares NOTIFY sharesChanged)
+     Q_PROPERTY(bool creatingShare READ creatingShare NOTIFY creatingShareChanged)
+diff --git a/src/gui/sharing/unifiedshare.cpp b/src/gui/sharing/unifiedshare.cpp
+index 3b9ba115a0..d23cb568fd 100644
+--- a/src/gui/sharing/unifiedshare.cpp
++++ b/src/gui/sharing/unifiedshare.cpp
+@@ -6,6 +6,8 @@
+ 
+ #include "unifiedshare.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <QJsonArray>
+ #include <QJsonDocument>
+ #include <QJsonObject>
+diff --git a/src/gui/sharing/unifiedshare.h b/src/gui/sharing/unifiedshare.h
+index 692cecd959..3b4e597f04 100644
+--- a/src/gui/sharing/unifiedshare.h
++++ b/src/gui/sharing/unifiedshare.h
+@@ -5,11 +5,13 @@
+ 
+ #pragma once
+ 
++#include "common/qtcompat.h"
++
+ #include <QJsonArray>
+ #include <QJsonDocument>
+ #include <QObject>
+ 
+-#include <QtQmlIntegration>
++#include QmlIntegrationHeader
+ 
+ #include <memory>
+ #include <vector>
+diff --git a/src/gui/sharing/unifiedsharelistmodel.cpp b/src/gui/sharing/unifiedsharelistmodel.cpp
+index a68c464a26..81601f50b6 100644
+--- a/src/gui/sharing/unifiedsharelistmodel.cpp
++++ b/src/gui/sharing/unifiedsharelistmodel.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "unifiedsharelistmodel.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <algorithm>
+ #include <utility>
+ 
+diff --git a/src/gui/sharing/unifiedsharelistmodel.h b/src/gui/sharing/unifiedsharelistmodel.h
+index d38831e584..6fa90d9bfa 100644
+--- a/src/gui/sharing/unifiedsharelistmodel.h
++++ b/src/gui/sharing/unifiedsharelistmodel.h
+@@ -5,9 +5,11 @@
+ 
+ #pragma once
+ 
++#include "common/qtcompat.h"
++
+ #include <QAbstractListModel>
+ #include <QMetaObject>
+-#include <QtQmlIntegration>
++#include QmlIntegrationHeader
+ 
+ namespace OCC::Gui::Sharing
+ {
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index 5f9d1588fc..b3cb92de05 100644
+index 232925d5f7..64a5038400 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
 @@ -17,6 +17,7 @@
@@ -1613,7 +2347,7 @@ index dc2cfe6022..9eb7a4ad9a 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index 8a68378a7f..d46cd5814d 100644
+index c765b2aeb8..a3fbcfeada 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -46,6 +46,8 @@
@@ -1625,7 +2359,7 @@ index 8a68378a7f..d46cd5814d 100644
  using namespace Qt::StringLiterals;
  
  namespace OCC {
-@@ -414,11 +416,11 @@ void Systray::showSearchWindow(int userIndex)
+@@ -418,11 +420,11 @@ void Systray::showSearchWindow(int userIndex)
          return;
      }
  
@@ -1641,15 +2375,34 @@ index 8a68378a7f..d46cd5814d 100644
          return;
      }
  
-@@ -432,7 +434,7 @@ void Systray::showSearchWindow(int userIndex)
+@@ -434,7 +436,7 @@ void Systray::showSearchWindow(int userIndex)
                      }},
-         {"searchModel", QVariant::fromValue(searchModel)},
+         {"accountId", targetUserId},
      };
 -    const auto createdObject = searchWindowComponent.createWithInitialProperties(initialProperties);
 +    const auto createdObject = searchWindowComponent->createWithInitialProperties(initialProperties);
      const auto window = qobject_cast<QQuickWindow *>(createdObject);
      if (!window) {
          qCWarning(lcSystray) << "Search window resulted in creation of object that was not a window!";
+@@ -884,14 +886,14 @@ void Systray::createUnifiedSharingDialog(const AccountPtr &account, const QStrin
+         {"remotePath", remotePath},
+     };
+ 
+-    QQmlComponent fileDetailsDialog(trayEngine(), "com.nextcloud.desktopclient.sharing"_L1, "ShareDialog"_L1);
++    auto *fileDetailsDialog = QmlComponentFromUri(trayEngine(), "com.nextcloud.desktopclient.sharing"_L1, "ShareDialog"_L1);
+ 
+-    if (fileDetailsDialog.isError()) {
+-        qCWarning(lcSystray) << fileDetailsDialog.errorString();
++    if (fileDetailsDialog->isError()) {
++        qCWarning(lcSystray) << fileDetailsDialog->errorString();
+         return;
+     }
+ 
+-    const auto createdDialog = fileDetailsDialog.createWithInitialProperties(initialProperties);
++    const auto createdDialog = fileDetailsDialog->createWithInitialProperties(initialProperties);
+     const auto dialog = qobject_cast<QQuickWindow*>(createdDialog);
+ 
+     if (!dialog) {
 diff --git a/src/gui/tray/AutoSizingMenu.qml b/src/gui/tray/AutoSizingMenu.qml
 index 835bcaa1bd..6cc3a09440 100644
 --- a/src/gui/tray/AutoSizingMenu.qml
@@ -1895,7 +2648,7 @@ index 261cf35653..7b9cc30d4a 100644
  
      promise->start();
 diff --git a/src/libsync/capabilities.cpp b/src/libsync/capabilities.cpp
-index 0b30ec3277..c8bf64660c 100644
+index 918ac2d94f..7e4db496d9 100644
 --- a/src/libsync/capabilities.cpp
 +++ b/src/libsync/capabilities.cpp
 @@ -13,6 +13,8 @@
@@ -2507,7 +3260,7 @@ index a0c21bd2d1..ba603fb759 100644
  using namespace OCC;
  
 diff --git a/test/testfilesystem.cpp b/test/testfilesystem.cpp
-index 37abf3784f..57ae135aee 100644
+index 2df15c6b43..a1348042bf 100644
 --- a/test/testfilesystem.cpp
 +++ b/test/testfilesystem.cpp
 @@ -12,6 +12,7 @@
