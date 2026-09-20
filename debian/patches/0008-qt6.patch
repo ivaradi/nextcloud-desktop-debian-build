@@ -606,7 +606,7 @@ index f5c433198a..8ca28fc1e8 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index b3cdaf0f06..b8c9760bd4 100644
+index 4347ca75b6..3d892b5752 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -618,7 +618,7 @@ index b3cdaf0f06..b8c9760bd4 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -580,13 +580,20 @@ target_link_libraries(nextcloudCore
+@@ -583,13 +583,20 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -640,10 +640,17 @@ index b3cdaf0f06..b8c9760bd4 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -844,3 +851,69 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -847,3 +854,76 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
++
++if ("${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}" VERSION_GREATER_EQUAL "6.4")
++    set(QML_COMPONENT_BEHAVIOR_PRAGMA "pragma ComponentBehavior: Bound")
++else()
++    set(QML_COMPONENT_BEHAVIOR_PRAGMA "")
++endif()
++configure_file(integration/FileActionsWindow.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/integration/FileActionsWindow.qml)
 +
 +if ("${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}" VERSION_GREATER_EQUAL "6.6")
 +    set(QML_UNIFORM_CELL_SIZES_TRUE "uniformCellSizes: true")
@@ -735,7 +742,7 @@ index ca1026e419..9252c314fb 100644
  
                  onClicked: {
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index f2be437d41..8f6db6cac3 100644
+index cfd3cb59ab..e66b8dab8e 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -1285,6 +1292,30 @@ index 81102ff000..716485424d 100644
  using namespace Qt::StringLiterals;
  
  namespace OCC
+diff --git a/src/gui/integration/FileActionsWindow.qml b/src/gui/integration/FileActionsWindow.qml.in
+similarity index 98%
+rename from src/gui/integration/FileActionsWindow.qml
+rename to src/gui/integration/FileActionsWindow.qml.in
+index 5b8325647e..cb66b59028 100644
+--- a/src/gui/integration/FileActionsWindow.qml
++++ b/src/gui/integration/FileActionsWindow.qml.in
+@@ -3,7 +3,7 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
+  */
+ 
+-pragma ComponentBehavior: Bound
++@QML_COMPONENT_BEHAVIOR_PRAGMA@
+ 
+ import QtQuick
+ import QtQuick.Window
+@@ -150,7 +150,6 @@ ApplicationWindow {
+                         color: palette.windowText
+                         width: Style.minimumActivityItemHeight
+                         height: Style.minimumActivityItemHeight
+-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                     }
+ 
+                     background: Rectangle {
 diff --git a/src/gui/owncloudsetupwizard.cpp b/src/gui/owncloudsetupwizard.cpp
 index 2516bb16d2..2de5f225fe 100644
 --- a/src/gui/owncloudsetupwizard.cpp
@@ -2352,7 +2383,7 @@ index a0c21bd2d1..ba603fb759 100644
  using namespace OCC;
  
 diff --git a/test/testfilesystem.cpp b/test/testfilesystem.cpp
-index 37abf3784f..57ae135aee 100644
+index 2df15c6b43..a1348042bf 100644
 --- a/test/testfilesystem.cpp
 +++ b/test/testfilesystem.cpp
 @@ -12,6 +12,7 @@
