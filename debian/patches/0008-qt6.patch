@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5554449ac7..d15bbcc185 100644
+index 30f1d50973..266f0cfb34 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -30,7 +30,7 @@ set(BIN_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -49,10 +49,10 @@ index e2669c5e56..f7d743c398 100644
  find_package(Qt${QT_MAJOR_VERSION}Core ${REQUIRED_QT_VERSION} CONFIG QUIET)
  set_package_properties(Qt${QT_MAJOR_VERSION}Core PROPERTIES
 diff --git a/src/cmd/cmd.cpp b/src/cmd/cmd.cpp
-index 5e78908621..22ed230061 100644
+index 45d7d1773e..3df1b398a0 100644
 --- a/src/cmd/cmd.cpp
 +++ b/src/cmd/cmd.cpp
-@@ -49,6 +49,8 @@
+@@ -50,6 +50,8 @@
  
  #include "config.h"
  
@@ -636,7 +636,7 @@ index a48d341c2e..09577a4eee 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index c708f20e5e..01035284dc 100644
+index c708f20e5e..3daf1197c1 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -3,7 +3,7 @@
@@ -648,7 +648,20 @@ index c708f20e5e..01035284dc 100644
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -587,10 +587,17 @@ target_link_libraries(nextcloudCore
+@@ -286,6 +286,12 @@ IF(BUILD_UPDATER)
+     )
+ endif()
+ 
++if ("${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}" VERSION_GREATER_EQUAL "6.4")
++    set(QML_COMPONENT_BEHAVIOR_PRAGMA "pragma ComponentBehavior: Bound")
++else()
++    set(QML_COMPONENT_BEHAVIOR_PRAGMA "")
++endif()
++
+ add_subdirectory(search)
+ add_subdirectory(sharing)
+ include(assistant/CMakeLists.txt)
+@@ -587,10 +593,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -667,7 +680,7 @@ index c708f20e5e..01035284dc 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -854,3 +861,69 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -854,3 +867,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -737,6 +750,57 @@ index c708f20e5e..01035284dc 100644
 +    set(QML_NC_CONTEXT_MENU_TEXT_FIELD "")
 +endif()
 +configure_file(common/NCContextMenuTextField.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/common/NCContextMenuTextField.qml)
++
++if ("${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}" VERSION_GREATER_EQUAL "6.5")
++    set(QML_WIZARD_ICON_TINT_IMPORT "import QtQuick.Effects")
++    set(QML_WIZARD_BUTTON_ICON_TINT_EFFECT [=[
++            MultiEffect {
++                objectName: "wizardButtonLeadingIconTint"
++                anchors.fill: leadingIconImage
++                visible: root.tintIcon
++                source: leadingIconImage
++                colorization: 1.0
++                colorizationColor: root.iconTintColor
++                Accessible.ignored: true
++            }
++]=])
++    set(QML_WIZARD_MENU_ITEM_ICON_TINT_EFFECT [=[
++            MultiEffect {
++                objectName: "wizardMenuItemIconTint"
++                anchors.fill: menuIconImage
++                visible: root.tintIcon
++                source: menuIconImage
++                colorization: 1.0
++                colorizationColor: root.iconTintColor
++                Accessible.ignored: true
++            }
++]=])
++else()
++    set(QML_WIZARD_ICON_TINT_IMPORT "import Qt5Compat.GraphicalEffects")
++    set(QML_WIZARD_BUTTON_ICON_TINT_EFFECT [=[
++            ColorOverlay {
++                objectName: "wizardButtonLeadingIconTint"
++                anchors.fill: leadingIconImage
++                visible: root.tintIcon
++                source: leadingIconImage
++                color: root.iconTintColor
++                Accessible.ignored: true
++            }
++]=])
++    set(QML_WIZARD_MENU_ITEM_ICON_TINT_EFFECT [=[
++            ColorOverlay {
++                objectName: "wizardMenuItemIconTint"
++                anchors.fill: menuIconImage
++                visible: root.tintIcon
++                source: menuIconImage
++                color: root.iconTintColor
++                Accessible.ignored: true
++            }
++]=])
++endif()
++configure_file(wizard/qml/WizardButton.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/wizard/qml/WizardButton.qml)
++configure_file(wizard/qml/WizardMenuItem.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/wizard/qml/WizardMenuItem.qml)
++configure_file(integration/FileActionsWindow.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/integration/FileActionsWindow.qml)
 diff --git a/src/gui/EmojiPicker.qml b/src/gui/EmojiPicker.qml
 index ca1026e419..9252c314fb 100644
 --- a/src/gui/EmojiPicker.qml
@@ -1429,6 +1493,30 @@ index 81102ff000..716485424d 100644
  using namespace Qt::StringLiterals;
  
  namespace OCC
+diff --git a/src/gui/integration/FileActionsWindow.qml b/src/gui/integration/FileActionsWindow.qml.in
+similarity index 98%
+rename from src/gui/integration/FileActionsWindow.qml
+rename to src/gui/integration/FileActionsWindow.qml.in
+index 5b8325647e..cb66b59028 100644
+--- a/src/gui/integration/FileActionsWindow.qml
++++ b/src/gui/integration/FileActionsWindow.qml.in
+@@ -3,7 +3,7 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
+  */
+ 
+-pragma ComponentBehavior: Bound
++@QML_COMPONENT_BEHAVIOR_PRAGMA@
+ 
+ import QtQuick
+ import QtQuick.Window
+@@ -150,7 +150,6 @@ ApplicationWindow {
+                         color: palette.windowText
+                         width: Style.minimumActivityItemHeight
+                         height: Style.minimumActivityItemHeight
+-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                     }
+ 
+                     background: Rectangle {
 diff --git a/src/gui/owncloudsetupwizard.cpp b/src/gui/owncloudsetupwizard.cpp
 index 2516bb16d2..2de5f225fe 100644
 --- a/src/gui/owncloudsetupwizard.cpp
@@ -1442,10 +1530,10 @@ index 2516bb16d2..2de5f225fe 100644
  
  #include "accountmanager.h"
 diff --git a/src/gui/search/CMakeLists.txt b/src/gui/search/CMakeLists.txt
-index 369da1cf08..9b47d2656c 100644
+index 369da1cf08..ea6b947c84 100644
 --- a/src/gui/search/CMakeLists.txt
 +++ b/src/gui/search/CMakeLists.txt
-@@ -1,6 +1,8 @@
+@@ -1,8 +1,26 @@
  # SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
  # SPDX-License-Identifier: GPL-2.0-or-later
  
@@ -1453,8 +1541,26 @@ index 369da1cf08..9b47d2656c 100644
 +
  add_library(nextcloudGuiSearch STATIC)
  
++foreach(_search_component_behavior_file UnifiedSearchFilterBar.qml UnifiedSearchPeoplePopup.qml)
++  configure_file(${_search_component_behavior_file}.in ${CMAKE_CURRENT_SOURCE_DIR}/${_search_component_behavior_file})
++endforeach()
++
++if ("${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}" VERSION_GREATER_EQUAL "6.8")
++    set(QML_SEARCH_ACCESSIBILITY_STATUS_HANDLER [=[
++        function onAccessibilityStatusChanged() {
++            if (root.searchModel.accessibilityStatus.length > 0)
++                Accessible.announce(root.searchModel.accessibilityStatus, Accessible.Polite)
++        }
++]=])
++else()
++    set(QML_SEARCH_ACCESSIBILITY_STATUS_HANDLER "")
++endif()
++configure_file(SearchWindow.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/SearchWindow.qml)
++
  target_sources(nextcloudGuiSearch
-@@ -13,10 +15,34 @@ target_sources(nextcloudGuiSearch
+   PRIVATE
+     unifiedsearchresult.h
+@@ -13,10 +31,34 @@ target_sources(nextcloudGuiSearch
      unifiedsearchpeoplemodel.cpp
  )
  
@@ -1493,7 +1599,7 @@ index 369da1cf08..9b47d2656c 100644
      SearchWindow.qml
      UnifiedSearchCustomDateRangeDialog.qml
      UnifiedSearchDetailHeader.qml
-@@ -34,7 +60,44 @@ ecm_add_qml_module(nextcloudGuiSearch
+@@ -34,7 +76,74 @@ ecm_add_qml_module(nextcloudGuiSearch
      UnifiedSearchResultNothingFound.qml
      UnifiedSearchPlaceholderView.qml
      UnifiedSearchResultSectionItem.qml
@@ -1506,8 +1612,37 @@ index 369da1cf08..9b47d2656c 100644
 +    FILES ${_search_qml_files}
 +  )
 +
++  set(_search_qmldir "${CMAKE_CURRENT_BINARY_DIR}/qmldir")
++  set(_search_qmldir_content "module com.nextcloud.desktopclient.search\n")
++  string(APPEND _search_qmldir_content "optional plugin nextcloudGuiSearchplugin\n")
++  string(APPEND _search_qmldir_content "classname com_nextcloud_desktopclient_searchPlugin\n")
++  string(APPEND _search_qmldir_content "prefer :/qt/qml/com/nextcloud/desktopclient/search/\n")
++  foreach(_search_qml_file IN LISTS _search_qml_files)
++    get_filename_component(_search_qml_type "${_search_qml_file}" NAME_WE)
++    string(APPEND _search_qmldir_content "${_search_qml_type} 254.0 ${_search_qml_file}\n")
++  endforeach()
++  file(WRITE "${_search_qmldir}" "${_search_qmldir_content}")
++  set_source_files_properties("${_search_qmldir}" PROPERTIES QT_RESOURCE_ALIAS "qmldir")
++  qt_add_resources(nextcloudGuiSearch search_qmldir
++    PREFIX "/qt/qml/com/nextcloud/desktopclient/search"
++    FILES "${_search_qmldir}"
++  )
++
 +  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/nextcloudGuiSearchplugin.cpp"
 +    "#include <QQmlEngineExtensionPlugin>\n"
++    "#include <QtQml/qqmlmoduleregistration.h>\n"
++    "#include <qqml.h>\n"
++    "\n"
++    "#include \"gui/search/unifiedsearchpeoplemodel.h\"\n"
++    "#include \"gui/search/unifiedsearchresultslistmodel.h\"\n"
++    "\n"
++    "static void qml_register_types_com_nextcloud_desktopclient_search()\n"
++    "{\n"
++    "    qmlRegisterModule(\"com.nextcloud.desktopclient.search\", 1, 0);\n"
++    "    qmlRegisterType<OCC::UnifiedSearchPeopleModel>(\"com.nextcloud.desktopclient.search\", 1, 0, \"UnifiedSearchPeopleModel\");\n"
++    "    qmlRegisterType<OCC::UnifiedSearchResultsListModel>(\"com.nextcloud.desktopclient.search\", 1, 0, \"UnifiedSearchResultsListModel\");\n"
++    "}\n"
++    "static const QQmlModuleRegistration registration(\"com.nextcloud.desktopclient.search\", qml_register_types_com_nextcloud_desktopclient_search);\n"
 +    "\n"
 +    "class com_nextcloud_desktopclient_searchPlugin : public QQmlEngineExtensionPlugin\n"
 +    "{\n"
@@ -1525,6 +1660,7 @@ index 369da1cf08..9b47d2656c 100644
 +    PUBLIC
 +      nextcloudGuiSearch
 +    PRIVATE
++      nextcloudCore
 +      Qt::Qml
 +  )
 +  set_target_properties(nextcloudGuiSearchplugin PROPERTIES
@@ -1539,6 +1675,81 @@ index 369da1cf08..9b47d2656c 100644
  
  target_link_libraries(nextcloudGuiSearch PRIVATE nextcloudCore)
  target_compile_definitions(nextcloudGuiSearch PRIVATE QT_NO_KEYWORDS)
+diff --git a/src/gui/search/SearchWindow.qml b/src/gui/search/SearchWindow.qml.in
+similarity index 98%
+rename from src/gui/search/SearchWindow.qml
+rename to src/gui/search/SearchWindow.qml.in
+index 7c88060069..f42fd7cbc3 100644
+--- a/src/gui/search/SearchWindow.qml
++++ b/src/gui/search/SearchWindow.qml.in
+@@ -87,10 +87,7 @@ WizardStyledWindow {
+                 }
+             })
+         }
+-        function onAccessibilityStatusChanged() {
+-            if (root.searchModel.accessibilityStatus.length > 0)
+-                Accessible.announce(root.searchModel.accessibilityStatus, Accessible.Polite)
+-        }
++@QML_SEARCH_ACCESSIBILITY_STATUS_HANDLER@
+     }
+ 
+     Component.onCompleted: Qt.callLater(focusSearchInput)
+diff --git a/src/gui/search/UnifiedSearchFilterBar.qml b/src/gui/search/UnifiedSearchFilterBar.qml.in
+similarity index 99%
+rename from src/gui/search/UnifiedSearchFilterBar.qml
+rename to src/gui/search/UnifiedSearchFilterBar.qml.in
+index b21939dc59..20259dd6c7 100644
+--- a/src/gui/search/UnifiedSearchFilterBar.qml
++++ b/src/gui/search/UnifiedSearchFilterBar.qml.in
+@@ -3,7 +3,7 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
+  */
+ 
+-pragma ComponentBehavior: Bound
++@QML_COMPONENT_BEHAVIOR_PRAGMA@
+ 
+ import QtQuick
+ import QtQuick.Controls.Basic
+diff --git a/src/gui/search/UnifiedSearchInputContainer.qml b/src/gui/search/UnifiedSearchInputContainer.qml
+index 57dcb0519f..29ba169c1f 100644
+--- a/src/gui/search/UnifiedSearchInputContainer.qml
++++ b/src/gui/search/UnifiedSearchInputContainer.qml
+@@ -7,6 +7,7 @@ import QtQuick
+ import QtQuick.Controls.Basic
+ import Style
+ import com.nextcloud.desktopclient
++import com.nextcloud.desktopclient.search
+ import "qrc:/qml/src/gui/tray"
+ 
+ TextField {
+diff --git a/src/gui/search/UnifiedSearchPeoplePopup.qml b/src/gui/search/UnifiedSearchPeoplePopup.qml.in
+similarity index 98%
+rename from src/gui/search/UnifiedSearchPeoplePopup.qml
+rename to src/gui/search/UnifiedSearchPeoplePopup.qml.in
+index 49dcc3e3d5..ab244ae635 100644
+--- a/src/gui/search/UnifiedSearchPeoplePopup.qml
++++ b/src/gui/search/UnifiedSearchPeoplePopup.qml.in
+@@ -3,7 +3,7 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
+  */
+ 
+-pragma ComponentBehavior: Bound
++@QML_COMPONENT_BEHAVIOR_PRAGMA@
+ 
+ import QtQuick
+ import QtQuick.Controls.Basic
+diff --git a/src/gui/search/UnifiedSearchResultDelegate.qml b/src/gui/search/UnifiedSearchResultDelegate.qml
+index 905480d293..6e6451d620 100644
+--- a/src/gui/search/UnifiedSearchResultDelegate.qml
++++ b/src/gui/search/UnifiedSearchResultDelegate.qml
+@@ -9,6 +9,7 @@ import QtQuick.Layouts
+ 
+ import Style
+ import com.nextcloud.desktopclient
++import com.nextcloud.desktopclient.search
+ import "qrc:/qml/src/gui/tray"
+ 
+ Item {
 diff --git a/src/gui/search/UnifiedSearchResultListItem.qml b/src/gui/search/UnifiedSearchResultListItem.qml
 index 6c998598fb..5866e1615a 100644
 --- a/src/gui/search/UnifiedSearchResultListItem.qml
@@ -1662,10 +1873,10 @@ index a57349d15e..5b57d47e8f 100644
  #include <QUrl>
  #include <QJsonDocument>
 diff --git a/src/gui/sharing/CMakeLists.txt b/src/gui/sharing/CMakeLists.txt
-index 3e82ce426a..3fcf03a7fe 100644
+index 3e82ce426a..19f120f052 100644
 --- a/src/gui/sharing/CMakeLists.txt
 +++ b/src/gui/sharing/CMakeLists.txt
-@@ -1,6 +1,8 @@
+@@ -1,8 +1,40 @@
  # SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
  # SPDX-License-Identifier: GPL-2.0-or-later
  
@@ -1673,8 +1884,40 @@ index 3e82ce426a..3fcf03a7fe 100644
 +
  add_library(nextcloudGuiSharing STATIC)
  
++if ("${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}" VERSION_GREATER_EQUAL "6.5")
++    set(QML_AVATAR_EFFECT_IMPORT "import QtQuick.Effects")
++    set(QML_AVATAR_EFFECT [=[
++    MultiEffect {
++        objectName: "recipientAvatarEffect"
++
++        anchors.fill: parent
++        source: avatarImage
++        maskEnabled: true
++        maskSource: maskShape
++    }
++]=])
++else()
++    set(QML_AVATAR_EFFECT_IMPORT "import Qt5Compat.GraphicalEffects")
++    set(QML_AVATAR_EFFECT [=[
++    OpacityMask {
++        objectName: "recipientAvatarEffect"
++
++        anchors.fill: parent
++        source: avatarImage
++        maskSource: maskShape
++    }
++]=])
++endif()
++configure_file(RecipientAvatar.qml.in ${CMAKE_CURRENT_SOURCE_DIR}/RecipientAvatar.qml)
++
++foreach(_sharing_component_behavior_file FieldDelegate.qml ShareAdvancedSettingsPage.qml ShareDetailsFrame.qml ShareDialog.qml ShareListPage.qml)
++  configure_file(${_sharing_component_behavior_file}.in ${CMAKE_CURRENT_SOURCE_DIR}/${_sharing_component_behavior_file})
++endforeach()
++
  set_source_files_properties(RecipientIcon.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
-@@ -70,10 +72,29 @@ target_sources(nextcloudGuiSharing
+ 
+ target_sources(nextcloudGuiSharing
+@@ -70,10 +102,29 @@ target_sources(nextcloudGuiSharing
      unifiedsharelistmodel.cpp
  )
  
@@ -1708,7 +1951,7 @@ index 3e82ce426a..3fcf03a7fe 100644
      FieldDelegate.qml
      PermissionList.qml
      RecipientPermissionDialog.qml
-@@ -89,6 +110,45 @@ ecm_add_qml_module(nextcloudGuiSharing
+@@ -89,6 +140,91 @@ ecm_add_qml_module(nextcloudGuiSharing
      ShareRow.qml
      SettingsPanel.qml
      ShareDialog.qml
@@ -1721,8 +1964,53 @@ index 3e82ce426a..3fcf03a7fe 100644
 +    FILES ${_sharing_qml_files}
 +  )
 +
++  set(_sharing_qmldir "${CMAKE_CURRENT_BINARY_DIR}/qmldir")
++  set(_sharing_qmldir_content "module com.nextcloud.desktopclient.sharing\n")
++  string(APPEND _sharing_qmldir_content "optional plugin nextcloudGuiSharingplugin\n")
++  string(APPEND _sharing_qmldir_content "classname com_nextcloud_desktopclient_sharingPlugin\n")
++  string(APPEND _sharing_qmldir_content "prefer :/qt/qml/com/nextcloud/desktopclient/sharing/\n")
++  foreach(_sharing_qml_file IN LISTS _sharing_qml_files)
++    get_filename_component(_sharing_qml_type "${_sharing_qml_file}" NAME_WE)
++    if(_sharing_qml_file STREQUAL "RecipientIcon.qml")
++      string(APPEND _sharing_qmldir_content "singleton ${_sharing_qml_type} 254.0 ${_sharing_qml_file}\n")
++    else()
++      string(APPEND _sharing_qmldir_content "${_sharing_qml_type} 254.0 ${_sharing_qml_file}\n")
++    endif()
++  endforeach()
++  file(WRITE "${_sharing_qmldir}" "${_sharing_qmldir_content}")
++  set_source_files_properties("${_sharing_qmldir}" PROPERTIES QT_RESOURCE_ALIAS "qmldir")
++  qt_add_resources(nextcloudGuiSharing sharing_qmldir
++    PREFIX "/qt/qml/com/nextcloud/desktopclient/sharing"
++    FILES "${_sharing_qmldir}"
++  )
++
 +  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/nextcloudGuiSharingplugin.cpp"
 +    "#include <QQmlEngineExtensionPlugin>\n"
++    "#include <QtQml/qqmlmoduleregistration.h>\n"
++    "#include <qqml.h>\n"
++    "\n"
++    "#include \"gui/sharing/permissionmodel.h\"\n"
++    "#include \"gui/sharing/propertymodel.h\"\n"
++    "#include \"gui/sharing/recipient.h\"\n"
++    "#include \"gui/sharing/recipientmodel.h\"\n"
++    "#include \"gui/sharing/recipientsearchmodel.h\"\n"
++    "#include \"gui/sharing/sharingcontroller.h\"\n"
++    "#include \"gui/sharing/unifiedshare.h\"\n"
++    "#include \"gui/sharing/unifiedsharelistmodel.h\"\n"
++    "\n"
++    "static void qml_register_types_com_nextcloud_desktopclient_sharing()\n"
++    "{\n"
++    "    qmlRegisterModule(\"com.nextcloud.desktopclient.sharing\", 1, 0);\n"
++    "    qmlRegisterType<OCC::Gui::Sharing::PermissionModel>(\"com.nextcloud.desktopclient.sharing\", 1, 0, \"PermissionModel\");\n"
++    "    qmlRegisterType<OCC::Gui::Sharing::PropertyModel>(\"com.nextcloud.desktopclient.sharing\", 1, 0, \"PropertyModel\");\n"
++    "    qmlRegisterUncreatableType<OCC::Gui::Sharing::Recipient>(\"com.nextcloud.desktopclient.sharing\", 1, 0, \"Recipient\", QStringLiteral(\"created by SharingController\"));\n"
++    "    qmlRegisterType<OCC::Gui::Sharing::RecipientModel>(\"com.nextcloud.desktopclient.sharing\", 1, 0, \"RecipientModel\");\n"
++    "    qmlRegisterType<OCC::Gui::Sharing::RecipientSearchModel>(\"com.nextcloud.desktopclient.sharing\", 1, 0, \"RecipientSearchModel\");\n"
++    "    qmlRegisterUncreatableType<OCC::Gui::Sharing::Share>(\"com.nextcloud.desktopclient.sharing\", 1, 0, \"Share\", QStringLiteral(\"created via SharingController\"));\n"
++    "    qmlRegisterType<OCC::Gui::Sharing::SharingController>(\"com.nextcloud.desktopclient.sharing\", 1, 0, \"SharingController\");\n"
++    "    qmlRegisterType<OCC::Gui::Sharing::UnifiedShareListModel>(\"com.nextcloud.desktopclient.sharing\", 1, 0, \"UnifiedShareListModel\");\n"
++    "}\n"
++    "static const QQmlModuleRegistration registration(\"com.nextcloud.desktopclient.sharing\", qml_register_types_com_nextcloud_desktopclient_sharing);\n"
 +    "\n"
 +    "class com_nextcloud_desktopclient_sharingPlugin : public QQmlEngineExtensionPlugin\n"
 +    "{\n"
@@ -1740,6 +2028,7 @@ index 3e82ce426a..3fcf03a7fe 100644
 +    PUBLIC
 +      nextcloudGuiSharing
 +    PRIVATE
++      nextcloudCore
 +      Qt::Qml
 +  )
 +  set_target_properties(nextcloudGuiSharingplugin PROPERTIES
@@ -1755,6 +2044,201 @@ index 3e82ce426a..3fcf03a7fe 100644
  target_link_libraries(nextcloudGuiSharing PRIVATE nextcloudCore)
 +target_compile_definitions(nextcloudGuiSharing PRIVATE QT_NO_KEYWORDS)
 +target_compile_definitions(nextcloudGuiSharingplugin PRIVATE QT_NO_KEYWORDS)
+diff --git a/src/gui/sharing/FieldDelegate.qml b/src/gui/sharing/FieldDelegate.qml.in
+similarity index 99%
+rename from src/gui/sharing/FieldDelegate.qml
+rename to src/gui/sharing/FieldDelegate.qml.in
+index 681917622f..1493bd8635 100644
+--- a/src/gui/sharing/FieldDelegate.qml
++++ b/src/gui/sharing/FieldDelegate.qml.in
+@@ -3,7 +3,7 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
+  */
+ 
+-pragma ComponentBehavior: Bound
++@QML_COMPONENT_BEHAVIOR_PRAGMA@
+ 
+ import QtQuick
+ import QtQuick.Window
+@@ -11,6 +11,7 @@ import QtQuick.Layouts
+ import QtQuick.Controls
+ 
+ import com.nextcloud.desktopclient
++import com.nextcloud.desktopclient.sharing
+ import Style
+ import "qrc:/qml/src/gui/tray"
+ import "qrc:/qml/src/gui/wizard/qml"
+diff --git a/src/gui/sharing/RecipientAvatar.qml b/src/gui/sharing/RecipientAvatar.qml.in
+similarity index 77%
+rename from src/gui/sharing/RecipientAvatar.qml
+rename to src/gui/sharing/RecipientAvatar.qml.in
+index 6e8e4ddafc..4dfa85b316 100644
+--- a/src/gui/sharing/RecipientAvatar.qml
++++ b/src/gui/sharing/RecipientAvatar.qml.in
+@@ -4,7 +4,7 @@
+  */
+ 
+ import QtQuick
+-import QtQuick.Effects
++@QML_AVATAR_EFFECT_IMPORT@
+ 
+ Item {
+     id: root
+@@ -34,12 +34,5 @@ Item {
+         layer.enabled: true
+     }
+ 
+-    MultiEffect {
+-        objectName: "recipientAvatarEffect"
+-
+-        anchors.fill: parent
+-        source: avatarImage
+-        maskEnabled: true
+-        maskSource: maskShape
+-    }
++@QML_AVATAR_EFFECT@
+ }
+diff --git a/src/gui/sharing/RecipientPermissionDialog.qml b/src/gui/sharing/RecipientPermissionDialog.qml
+index aff4f8e5f8..e3c470b89c 100644
+--- a/src/gui/sharing/RecipientPermissionDialog.qml
++++ b/src/gui/sharing/RecipientPermissionDialog.qml
+@@ -8,6 +8,7 @@ import QtQuick.Layouts
+ import QtQuick.Controls
+ 
+ import com.nextcloud.desktopclient
++import com.nextcloud.desktopclient.sharing
+ import Style
+ import "qrc:/qml/src/gui"
+ import "qrc:/qml/src/gui/tray"
+diff --git a/src/gui/sharing/RecipientSearchField.qml b/src/gui/sharing/RecipientSearchField.qml
+index b372f815e4..fefe46a304 100644
+--- a/src/gui/sharing/RecipientSearchField.qml
++++ b/src/gui/sharing/RecipientSearchField.qml
+@@ -10,6 +10,7 @@ import QtQuick.Controls
+ 
+ import com.nextcloud.desktopclient
+ import com.nextcloud.desktopclient as NC
++import com.nextcloud.desktopclient.sharing
+ import Style
+ import "qrc:/qml/src/gui/tray"
+ import "qrc:/qml/src/gui/wizard/qml"
+diff --git a/src/gui/sharing/ShareAdvancedSettingsPage.qml b/src/gui/sharing/ShareAdvancedSettingsPage.qml.in
+similarity index 96%
+rename from src/gui/sharing/ShareAdvancedSettingsPage.qml
+rename to src/gui/sharing/ShareAdvancedSettingsPage.qml.in
+index eb1fc2d135..a7f7e7f819 100644
+--- a/src/gui/sharing/ShareAdvancedSettingsPage.qml
++++ b/src/gui/sharing/ShareAdvancedSettingsPage.qml.in
+@@ -3,13 +3,14 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
+  */
+ 
+-pragma ComponentBehavior: Bound
++@QML_COMPONENT_BEHAVIOR_PRAGMA@
+ 
+ import QtQuick
+ import QtQuick.Layouts
+ import QtQuick.Controls
+ 
+ import com.nextcloud.desktopclient
++import com.nextcloud.desktopclient.sharing
+ import Style
+ import "qrc:/qml/src/gui"
+ import "qrc:/qml/src/gui/tray"
+diff --git a/src/gui/sharing/ShareDetailsFrame.qml b/src/gui/sharing/ShareDetailsFrame.qml.in
+similarity index 98%
+rename from src/gui/sharing/ShareDetailsFrame.qml
+rename to src/gui/sharing/ShareDetailsFrame.qml.in
+index 229338a052..871bf930dd 100644
+--- a/src/gui/sharing/ShareDetailsFrame.qml
++++ b/src/gui/sharing/ShareDetailsFrame.qml.in
+@@ -3,13 +3,14 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
+  */
+ 
+-pragma ComponentBehavior: Bound
++@QML_COMPONENT_BEHAVIOR_PRAGMA@
+ 
+ import QtQuick
+ import QtQuick.Layouts
+ import QtQuick.Controls
+ 
+ import com.nextcloud.desktopclient
++import com.nextcloud.desktopclient.sharing
+ import Style
+ import "qrc:/qml/src/gui"
+ import "qrc:/qml/src/gui/tray"
+diff --git a/src/gui/sharing/ShareDetailsPage.qml b/src/gui/sharing/ShareDetailsPage.qml
+index 9798c2f1bb..634a8b8033 100644
+--- a/src/gui/sharing/ShareDetailsPage.qml
++++ b/src/gui/sharing/ShareDetailsPage.qml
+@@ -8,6 +8,7 @@ import QtQuick.Layouts
+ import QtQuick.Controls
+ 
+ import com.nextcloud.desktopclient
++import com.nextcloud.desktopclient.sharing
+ import Style
+ import "qrc:/qml/src/gui"
+ import "qrc:/qml/src/gui/tray"
+diff --git a/src/gui/sharing/ShareDialog.qml b/src/gui/sharing/ShareDialog.qml.in
+similarity index 99%
+rename from src/gui/sharing/ShareDialog.qml
+rename to src/gui/sharing/ShareDialog.qml.in
+index eac1d249a8..1c21f544c8 100644
+--- a/src/gui/sharing/ShareDialog.qml
++++ b/src/gui/sharing/ShareDialog.qml.in
+@@ -3,7 +3,7 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
+  */
+ 
+-pragma ComponentBehavior: Bound
++@QML_COMPONENT_BEHAVIOR_PRAGMA@
+ 
+ import QtQuick
+ import QtQuick.Window
+@@ -11,6 +11,7 @@ import QtQuick.Layouts
+ import QtQuick.Controls
+ 
+ import com.nextcloud.desktopclient
++import com.nextcloud.desktopclient.sharing
+ import Style
+ import "qrc:/qml/src/gui"
+ import "qrc:/qml/src/gui/tray"
+diff --git a/src/gui/sharing/ShareListPage.qml b/src/gui/sharing/ShareListPage.qml.in
+similarity index 98%
+rename from src/gui/sharing/ShareListPage.qml
+rename to src/gui/sharing/ShareListPage.qml.in
+index 47f884804d..548b6aeaea 100644
+--- a/src/gui/sharing/ShareListPage.qml
++++ b/src/gui/sharing/ShareListPage.qml.in
+@@ -3,13 +3,14 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
+  */
+ 
+-pragma ComponentBehavior: Bound
++@QML_COMPONENT_BEHAVIOR_PRAGMA@
+ 
+ import QtQuick
+ import QtQuick.Layouts
+ import QtQuick.Controls
+ 
+ import com.nextcloud.desktopclient
++import com.nextcloud.desktopclient.sharing
+ import Style
+ import "qrc:/qml/src/gui"
+ import "qrc:/qml/src/gui/tray"
+diff --git a/src/gui/sharing/ShareRow.qml b/src/gui/sharing/ShareRow.qml
+index b39910fdc6..ab086112c0 100644
+--- a/src/gui/sharing/ShareRow.qml
++++ b/src/gui/sharing/ShareRow.qml
+@@ -8,6 +8,7 @@ import QtQuick.Layouts
+ import QtQuick.Controls
+ 
+ import com.nextcloud.desktopclient
++import com.nextcloud.desktopclient.sharing
+ import Style
+ import "qrc:/qml/src/gui/tray"
+ import "qrc:/qml/src/gui/wizard/qml"
 diff --git a/src/gui/sharing/addrecipientjob.cpp b/src/gui/sharing/addrecipientjob.cpp
 index e58a20eed8..40d4e99bee 100644
 --- a/src/gui/sharing/addrecipientjob.cpp
@@ -2347,7 +2831,7 @@ index dc2cfe6022..9eb7a4ad9a 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index c765b2aeb8..a3fbcfeada 100644
+index c765b2aeb8..cc0465dbc6 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -46,6 +46,8 @@
@@ -2359,7 +2843,15 @@ index c765b2aeb8..a3fbcfeada 100644
  using namespace Qt::StringLiterals;
  
  namespace OCC {
-@@ -418,11 +420,11 @@ void Systray::showSearchWindow(int userIndex)
+@@ -132,6 +134,7 @@ void Systray::createTrayEngine()
+ 
+     _trayEngine->addImportPath(QCoreApplication::applicationDirPath() + "/qml");
+     _trayEngine->addImportPath("qrc:/qml/theme");
++    _trayEngine->addImportPath(QStringLiteral("qrc:/qt/qml"));
+     _trayEngine->addImageProvider("avatars", new ImageProvider);
+     _trayEngine->addImageProvider(QLatin1String("svgimage-custom-color"), new OCC::Ui::SvgImageProvider);
+     _trayEngine->addImageProvider(QLatin1String("tray-image-provider"), new TrayImageProvider);
+@@ -418,11 +421,11 @@ void Systray::showSearchWindow(int userIndex)
          return;
      }
  
@@ -2375,7 +2867,7 @@ index c765b2aeb8..a3fbcfeada 100644
          return;
      }
  
-@@ -434,7 +436,7 @@ void Systray::showSearchWindow(int userIndex)
+@@ -434,7 +437,7 @@ void Systray::showSearchWindow(int userIndex)
                      }},
          {"accountId", targetUserId},
      };
@@ -2384,7 +2876,7 @@ index c765b2aeb8..a3fbcfeada 100644
      const auto window = qobject_cast<QQuickWindow *>(createdObject);
      if (!window) {
          qCWarning(lcSystray) << "Search window resulted in creation of object that was not a window!";
-@@ -884,14 +886,14 @@ void Systray::createUnifiedSharingDialog(const AccountPtr &account, const QStrin
+@@ -884,14 +887,14 @@ void Systray::createUnifiedSharingDialog(const AccountPtr &account, const QStrin
          {"remotePath", remotePath},
      };
  
@@ -2516,6 +3008,72 @@ index 1a08d2445e..412cc6123f 100644
  
      WizardButton {
          enabled: !root.controller.busy
+diff --git a/src/gui/wizard/qml/WizardButton.qml b/src/gui/wizard/qml/WizardButton.qml.in
+similarity index 93%
+rename from src/gui/wizard/qml/WizardButton.qml
+rename to src/gui/wizard/qml/WizardButton.qml.in
+index 9f2681b3f2..73183f07ae 100644
+--- a/src/gui/wizard/qml/WizardButton.qml
++++ b/src/gui/wizard/qml/WizardButton.qml.in
+@@ -5,7 +5,7 @@
+ 
+ import QtQuick
+ import QtQuick.Controls.Basic as BasicControls
+-import QtQuick.Effects
++@QML_WIZARD_ICON_TINT_IMPORT@
+ import QtQuick.Layouts
+ import Style
+ 
+@@ -56,15 +56,7 @@ BasicControls.Button {
+                 Accessible.ignored: true
+             }
+ 
+-            MultiEffect {
+-                objectName: "wizardButtonLeadingIconTint"
+-                anchors.fill: leadingIconImage
+-                visible: root.tintIcon
+-                source: leadingIconImage
+-                colorization: 1.0
+-                colorizationColor: root.iconTintColor
+-                Accessible.ignored: true
+-            }
++@QML_WIZARD_BUTTON_ICON_TINT_EFFECT@
+         }
+ 
+         Text {
+diff --git a/src/gui/wizard/qml/WizardMenuItem.qml b/src/gui/wizard/qml/WizardMenuItem.qml.in
+similarity index 84%
+rename from src/gui/wizard/qml/WizardMenuItem.qml
+rename to src/gui/wizard/qml/WizardMenuItem.qml.in
+index 4ac379ccbd..ad2a95095f 100644
+--- a/src/gui/wizard/qml/WizardMenuItem.qml
++++ b/src/gui/wizard/qml/WizardMenuItem.qml.in
+@@ -5,7 +5,7 @@
+ 
+ import QtQuick
+ import QtQuick.Controls.Basic as BasicControls
+-import QtQuick.Effects
++@QML_WIZARD_ICON_TINT_IMPORT@
+ import QtQuick.Layouts
+ 
+ import Style
+@@ -42,15 +42,7 @@ BasicControls.MenuItem {
+                 Accessible.ignored: true
+             }
+ 
+-            MultiEffect {
+-                objectName: "wizardMenuItemIconTint"
+-                anchors.fill: menuIconImage
+-                visible: root.tintIcon
+-                source: menuIconImage
+-                colorization: 1.0
+-                colorizationColor: root.iconTintColor
+-                Accessible.ignored: true
+-            }
++@QML_WIZARD_MENU_ITEM_ICON_TINT_EFFECT@
+ 
+             Accessible.ignored: true
+         }
 diff --git a/src/libsync/CMakeLists.txt b/src/libsync/CMakeLists.txt
 index 72fe345dfa..f2b3f1ca49 100644
 --- a/src/libsync/CMakeLists.txt
@@ -3197,6 +3755,42 @@ index 57286be498..4f643cdb77 100644
  }
  
  bool Theme::displayLegacyImportDialog() const
+diff --git a/test/qml/search/testsearch.qml b/test/qml/search/testsearch.qml
+index 4dae6e38cb..1c902ce37f 100644
+--- a/test/qml/search/testsearch.qml
++++ b/test/qml/search/testsearch.qml
+@@ -696,8 +696,13 @@ Item {
+             const iconTint = findChild(wizardHoverButton, "wizardButtonLeadingIconTint")
+             verify(iconTint !== null)
+             compare(iconTint.visible, true)
+-            compare(iconTint.colorization, 1.0)
+-            compare(iconTint.colorizationColor.toString(), Style.wizardPrimaryText.toString())
++            const expectedColor = Style.wizardPrimaryText.toString()
++            if (iconTint.hasOwnProperty("colorization")) {
++                compare(iconTint.colorization, 1.0)
++                compare(iconTint.colorizationColor.toString(), expectedColor)
++            } else {
++                compare(iconTint.color.toString(), expectedColor)
++            }
+         }
+ 
+         function test_trailingIconCannotOverlapLongText() {
+@@ -737,8 +742,13 @@ Item {
+             const iconTint = findChild(wizardMenuHoverItem, "wizardMenuItemIconTint")
+             verify(iconTint !== null)
+             compare(iconTint.visible, true)
+-            compare(iconTint.colorization, 1.0)
+-            compare(iconTint.colorizationColor.toString(), Style.wizardPrimaryText.toString())
++            const expectedColor = Style.wizardPrimaryText.toString()
++            if (iconTint.hasOwnProperty("colorization")) {
++                compare(iconTint.colorization, 1.0)
++                compare(iconTint.colorizationColor.toString(), expectedColor)
++            } else {
++                compare(iconTint.color.toString(), expectedColor)
++            }
+         }
+     }
+ 
 diff --git a/test/syncenginetestutils.cpp b/test/syncenginetestutils.cpp
 index b0f774a948..87dc67d765 100644
 --- a/test/syncenginetestutils.cpp
@@ -3321,6 +3915,21 @@ index ed1b30dde1..34414eff7e 100644
  using namespace Qt::StringLiterals;
  
  #ifdef HAVE_QHTTPSERVER
+diff --git a/test/testsharingdialog.cpp b/test/testsharingdialog.cpp
+index 48d9340ab3..33d0f68806 100644
+--- a/test/testsharingdialog.cpp
++++ b/test/testsharingdialog.cpp
+@@ -910,7 +910,9 @@ class TestSharingDialog : public QObject
+         const auto effect = avatarObject->findChild<QObject *>(QStringLiteral("recipientAvatarEffect"));
+         QVERIFY(effect);
+         QVERIFY(effect->property("visible").toBool());
+-        QVERIFY(effect->property("maskEnabled").toBool());
++        if (effect->property("maskEnabled").isValid()) {
++            QVERIFY(effect->property("maskEnabled").toBool());
++        }
+         const auto mask = avatarObject->findChild<QObject *>(QStringLiteral("recipientAvatarMaskShape"));
+         QVERIFY(mask);
+         QCOMPARE(effect->property("maskSource").value<QObject *>(), mask);
 diff --git a/test/testsyncengine.cpp b/test/testsyncengine.cpp
 index ea7360cafc..be0d8dd02d 100644
 --- a/test/testsyncengine.cpp
