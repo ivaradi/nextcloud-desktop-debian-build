@@ -1,3 +1,1068 @@
+nextcloud-desktop (35.0.0) jammy; urgency=medium
+
+  [ Rello ]
+  * feature: move logout and remove to settings menu
+  * fix(UI): line break issue and panel background
+  * fix(UI): condition for public share link visibility
+  * fix(perf): do not run CI on draft PRs
+  * fix(UI): The settings button now uses AccountState::isSignedOut() instead of isConnected()
+  * fix(UI): test fixes
+  * fix(UI): settings dialog background
+  * fix(UI): settings dialog background
+  * fix(UI): read OCC_UPDATE_URL only for dev builds
+  * fix: parsing ] in ignorelist in File Provider correctly
+  * fix: no special handling. we change the theme text
+  * fix: shorten version string; details in debug archive
+  * feat: add NC URI account setup
+  * fix: only allow valid URLs
+  * fix: only allow valid URLs and reduce logging
+  * fix: cancel a running login flow if a new one arrives
+  * fix: open the finder location instead of the file directly
+  * fix: remove unused <chrono> and stabilize the code
+  * fix: prevent double account wizard
+  * Update src/gui/wizard/accountwizardcontroller.cpp
+  * feat(tray): update account status menu
+  * fix: Code cleanups and Claude-Review findings
+  * fix: test case issue
+  * style(macOS): change the text for some tray menu options.
+  * fix: app list svg rendering
+  * fix: string cleanups
+  * fix: translation strings
+  * fix(UI): Make FolderMetadata enforce that every decrypted E2EE filename is a single path segment before it can enter discovery.
+  * fix(UI): test fixes
+  * feat: add search dialog to new tray menu
+  * fix: Remove file deletion on metadata error
+  * fix: Add checks for '.' and '..' in filename validation
+  * fix: review findings
+  * fix: "dismiss" string and showing of chat message in tray preview
+  * fix: make the search modular by separating UI components
+  * fix: do not allow scheme change for push notifications
+  * feat: refactor activity window into own folder structure
+  * fix: reopening a cached Activities window now reloads its account-pinned SyncStatusSummary before showing it.
+  * feat: refactor activity window into own folder structure
+  * fix: dependencies
+  * fix: dependencies
+  * fix: Do not continue polling ETag in file provider extension when account is not connected
+  * fix: add tests checking disconnected accounts' file provider extensions do not trigger polling ETag check
+  * fix(tray): simplify disconnected account menu
+  * fix: Keep each menu policy type in its own file & values should be in their own variables
+  * fix: update Sonarcloud settings
+  * Refactor entitlements handling for login items
+  * fix: move the apple-only-test to a macOS/ subfolder to have it excluded from clang-tidy
+  * fix(tray): activate tray window also on right click
+  * fix(file-provider): preserve special characters in chunked upload paths
+  * fix(macOS): present tray popup before app activation
+  * fix(macOS): compare FinderSync broker application versions
+  * fix(wizard): replace reauthentication dialog with a qml window.
+  * fix(tray): restore pause and resume sync action
+  * fix(tray): separate qt and maocOS test cases
+  * Exclude macOS files from clang-tidy analysis
+  * fix(test): move test into macOS subfolder
+  * fix(tray): handle partially paused sync folders
+  * fix(tray): Fixed the missing lambda capture
+  * fix(test): adjustment for clang test
+  * Update agent guidelines on contributions
+  * Clarify DCO signing requirements
+  * feat(assistant): add desktop assistant interface
+  * revert: clarify DCO signing requirements
+  * revert: update agent guidelines on contributions
+  * fix(assistant): isolate module and harden request lifecycle
+  * fix(test): implement test feedback
+  * fix(fileprovider): preserve content version across file locks
+  * fix(ci): skip unrelated component workflows
+  * fix(ci): narrow SonarCloud master push paths
+  * fix(ci): cache Windows Craft dependencies
+  * fix(ci): reuse Clang build for clang-tidy
+  * fix(ci): derive Craft cache refs from config
+  * fix(assistant): address review feedback
+  * feat(search): revive unified search
+  * fix(search): address unified search review feedback
+  * fix(search): resolve CI failures
+  * fix(search): address remaining review feedback
+  * fix(ci): cancel obsolete pull request workflows
+  * fix(search): make people query restoration test deterministic
+  * fix(assistant): address remaining review feedback
+  * fix(assistant): avoid unity build symbol collision
+  * fix(assistant): harden state handling and tests
+  * fix(test): remove unused qml test dependency
+  * fix(test): generate fake account meta-object
+  * fix(test): wait for assistant task delegates
+  * fix(tray): match menu icons to palette
+  * fix(tray): use monochrome sync control icons
+  * fix(test): initialize tray icon resources
+  * fix(tray): use dedicated sync control icons
+  * fix(tray): show initial sync state
+  * fix(test): tolerate platform pixmap backgrounds
+  * fix(test): verify tray menu palette directly
+  * fix(assistant): address QML review feedback
+  * fix: Include error message in update download error notification
+  * fix(assistant): instantiate list scrollbars
+  * fix(translation): Add accessibility status message for search results
+  * fix(assistant): address follow-up QML review
+  * fix(i18n): document translation placeholders
+  * refactor(tray): remove obsolete tray window
+  * refactor(tray): remove orphaned QML components
+  * refactor(tray): update user status translation context
+  * fix(i18n): document opaque translation placeholders
+  * refactor(tray): remove legacy tray backend
+  * refactor(tray): remove stale sync error update
+  * fix(ci): run appimage/flatpack only for Linux-labeled PRs
+  * fix(ci): run appimage/flatpack only for Linux-labeled PRs
+  * Update Linux label in GitHub Actions workflow
+  * feat(settings): make settings the default application surface
+  * fix(settings): polish account actions
+  * fix(settings): document account shortcut routing
+  * fix(tests): include QSignalSpy directly
+  * fix(tests): provide account settings network fixture
+  * fix(tests): stabilize account settings fixtures
+  * fix(ci): skip expensive checks for backports
+  * fix(tests): isolate settings dialog configuration
+  * fix(tray): scroll to top in the activity window on opening
+  * fix(fix): scroll to the very top & add QTQuick Tests
+  * fix(fix): add missing REUSE header
+  * fix(fix): Fixed the QML compile failure
+  * fix(fix): Added a custom Qt Quick Test runner that initializes theme resources and registers the production SVG image provider
+  * fix(test): assert atYEnd instead of hover-driven currentIndex
+  * fix(test): correct test evaluation
+  * test: stabilize activities window QML checks
+  * fix(file-provider): treat unlock 412 as success
+  * fix(settings): restore Windows panel palette roles
+  * fix(l10n): clarify short UI string contexts
+  * chore(l10n): rely on translation CI
+  * refactor(l10n): simplify fallback translation binding
+  * docs(cli): group command-line help options
+  * fix(assistant): center icon-only action buttons
+
+  [ Jyrki Gadinger ]
+  * chore: bump version to 34.0.0-rc1
+  * fix(gui): remove gap after status messages
+  * fix(exclude): avoid trying to read patterns from file when reading failed
+  * fix(cfapi): download exclude pattern lists with the next sync when creating placeholder files
+  * chore(capabilities): remove unused capability methods
+  * chore(ocssharejob): remove unused setPublicUpload method
+  * chore(sharing): remove unused methods related to `name` attributes
+  * Revert "perf(sync): remove 3ms scheduling delay between propagation jobs"
+  * refactor(gui/search): build as a proper QML module
+  * chore(test): add test for file size changing during uploads
+  * fix(propagateupload): ensure file size stays the same for new uploads
+  * fix(mac-crafter): quote file path for codesign invocation
+  * chore(codeowners): assign specific codeowners per platform
+  * fix(gui): correctly link search QML module
+  * feat(sharing): add new QML module for the new sharing UI
+  * feat(sharing): add prototype for new sharing UI
+  * feat(sharing): add new SharingManager class
+  * feat(sharing): add view for share settings
+  * feat(sharing): split UI parts into separate components
+  * feat(sharing): prepare viewmodel for dynamic sharing items
+  * feat(sharing): prototype dynamic view based on listmodel
+  * feat(sharing): pass sharingModel from main dialog
+  * feat(sharing): filter viewmodel depending on main/settings view
+  * feat(sharing): add accountstate property to viewmodel
+  * feat(sharing): load model data from features capabilities
+  * feat(sharing): display features depending on expected source types
+  * fix(sharing): correct background on hover in header buttons
+  * feat(sharing): move recipient types chooser to dialog header
+  * fix(sharing): correct margins of window header
+  * feat(sharing): add recipient search
+  * feat(sharing): keep track of changes in viewmodel
+  * refactor(sharing): adopt unified sharing API models
+  * feat(sharing): display permissions
+  * feat(sharing): add recipients
+  * fix(sharing): show detailed permission switches depending on preset selection
+  * fix(sharing): update permission resource
+  * fix(sharing): create link recipients and update permissions
+  * feat(sharing): model share recipients
+  * refactor(sharing): remove obsolete field delegate code
+  * feat(sharing): add permission preset selection
+  * refactor(socketapi): use early returns instead of elsif in processShareRequest
+  * feat(sharing): pass file ID to sharing dialog
+  * refactor(sharing): simplify settings page properties
+  * refactor(sharing): reuse wizard-styled components
+
+  [ Iva Horn ]
+  * chore(macOS): Removed obsolete SwiftNIO dependency
+  * fix(#10053): Initial menu bar extra sync status
+  * fix(#10177): Unblock menu bar extra
+  * chore: Removed obsolete Qt version gates in code
+  * fix(#10178): Draggable account wizard window.
+  * fix(macOS): Relabel "virtual files" as "File Provider"
+  * chore(macOS): Updated dependencies
+  * fix(#10216): Prevent app nap and silent kill
+  * fix(file-provider): Fixed different drops of remote changes in sync logic
+  * chore(file-provider): Reorganized code for improved contributor understanding
+  * fix(file-provider): Corrected some test assumptions
+  * chore(file-provider): Applied SwiftFormat
+  * fix(#10237): Support Adobe Lock Files
+  * fix(file-provider): Confine the enumeration of remote changes to what actually was visited locally
+  * chore: Remove QtWebEngine
+  * fix(file-provider): Crash due to __FILEPROVIDER_OBSERVER_TOO_MANY_ITEMS__
+  * fix(Ticket#96101255): Crash on wake due to race condition
+  * chore(macOS): Split up trayaccountpopup_mac.mm into dedicated source code files and added documentation
+  * fix(file-provider): Support Adobe InDesign safe save
+  * fix(#10085): "Remove Download" unavailable on folders
+  * fix(macOS): Updated TransifexStringCatalogSanitizer
+  * fix(l10n): Update translations from Transifex
+  * fix(TransifexStringCatalogSanitizer): Hardening to prevent data loss
+  * Improve FinderSync Extension handling
+  * fix(file-provider): Check for upload size mismatch
+  * fix(file-provider): Fix flaky testEnumerate root date assertion
+  * fix(file-provider): Improved chunked upload integrity
+  * feat(macOS): Improved file provider switch user experience
+  * fix(file-provider): Detect upload conflicts with an If-Match precondition
+  * fix(file-provider): Remove the misleading size check for uploads again
+  * chore(macOS): Updated dependencies
+  * chore(file-provider): Fix SwiftFormat lint action
+  * fix(file-provider): Do not vend .allowsExcludingFromSync capability on items
+  * feat(file-provider): Add a reset button in the app settings
+  * fix(l10n): Update translations from Transifex
+  * fix(file-provider): don't drop all remote changes when one folder read fails
+  * fix(file-provider): eliminate O(N²) Realm work in large-folder enumeration
+  * fix(#10478): Refactored XPC for FinderSync Extension
+  * fix(account/setup): repair account creation via CLI
+  * test(account/setup): cover CLI option format and setup paths
+  * feat(file-provider): Synchronization blocking
+  * chore(macOS): Updated Swift package dependencies in Workspace.
+  * fix(macOS): disable index store for nested xcodebuild invocations
+  * fix(craft): pin CraftRevision to a reachable commit
+  * fix(macOS): keep nested xcodebuild caches out of the source tree
+  * fix(wizard): widen account wizard so localized button labels fit
+  * fix(macOS): hold sandbox access for newly added sync folders
+  * fix(macOS): pick sync folders with the native panel to keep their bookmark
+  * fix(gui): check connectivity of a new account even when push is ready
+  * fix(gui): report a completed account wizard as accepted
+  * test: keep FolderManTest off the machine's device policy
+
+  [ Nextcloud bot ]
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+  * fix(l10n): Update translations from Transifex
+
+  [ Camila Ayres ]
+  * fix(file-provider): invalidate lock tokens when file paths change.
+  * test(file-provider): add lock token invalidation tests.
+  * test(file-provider): retain in-memory realm across async enumeration
+  * chore(agents): add guideline for verifiable claims in contributions.
+  * fix(libsync): use slash prefix in removeRecursively.
+  * fix(libsync): clear lock token when propagating file path changes.
+  * fix(libsync): update child journal records on directory rename.
+  * refactor(test): fix path and remove syncOnce calls.
+  * fix(libsync): crash.
+  * fix(test): fix failed test.
+  * fix(test): remove check for vfs plugin.
+  * refactor(qml): use Style properties and create wizard component.
+  * fix(tray): make TrayAccountAppsModel::Roles an unscoped enum.
+  * fix(tray): include IconUrlRole in TrayAccountAppsModel::data role range.
+  * refactor(search): move search window state derivation into the model
+  * test(search): cover SearchState transitions in the search model
+  * chore(common): print filename if error occurs in file locking check.
+  * fix(discovery): move file lock state off the GUI thread.
+  * refactor: simplified fix and updated tests accordingly.
+  * fix(macOS): use tag to pass menu command to Finder extension.
+  * fix(macOS): use a valid SocketListener for XPC menu commands.
+  * fix(discovery): use QString to avoid dangling QStringBuilder.
+  * fix(socketapi): defer conflict dialog to prevent crash on resolve.
+  * fix(socketapi): defer move item dialog out of socket read loop.
+  * fix(activity): open conflict dialog directly when notification is clicked.
+  * refactor(socketapi): show conflict and move item dialogs via gui signals.
+  * chore: add check for conventional commits in PR template.
+  * fix(cmake): set cmake var APPLICATION_REV_DOMAIN_INSTALLER
+  * fix(osx): set BUNDLE_CAN_DOWNGRADE
+  * fix(osx): refresh stale FinderSync pluginkit registration on install.
+  * fix(tray): avoid GNU ?: extension for screen fallback lookup.
+  * fix(gui): guard unused showTrayPopup position on macOS
+  * fix(mac): silence deprecated LSSharedFileList warnings in setupFavLink
+  * refactor(tray): extract mainOrFirstScreen screen fallback into function.
+  * refactor(migration): move migration logic into OCC::Migration
+  * test(migration): add migration unit tests
+  * docs(migration): document the config migration flow
+  * feat(settings): add ManagedSettings resolver and settings schema.
+  * refactor(settings): make update and proxy server default only
+  * feat(settings): validate the server folder size limit
+  * feat(settings): resolve managed virtual files mode
+  * refactor(settings): rename some vars and functions to make their meaning more clear.
+  * feat(settings): add ManagedConfig cache for parsed server settings.
+  * docs(settings): improve documentation about managed settings.
+  * fix(settings): only enforce settings declared in the schema.
+  * fix(settings): make the managed proxy policy authoritative
+  * fix(settings): address the remaining review findings.
+  * refactor(settings): move the device source factory out of the sources header
+  * fix(settings): apply an enforced proxy to a new account's network manager
+  * fix(settings): disable file provider mode and checkbox when it is enforced off.
+  * fix(settings): drop skipUpdateCheck from the server allow list
+  * fix(settings): drop virtual files sync mode when the server enforces it off
+  * fix(settings): seed a new account proxy from the managed default
+  * fix(settings): keep managed proxy defaults from leaking onto existing accounts
+  * fix(settings): keep config values readable by older clients after a downgrade
+  * fix(updater): allow a user initiated update check when auto updates are disabled.
+  * fix(macOS): tell the user when a policy disables or enabled virtual files.
+  * fix(settings): only disable and label updater section in settings to enforce policy.
+
+  [ Troed Sångberg ]
+  * fix(gui): prevent nullptr dereference when VFS mode is unavailable
+
+  [ Matthieu Gallien ]
+  * fix(vfs/windows): test folders on-demand with a sub-folder prefix
+  * fix(vfs/windows): use proper relative local path for DB records
+  * fix(rename): avoid errors during sync with remote rename tracking
+  * fix(encryption): explicit detection of child or root encrypted folders
+  * fix(encryption): prevent user to leave encrypted shares: not possible
+  * fix(logs): prints the Qt platform name at startup
+  * chore: disable building with Qt WebEngine in craft settings
+  * fix: moves code related to Activity class inside the class itself
+  * fix: small clean up in activity list model class
+  * fix: do not rename existing variables when not needed
+  * fix: better code style
+  * fix: fix issues reported by static code checks
+  * fix: fix warnings reported by static code checks
+  * fix: we already require Qt 6.10.0 minimum
+  * fix: fix code style such that a slot has no return value
+  * fix: fix invalid behavior in rowCount method of a Qt based model
+  * fix(accountsetup): exit with code 1 when sync folder creation fails during provisioning
+  * fix(account/setup): fix automated account creation via CLI options
+  * fix: load existing accounts before creating a new one
+  * feat(governance): add base class for governance related network jobs
+  * feat(governance): very basic getter to test governance capability
+  * feat(governance): add more job types for each requests
+  * feat(governance): getting ready to be able to use governance API
+  * feat(governance): open governance labels dialog from files manager
+  * feat(governance): add automated tesst for network requests
+  * feat(governance): parse governance API replies to populate the UI
+  * feat(governance): makes our apply labels dialog usefull
+  * feat(governance): fix some issues with QML bindings of enum types
+  * feat(governance): remove unused components from governance dialog
+  * feat(governance): now the ComboBox displays the labels
+  * feat(governance): add all label types
+  * feat(governance): apply labels and fix issues
+  * feat(governance): apply wizard visual style to GovernanceLabelsDialog
+  * feat(governance): fix governance API requests syntax
+  * feat(governance): improve QML bindings to the governance jobs
+  * feat(governance): manage label selection inside the model
+  * feat(governance): add or remove labels by selecting them, display state
+  * feat(governance): display network errors when using governance labels
+  * feat(governance): apply design review on the new dialog
+  * feat(governance): ensure labels model is properly populated
+  * fix: improve logging of network requests
+  * feat(governance): add icons before Sensitivity and Retention labels
+  * feat(governance): ensure labels model is properly populated
+  * feat(governance): apply changes from API updated development state
+  * feat(governance): deduplicate some code
+  * feat(governance): update governance API for latest changes
+  * chore: @claucambra is a new code owner
+  * chore: clean up static code reported warnings
+  * fix(encryption): adjust log output to help to debug
+  * fix(encryption): do not loop twice to remove a single file
+  * fix(encryption): ignore invalid files when scanning encrypted folders
+  * fix(governance): makes desktop UI closer to the files web UI
+  * fix(windows/vfs): fix new automated test compilation
+  * fix(windows/vfs): ensure new automated test is valid
+  * fix(windows): properly test for locked files
+  * fix(tests): increase test reliability
+  * fix: ensure FolderMan singleton is initialized when needed
+  * chore: make sure that FolderMan singleton can be initialized when needed
+  * chore: use string literals from Qt to have build time QString
+  * feat(cmd): use AccountSetupCommandLineManager for account provisioning
+  * chore(cmd): in config mode, provide meaningfull return code
+  * fix(login): ensure to trigger a login when in signed out state
+  * fix(tests): ensure new automated tests run on all platforms
+  * fix(lockedFiles): do not ignore locked files too early
+  * fix(db): avoid printing misleading warning logs
+  * fix(logs): no new notification should not be a warning in logs
+  * chore: enable use of QT_NO_KEYWORDS when compiling newtcloudCore target
+  * chore(network): add a new log entry for sent requests
+  * feat(network): in case remote host closed the connection: retry once
+  * fix(propagator): clean up logs related to item completed
+  * chore: upgrade the clang-format check to run on more recent releases
+  * chore: enable pre-commit hook for clang-format
+  * chore(format): always add braces in statement per clang-format
+  * chore(format): tune clang-format to improve readibility
+  * docs(agents): require clang-format after C++ edits
+  * chore: fix two small issues for compilation and clang-format
+  * chore: use more recent CI image to get updated compilers
+  * fix(warnings): ensure compilation without warnings with gcc 16
+  * fix: avoid warning by not calling joinPath with invalid parameters
+  * chore: removes dead code
+  * chore: Move clang-tidy checks config to .clang-tidy file
+  * chore: apply modernize-use-nodiscard via run-clang-tidy
+  * chore: apply readability-braces-around-statements via clang-tidy
+  * chore: apply modernize-loop-convert from clang-tidy
+  * chore: enable modernize-use-equals-default from clang-tidy
+  * docs(agents): require repo-wide clang-format and mandatory clang-tidy
+  * feat(clang-tidy): enable CI to check clang-tidy conformance
+  * fix(clang-tidy): fis remaining issues to ensure compliance
+  * feat(ci): add flatpak to CI
+  * feat(ci): comment on PR with Flatpak artifact link after build
+  * fix(ci): quote if expression in linux-appimage/flatpak workflows
+  * chore: use our own flatpak build image with kde 6.11 Sdk
+  * fix: enable debhug log and test mode
+  * feat(linux/vfs): integrate openvfs linux virtual files plugin
+  * fix(openvfs): fix loading of the plug-in and make it default on linux
+  * fix(linux/vfs): fix socket API communication with fuse driver
+  * fix(linux/vfs): fix connecting back to an existing VFS sync folder
+  * fix(linux/vfs): fix lookup of socket commands needed for hydration
+  * fix(linux/vfs): makes sure the hydration job can do something useful
+  * fix(linux/vfs): default synchronization type to classical
+  * fix(linux/vfs): fix dehydration of files
+  * feat(linux/vfs): add flatpak manifest and enable virtual files
+  * feat(linux/vfs): build AppImage with openvfs virtual files enabled
+  * fix: make the code follow our clang-tidy rules
+  * feat(linux/vfs): update the openvfs commit to use when building
+  * fix(cmake): skip tests and CLI tool when BUILD_GUI is off
+  * feat(cmd): build nextcloudcmd without GUI, dropping account provisioning
+  * feat(vfs/linux): enable dynamic switch to OpenVFS from classic sync
+  * chore: makes agents write better code by default before reviews
+  * feat(craft): use the new craft cache for stable-35.0 branch
+  * chore: need one more commit for craft such that linux docker build
+  * fix(linux): fix AppImage build on almalinux 9
+  * fix(linux): avoid building AppImage dependencies: already included
+  * chore: use a stable docker tag for the flatpak CI image
+  * fix(systray): smarter elide mode for long display name
+  * chore: prepare for 35.0.0 RC1 release
+  * fix(linux): use latest docker image with rebuilt Qt 6.11.2
+  * fix(public-share-link): a public share link is always authenticated
+  * chore: prepare for 35.0.0 rc2 release
+  * fix(filesystem): do not try to delete already deleted files
+  * fix(log): be less verbose by default with permissions on Windows
+  * chore: prepare for 35.0.0 rc3
+  * fix(craft): use newer craft that uses zlib1.dll on Windows for zlib
+  * Revert "fix(msi): do not completely remove the previous installation when updating"
+  * chore: prepare for 35.0.0 rc4
+  * chore: prepare for 35.0.0 release
+
+  [ dependabot[bot] ]
+  * chore(deps): Bump actions/checkout from 6.0.3 to 7.0.0
+  * chore(deps): Bump cpp-linter/cpp-linter-action from 2.18.0 to 2.19.0
+  * chore(deps): Bump actions/cache from 5.0.5 to 6.1.0
+  * chore(deps): Bump cpp-linter/cpp-linter-action from 2.19.0 to 2.20.0
+  * chore(deps): Bump actions/cache/restore from 5.0.5 to 6.1.0
+  * chore(deps): Bump actions/setup-python from 6.2.0 to 6.3.0
+  * chore(deps): Bump actions/cache/save from 5.0.5 to 6.1.0
+  * chore(deps): Bump nextcloud/pr-feedback-action
+  * chore(deps): Bump nextcloud/pr-feedback-action
+  * chore(deps): Bump actions/stale from 10.3.0 to 10.4.0
+  * chore(deps): Bump actions/setup-python from 6.3.0 to 7.0.0
+  * chore(deps): Bump actions/checkout from 7.0.0 to 7.0.1
+  * chore(deps): Bump actions/stale from 10.4.0 to 11.0.0
+  * chore(deps): Bump cpp-linter/cpp-linter-action from 2.20.0 to 2.21.0
+  * build(deps): Bump cpp-linter/cpp-linter-action from 2.21.0 to 2.22.0
+
+  [ Ravi Kant Sharma ]
+  * fix: build error with OpenSSL 4.0
+
+  [ mosandlt ]
+  * fix(cmd,csync): don't silently ignore a missing --exclude file
+  * fix(libsync): add OWNCLOUD_BULK_UPLOAD env override to force-disable bulk upload
+  * fix(libsync): rename OWNCLOUD_BULK_UPLOAD to NEXTCLOUD_BULK_UPLOAD
+
+  [ Xaymar ]
+  * fix: Don't recursively call processEvents
+
+  [ Qoole ]
+  * perf(sync): remove 3ms scheduling delay between propagation jobs
+  * perf(activity): inline FolderMan::instance() and avoid string concat in hot path
+
+  [ Claudio Cambra ]
+  * fix(tray): Give macOS menu popup expected visual effect material
+  * fix(tray): Use liquid glass view for tray on macOS 26+
+  * feat: Add AutoCAD lock files to sync exclude
+  * feat: Detect AutoCAD files in sync engine
+  * feat: Handle file locking/unlocking when detecting .dwl(2)
+  * feat: Test AUtoCAD file locking behaviour
+  * feat(fileprovider): Detect autocad lock files
+  * feat(fileprovider): Acquire autocad lock file target name
+  * feat(fileprovider): Test autocad lock files handling
+  * feat(fileprovider): Document locking behaviour for Adobe and AutoCAD
+  * feat(fileprovider): Ensure both lock files are gone before unlocking AutoCAD file
+  * feat(fileprovider): Add test for sibling lock file behaviour
+  * chore: Add performance test/results requirement for perf PRs in PR template
+  * chore: Add performance improvement claim requirements to AGENTS.md
+  * feat: Add adobe lock file extensions to sync ignore list
+  * feat: Add Adobe excluded files test
+  * feat: Add check for lockable adobe document extension
+  * feat: Add Adobe lock file -> target path matching logic
+  * feat: Test detection and handling of adobe document lock files
+  * fix(macOS): Prevent stripping of application name components following a dot during Sparkle updates
+  * feat(ui): Add NCContextMenuTextField
+  * feat(ui): Use NCContextMenuTextField as base for all QML textfields
+  * fix(ui): Fix text palettes in windows
+  * feat: Detect affinity document extensions
+  * feat: Detect and handle affinity lock files
+  * feat: Add affinity lock files to exclude list
+  * feat: Add tests for affinity lock files
+  * fix: simplify lock file check for affinity
+  * fix(edit-locally): normalize acquired userIdAtHost
+  * fix(edit-locally): add testing for host normalization
+  * docs: add dev doc for edit locally
+  * fix(agents): ensure agents follow proper testing practices
+  * fix(file-provider): add extension property for canonical form
+  * fix(file-provider): add method to compare locations using canonical form
+  * fix(file-provider): add test to verify canonical check
+  * fix(file-provider): store normalised form in db
+  * fix(file-provider): add convenience methods for location checks using normalised strings
+  * fix(file-provider): use comparison methods/queries in location checks
+  * fix(file-provider): test location comparisons
+  * fix(file-provider): document normalisation
+  * fix(file-provider): remove unnecessary extension property
+  * fix(file-provider): populate normalized fields in dbmanager tests
+  * fix(file-provider): centralise updating location metadata
+  * fix(file-provider): remove account parameter from queries
+  * fix(file-provider): Add convenience methods for comparing paths and descendancy with normalisation
+  * fix(file-provider): use normalisation-using methods for path checks in working set scan
+  * fix(file-provider): add tests for new path checking methods
+  * fix(file-provider): add test for schema 203 migration
+  * fix(file-provider): swift-format normalisation changes
+  * fix(file-provider): test normalisation changes for hierarchical changes
+  * fix(file-provider): add tests for new item metadata path normalisation convenience methods
+  * fix(macos): Define local network usage description
+  * fix(macos): Add local network permission checking functions
+  * fix(macos): Verify local network access permission when no status acquired from server
+  * fix(macos): Check local network permission on connection validator job timeout
+  * fix(macos): Check local network permission when no server found in account wizard
+  * fix(macos): Check local network permission when no server found timeout happens in account wizard
+  * fix(macos): Make handleSecureConnectionFailure void, avoid unnecessary casting
+  * fix: Make local network permission check platform agnostic
+  * fix: Test local network permissions handling in account wizard
+  * fix: Test local network permission handling in connection validator
+  * fix: avoid virtual methods for testing in account wizard controller and connection validator
+  * fix(macos): Fix local network permission check when VPN is active
+  * docs(macOS): Add doc for local network permissions on macOS
+  * fix: Ensure a dir scan run on a file does not hang forever
+  * fix: Add test to check directory discovery on file finishes correctly
+  * fix: LocalDiscoveryTest on Windows
+  * fix(activity): Add ActivityFileMenu
+  * fix(activity): Use ActivityFileMenu within ActivityItemContent
+  * chore(activity): Remove unused Style import in AutoSizingMenu
+  * fix(activity): Add activity file menu test
+  * fix(activity): Add ActivityFileMenuButton
+  * fix(activity): Use file button in activity item content
+  * fix(activity): Include button in UI test
+  * fix(activity): Fix activity file menu sizing
+  * ci(macOS): checkout like on Windows
+  * fix(file-provider): Add RealmExcludedFromSyncItem
+  * fix(file-provider): Use discardableResult for handleMetadataDeletion
+  * fix(file-provider): Add setter, getter, remover for sync exclusion marker
+  * fix(file-provider): Do not propagate excluded item deletion to server
+  * fix(file-provider): Test that deletion works as expected for unexcluded item
+  * fix(file-provider): Test that excluded item deletion does not propagate to server
+  * fix(file-provider): Mark ignored item as excluded from sync during modification
+  * fix(file-provider): Model modify-then-delete process taking place when modifying bundle excluded from sync
+  * docs(file-provider): Document exclusion-from-sync server item deletion
+  * fix(macos): Get actual user home directory correctly
+  * fix(macos): Add tests verifying correct user dir
+  * fix(windows): Prevent re-upload of local placeholder directory deleted remotely
+  * fix(windows): Add regression test for vfs folder reupload
+  * fix(windows): Move case of virtual folder
+  * fix(agents): Document how to properly acquire desktop client logs
+  * fix(file-provider): Report chunked uploaded item's local chunk store location
+  * fix(file-provider): Remove reported chunk directory after successful upload
+  * fix(file-provider): Allow customising local chunk store location in mock remote interface
+  * fix(file-provider): Test correct chunk creation for MRI chunked uploads
+  * fix(file-provider): Test deletion of local chunks
+  * fix(file-provider): Add removeLocalChunks to remote interfaces
+  * fix(file-provider): Add convenience methods to remove an item's chunk records
+  * fix(file-provider): Add general cleanup routine
+  * fix(file-provider): Add method to discard chunk uploads by item identifier
+  * fix(file-provider): Add general clean-up on startup
+  * fix(file-provider): Add convenience method to set an upload identifier onto a itemmetadata
+  * fix(file-provider): Restore chunk upload ID on partial content modification failure
+  * fix(file-provider): Handle chunk deletion when an item is deleted
+  * fix(file-provider): Refactor chunk clean-up post-upload
+  * fix(file-provider): Leverage realm queries where possible in chunk ops
+  * fix(file-provider): Add testing for chunk upload cleanup methods
+  * fix(file-provider): Make chunk deletion testable through mock remote interface
+  * fix(file-provider): Add tests for chunk removal after item deletion
+  * fix(file-provider): Test various upload conditions handle chunk deletions correctly
+  * fix(file-provider): Test chunk ID preservation on failed modify
+  * docs(file-provider): Document chunked upload mechanism
+  * fix(file-provider): Prevent unintended cleanup of another item's chunks due to underscore matching
+  * fix(file-provider): Do not unconditionally clear chunk upload id (e.g. if upload failed)
+  * fix(file-provider): Match chunk metadata discard behaviour with in-upload item metadata discarding when deleting parent folder recursively
+  * fix(file-provider): Record incomplete chunk clean up operations
+  * fix(file-provider): Add expected-fail test case for initial created file chunks incorrectly being cleaned up
+  * fix(mac-crafter): Verify matching team identifiers in signatures
+  * fix(mac-crafter): Test team identifier identification
+  * ci(mac-crafter): Run mac crafter tests in CI
+  * fix(mac-crafter): Extract team identifier verifier to separate file
+  * fix(mac-crafter): Test code bundle component identification
+  * fix(mac-crafter): Verify matching team identifier between NEXTCLOUD.cmake value and code signature used for signing
+  * fix(mac-crafter): Add test for team id verification
+  * fix(file-provider): Pass in DEVELOPMENT_TEAM via CMakeLists to xcodebuild
+  * fix(file-provider): Add change continuation types
+  * fix(file-provider): Implement database getters/setters for change delivery types
+  * fix(file-provider): Always ensure intermediate continuation anchors are used during change enumeration
+  * fix(file-provider): Test change continuation anchors
+  * fix(file-provider): Document change enumeration
+  * fix(file-provider): Clean up change delivery items after change session completed
+  * fix(docs): Add terminology guide
+  * fix(docs): Commenting guidelines
+  * fix(file-provider): Verify service name is not nil
+  * fix(file-provider): Prevent concurrent modification of mutable arrays in FileProviderXPC utils
+  * fix(file-provider): Test xpc utils init is crash-free
+  * fix(docs): Expand terminology
+  * fix(file-provider): Address QT_NO_KEYWORDS in xpc utils test
+  * fix(agents): Guide agents to follow proper conduct when working on major features
+  * fix(shares): Only acquire shares for target path
+  * fix(shares): Test that shares fetch happens only for a target path
+  * fix: Add journalRelativePath helper method
+  * fix: Normalised paths received from FileSystem::removeRecursively callback for use in journal cleanup
+  * fix: Test for normalisation path mismatch during folder recursive delete
+  * fix: Improve normalisation test cases
+  * fix(docs): Refine terminology
+  * fix(agents): Generalize GUI testing guidance
+  * fix(tray): Handle highlight visibility more sensibly
+  * fix(tray): Test activity list highlight
+  * fix(tray): Handle scroll-to-top on activation in QML
+  * fix(tray): Document qml mock types
+  * fix(file-provider): Add pending state to delivery session
+  * fix(file-provider): Add db getters with inactive/pending support, change delivery acknowledgement
+  * fix(file-provider): Make change delivery idempotent
+  * fix(file-provider): Test change delivery batch idempotency
+  * fix(file-provider): Update change enumeration documentation
+  * fix(file-provider): Improve unnecessary long and overcomplicated trash name comment
+  * fix(file-provider): Fix handling of 404 error in item deletion
+  * fix(file-provider): Test deletion 404 conditions
+  * fix(macOS): Add macOS-specific sandbox folder picker using NSOpenPanel directly
+  * fix(macOS): Use explicitly NSOpenPanel path for acquiring security scoped bookmark
+  * fix(file-provider): Fix build on Xcode 27
+  * fix(macOS): Fix clang format config for Objective-C/Objective-C++
+  * fix(macOS): Position tray account popup adjacent to menu bar
+  * fix(windows): Test original file path during invalid filename rename flow skips trailing period
+  * fix(windows): Pass extended \\?\ paths to QFile for ordinary files in Filesystem::rename
+  * fix(windows): Add additional debug logging for filename test
+  * feat(sharing): add unified sharing api class
+  * feat(sharing): Split unified share request into specific types with job-specific return values
+  * feat(sharing): Remove ocssharingjob
+  * feat(sharing): Add timeout to search recipients job
+  * feat(sharing): Add debouncing to recipientsearchmodel
+  * feat(sharing): Add unified sharing test
+  * feat(sharing): Add specific update job classes
+  * feat(sharing): test for failure states
+  * feat(sharing): Allow ocsjob to have multiple values for a given parameter type
+  * feat(sharing): Allow ocsjob to have a JSON body
+  * feat(sharing): Allow ocsjob passing status codes to be modified
+  * feat(sharing): Finalise api jobs
+  * feat(sharing): adapt tests to new jobs
+  * feat(sharing): Do not auto-create share on share dialog completion
+  * feat(sharing): Unify node class string def
+  * feat(sharing): Remove single share value within sharing controller
+  * feat(sharing): Verify sharing controller initialises without creating share
+  * feat(sharing): Use constants in unified sharing test
+  * feat(sharing): Re-layout sharing window to master/detail view
+  * fix(sharing): Ensure correct fileId is passed to new sharing dialog
+  * feat(sharing): Add ability to create share
+  * fix(activity): Remove debugging labels
+  * feat(activity): Add back button svg
+  * fix(activity): Use back button icon
+  * feat(activity): Implement master/detail design
+  * feat(activity): Improve labelling for sharing entries
+  * feat(sharing): Implement share settings as a popup
+  * feat(sharing): Improve sharing dialog design
+  * feat(sharing): Fix recipients addition and surface failures
+  * feat(sharing): Conditionally add details to share
+  * feat(sharing): Place settings below recipients
+  * feat(sharing): Fix alignments
+  * feat(sharing): Implement property setting in controller
+  * feat(sharing): Implement share activation in controller and UI
+  * feat(sharing): Fix permissions selection layout
+  * feat(sharing): Refine design
+  * feat(sharing): Support full property values
+  * feat(sharing): Handle recipient instance
+  * feat(sharing): Handle shareId in search
+  * feat(sharing): Handle instance for recipient
+  * feat(sharing): Handle various icons for recipients
+  * feat(sharing): Add secret handling
+  * feat(sharing): Handle initiator display name
+  * feat(sharing): Fix removal handling
+  * feat(sharing): Clean up data method index handling and value retrieval
+  * feat(sharing): Fix return for QML of secret types
+  * feat(sharing): Improve recipient delegates
+  * feat(sharing): Expand testing to include new feature implementations
+  * feat(sharing): Handle share removal
+  * feat(sharing): Handle failure cases for permissions changes
+  * feat(sharing): Clean up permissions model
+  * feat(sharing): Match server layout
+  * feat(sharing): Add wizard item delegate
+  * feat(sharing): Use wizard styling in unified sharing components
+  * feat(sharing): Hide titlebar for activities window
+  * feat(sharing): Fix recipient icon type
+  * feat(sharing): Fix loading indication on recipients search field
+  * feat(sharing): Match server share creation flow
+  * feat(sharing): Display pending shares
+  * feat(sharing): Adjust layout
+  * feat(sharing): Adjust naming of shares
+  * feat(sharing): Add info button to headers
+  * feat(sharing): Added internal link and public link support
+  * feat(sharing): Fix and improve layout of sharing
+  * feat(sharing): Open QML unified sharing window (when this is supported by server) from FileProvider context menu
+  * fix(sharing): Import enforced label component
+  * fix(sharing): Fix linking
+  * fix(sharing): Add missing initialisers, fix Linux CI failures
+  * fix(sharing): Roll in gui search modules into nextcloudcmd
+  * fix: Remove systray dependency on unified search
+  * fix(sharing): Differentiate unifiedsharing share from legacy share
+  * fix(sharing): Leverage sharing in latest NCCK
+  * fix(file-provider): Remove unused NCCK imports
+  * feat(sharing): Clarify the role of share details list model
+  * fix(sharing): Use checkIndex rather than manual checks
+  * fix(sharing): Avoid .h style includes for Qt components
+  * fix(sharing): Avoid manual memory management in unified sharing test
+  * fix: remove unused back.svg
+  * fix(sharing): Move options as sub-struct of UnifiedSharingRequest
+  * fix(sharing): Address method/member ordering, slots
+  * fix(sharing): Include ordering
+  * fix(sharing): Rename ShareState to just State
+  * fix(sharing): Unify early return conditions in RecipientSearchModel::setQuery
+  * fix(sharing): Fix removesourcejob comment
+  * fix(sharing): Remove unnecessary Q_INVOKABLE from constructor
+  * fix(sharing): Remove unnecessary ShareDialog DetachedVerticalScrollBar
+  * fix(sharing): Deduplicate new style values
+  * fix(sharing): Do not indiscriminately link search against all tests
+  * fix(sharing): Extract share list page to separate component
+  * fix(sharing): Extract share deletion confirmation dialog
+  * fix(file-provider): Only present sharing entry in context menu when exactly one item selected
+  * fix(file-provider): Better handle single-item condition for sharing trigger
+  * fix(sharing): Remove unneeded pragma in sharedetailspage
+  * fix(sharing): Generate permission preset label from cpp side
+  * fix(sharing): Use model testers in testunifiedsharing
+  * fix(sharing): Extract share details frame from share dialog
+  * fix(sharing): Controller reference in sharedialog
+  * fix(sharing): Fix share dialog instantiation and test it
+  * fix(sharing): Add toggle switches to optional fields
+  * fix(sharing): Dialog layout and detail setup
+  * fix(sharing): Address scrollbar and footer visibility issues
+  * fix(sharing): Move advanced properties into separate page
+  * fix(sharing): Add delete button onto share delegates
+  * fix(sharing): Match settings panel switch design
+  * fix(sharing): Remove sections for shares
+  * fix(sharing): Remove advanced settings header
+  * fix(sharing): Display YYYY-MM-DD instead of cryptic ISO-8601
+  * fix(sharing): Use rounded avatar images
+  * fix(sharing): Increase share inter-item spacing
+  * fix(sharing): Use multiline text field for notes to recipients
+  * fix(sharing): Add top padding above text field
+  * fix(sharing): Restore back.svg
+  * fix(sharing): Simplify switch UI handling
+  * fix(sharing): Switch delegate backgrounds
+  * fix(sharing): Use person_add icon as share fallback
+  * fix(sharing): Rounded avatar images
+  * fix(sharing): Adapt to QT_NO_KEYWORDS
+  * fix(sharing): Extract PermissionList to separate component
+  * fix(sharing): Allow applying recipient onto permissionmodel
+  * feat(sharing): Add ability to retrieve recipient from recipientmodel directly
+  * feat(sharing): Add job to set permissions for specific recipient
+  * feat(sharing): Surface permissions data for specific recipient
+  * feat(sharing): Add ability to set recipient permission via sharingcontroller
+  * fix(sharing): More granularly update recipient data in unified share
+  * feat(sharing): Add recipient permissions dialog in share details
+  * feat(sharing): Test sharing dialog and its permissions settings for recipients
+  * fix(sharing): Test recipient permissions
+  * fix(sharing): Extract recipient permission dialog
+  * feat(sharing): Add basic recipientmodel tests
+  * feat(sharing): Add basic permissionmodel test
+  * feat(sharing): Disable permission toggles for recipient if given permission is disabled in parent share
+  * fix(sharing): Missing Q_SLOT for unified search results list model
+  * fix(search): Fix unified search-related build issues
+  * fix(sharing): Fix availableWidth property conflict
+  * fix(sharing): Use of recipient in QML
+  * fix(sharing): Alignment of icon-only wizard buttons
+  * fix(search): Fix unified search results list model test
+  * fix(sharing): Test hang after finish
+  * fix(sharing): Share-type building issues
+  * feat(sharing): Improve design of recipient permissions dialog
+  * feat(sharing): Add nodiscard to model methods
+  * fix: Use QList instead of QBector for ocsjob pass codes
+  * fix(tray): Move tray engine construction into systray
+  * fix(sharing): Wrong check for unifiedsharing availability in systray
+  * fix(sharing): DestroyShareJob -> DeleteShareJob
+  * fix(sharing): Clarify ownership semantics for shares, permissions, properties
+  * fix(sharing): More safely handle and notify share change in sharedetailslistmodel
+  * fix(sharing): Address test build failure
+  * fix(sharing): Simply take shareId in modification jobs
+  * fix(sharing): Use JSON in jobs for shares, avoid QPointers
+  * fix(reuse): Remove unneeded xcscheme
+  * fix(sharing): Remove nodiscard from updateShareFromJson
+  * fix(sharing): Address rebase issues in NCFPK test suite
+  * fix(sharing): Sharing dialog test crash
+  * fix(file-provider): Address failing remote change propagation tests
+  * fix(file-provider): Remove unused XPC utils methods
+  * fix(invalid-filename): Add test verifying path bug at sync root for rename dialog
+  * fix(invalid-filename): Use correct checking path for root-folder children
+  * fix(invalid-filename): Add missing nodiscard
+  * fix(file-provider): Rediscover XPC service for restored (previously missing) domain
+  * fix(file-provider): Upgrade to NextcloudKit 7.6.0
+  * fix(file-provider): Prevents account state test from waiting for the File Provider opt-in message when it has already arrived
+  * fix(file-provider): Cleanly create FileProviderXPC unique_ptr, do not use QObject ownership
+  * fix(file-provider): Store and keep track of active connections in FileProviderXPC
+  * fix(file-provider): Disconnect from domains before configuring new XPC connections
+  * fix(file-provider): Invalidate all XPC connections when tearing down FileProviderXPC instance
+  * fix(file-provider): Properly retain/release XPC connections and services
+  * fix(file-provider): Properly release dispatch groups used in XPC utils
+  * fix(file-provider): Do not leak domainIdentifier NSString within XPC utils
+  * fix(file-provider): Keep retain pattern at util function level consistent
+  * fix(file-provider): Test retain state
+  * fix(file-provider): Enforce main thread for FileProviderXPC instantiation
+  * fix(file-provider): Ensure all fileProviderDomainHasDirtyUserData calls are made on main thread
+  * fix(file-provider): Make fileProviderDomainHasDirtyUserData private, force other clients to call thread-safe version in FileProvider class
+  * fix(file-provider): Do not wait forever for domain dirty status, provide unambiguous failure return value
+  * fix(file-provider): Combine connection and service data structures in FileProviderXPC
+  * fix(file-provider): Correctly release expired semaphores
+  * fix(file-provider): Correctly release nsPatterns
+  * fix(file-provider): Expand lifecycle-related tests in xpc utils
+  * fix(file-provider): Time-out on getting file provider domain identifier
+  * fix(file-provider): Do not include XPC objective-c++ header in fileproviderxpc.h
+  * fix(file-provider): Do not attempt dereference on bool type
+  * fix(file-provider): Fix threading in xpc utils tests
+  * fix(finder-sync): Fix normalisation of paths received from FinderSync extension (NFD->NFC)
+  * fix(finder-sync): Test finder sync path normalisation
+  * fix(macOS): Do not re-open tray window when clicking menu bar icon if tray is already open
+  * fix(macOS): Test popup activation changes
+  * fix(file-provider): Fix handling of item renamed into excluded pattern
+  * fix(file-provider): test expected ignore pattern/rename into exclusion behaviour
+  * fix(file-provider): Ensure all early returns in item modification relating to rename into excluded pattern
+  * fix(file-provider): Explcitly handle connection error
+  * fix(file-provider): Protect against case of excluded file pattern-matching move into file-tree for user that has matching prefix
+  * fix(file-provider): Use files-root-relative paths when checking excluded path
+  * fix(file-provider): Expand ignore path rename testing to include paths outside the files root, including trash paths, return no sync-relative path and cannot match ignore rules
+  * fix(file-provider): Update docs with recent changes to exclusion handling
+  * fix(file-provider): Notify main application about item excluded from sync due to becoming an ignored item
+  * fix(file-provider): Properly handle server item deletion failure when moving/renaming item to ignore path
+  * fix(file-provider): Delete chunks for items removed due to exclusion
+  * fix(file-provider): Simplify remote-delete control flow for renaming into ignore path
+  * fix(file-provider): Clean up and expand tests relating to exclusion markers
+  * fix(file-provider): Lint MockRemoteInterface changes
+  * fix(auth): Do not migrate public link accounts to webflow
+  * fix(auth): Migrate erroneously webflow-migrated public link accounts back to basic auth
+  * fix(auth): Test correct auth approach for public link accounts
+  * fix(file-provider): Upgrade to NextcloudKit 7.6.1
+  * fix(tray): Improve wizard button icon location testing
+  * test(tray): Verify tray behaviour and item population
+  * fix(tray): prevent duplicate disconnected account actions
+  * fix(tray): Do not build Qt tray tests on macOS
+  * fix(file-provider): Keep modified contents unuploaded after upload failure
+  * fix(file-provider): Add regression coverage for failed and cancelled direct and chunked uploads
+  * fix(file-provider): Forward the domain when fetching thumbnails
+  * fix(file-provider): Add regression coverage for domain forwarding in thumbnailing
+  * fix: Ensure parent folder for temp download is writeable
+  * fix: Test overlapping downloads and permissions
+  * fix(macOS): Enable ARC for theme_mac
+  * fix(macOS): Enable ARC for security scoped access utils
+  * fix(macOS): Enable ARC for sandbox persistent access util
+  * fix(macOS): Sandbox utils using ARC
+  * fix(macOS): Enable ARC for utility_mac
+  * fix(macOS): Build native tray account popup components using ARC
+  * fix(macOS): Build macOS settings sources with ARC
+  * fix(macOS): Build systray components with ARC
+  * fix(macOS): Build foreground/background window helper with ARC
+  * fix(macOS): Build FileProvider major classes with ARC
+  * fix(macOS): Build FinderSyncBrokerRegistrar with ARC
+  * fix(macOS): Build ProgressObserver with ARC
+  * fix(macOS): Build native titlebar helper with ARC
+  * fix(macOS): Build notification sound player with ARC
+  * fix(macOS): Build sandbox folder picker with ARC
+  * fix(macOS): Build socket api helper with ARC
+  * fix(macOS): Build single instance manager with ARC
+  * fix(macOS): Build low power GPU enforcement utils using ARC
+  * fix(macOS): Consolidate gui client srcs
+  * fix(macOS): Document use of ARC in AGENTS.md
+
+  [ Thomas Mosandl ]
+  * fix(cmd): add --exclude-anchored, keep --exclude backwards-compatible
+
+  [ thstyl2000 ]
+  * fix(folderwatcher): ignore stale inotify descriptors
+
+  [ Andreas Bohl ]
+  * fix(filesystem): do not attempt to lock directories on Windows
+
+  [ Markus Goetz ]
+  * fix: sync engine readonly folder file deletion
+  * Discovery: Fix build emit->Q_EMIT
+
+  [ Junseo Kim ]
+  * fix: improve Windows custom-state icon contrast
+
+  [ xhon-pelushi ]
+  * fix(appimage): bundle sync-exclude.lst inside AppDir so it ships in the AppImage
+
+  [ István Váradi ]
+  * fix(tray): GNOME + AppIndicator compatibility
+  * fix(clntenc): Do not use ENGINE_get_default_RSA
+
+  [ RoGreat ]
+  * chore(nix): add nix to .gitignore
+  * style(nix): reformat nix flake for desktop client
+  * fix(nix): update nix flake for desktop client
+
+  [ jsk1004ha ]
+  * fix: regenerate Windows shared custom-state icons
+  * fix: use filled shared custom-state icon
+
+  [ chrip ]
+  * fix(updater): remove leftover installer during config version migration
+
+  [ artyom-fedosov ]
+  * style(cmake): remove redundant conditions from endif/endfunction/endmacro/endforeach
+  * fix(cmake): set CMAKE_CXX_STANDARD_REQUIRED to ON instead of 20
+  * chore(cmake): drop redundant CMP0071 policy setting
+  * fix(cmake): remove duplicate COMPONENTS keyword in find_package
+
+  [ Alex Potanin ]
+  * fix(file-provider): make materialized item reconciliation converge
+
+  [ Julius van der Vaart ]
+  * perf(file-provider): stop stat-ing and fsyncing every log line
+  * fix(file-provider): mark locally created directories as visited
+  * fix(file-provider): report an unread directory's child count as unknown
+  * fix(file-provider): record a directory visit when nothing remote changed
+  * perf(file-provider): answer logical-address lookups from the index
+  * perf(file-provider): repair and deduplicate logical addresses in one walk
+  * fix(file-provider): mark locally created directories as visited
+  * test(file-provider): add remote-change propagation regression tests
+  * fix(file-provider): keep trashed rows out of the working-set scan
+  * fix(file-provider): do not log expected noSuchItem when pinning a subtree
+  * fix(file-provider): wait for account setup instead of failing early requests
+
+  [ Gromhold ]
+  * fix(e2ee): wrap mnemonic text in dialog
+
+  [ dsyzov ]
+  * fix(editlocally): show correct message when file lock has no expiry
+
+  [ Hannah von Reth ]
+  * fix(linux/vfs): Add socket api call for hydration
+
+  [ Ben Luka Domnick ]
+  * docs(macos): update Xcode scheme reference in development guide
+
+  [ JanSndr ]
+  * docs: document finding Team ID for free Apple developer accounts (#10739)
+
+  [ Mr Beedell, Roke Julian Lockhart ]
+  * Correct the debug archive generation instructions in the bug report template.
+
+  [ Matt McFarland ]
+  * fix(macOS): render Qt Quick windows on the integrated GPU
+
+  [ xavi-b ]
+  * fix(linux/vfs): Copy missing openvfs/config.json for AppImage
+
+  [ Carl Schwan ]
+  * fix: Handle activity id as a string
+
+ -- István Váradi <ivaradi@varadiistvan.hu>  Tue, 13 Oct 2026 15:08:49 +0000
+
 nextcloud-desktop (34.0.0) jammy; urgency=medium
 
   [ Jyrki Gadinger ]
