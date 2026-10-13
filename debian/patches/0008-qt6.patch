@@ -62,10 +62,10 @@ index 45d7d1773e..3df1b398a0 100644
  #include <windows.h>
  #else
 diff --git a/src/common/common.cmake b/src/common/common.cmake
-index b618bdbead..cc9ca1d956 100644
+index d00de2b0a4..3bf59fc4cd 100644
 --- a/src/common/common.cmake
 +++ b/src/common/common.cmake
-@@ -48,3 +48,5 @@ elseif(UNIX AND NOT APPLE)
+@@ -55,3 +55,5 @@ elseif(UNIX AND NOT APPLE)
  endif()
  
  configure_file(${CMAKE_CURRENT_LIST_DIR}/vfspluginmetadata.json.in ${CMAKE_CURRENT_BINARY_DIR}/vfspluginmetadata.json)
@@ -662,19 +662,19 @@ index a48d341c2e..09577a4eee 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index c708f20e5e..3daf1197c1 100644
+index b7b529b59b..9386bd12d7 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
-@@ -3,7 +3,7 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
- project(gui)
+@@ -5,7 +5,7 @@ project(gui)
+ include(CheckQmlWindowCloseShortcuts)
+ 
  find_package(Qt${QT_MAJOR_VERSION} REQUIRED COMPONENTS Widgets Svg Qml Quick QuickControls2 QuickWidgets Xml Network)
 -find_package(KF6Archive REQUIRED)
 +find_package(KF6Archive)
  find_package(KF6GuiAddons)
  
  if(CMAKE_BUILD_TYPE MATCHES Debug)
-@@ -286,6 +286,12 @@ IF(BUILD_UPDATER)
+@@ -288,6 +288,12 @@ IF(BUILD_UPDATER)
      )
  endif()
  
@@ -687,7 +687,7 @@ index c708f20e5e..3daf1197c1 100644
  add_subdirectory(search)
  add_subdirectory(sharing)
  include(assistant/CMakeLists.txt)
-@@ -587,10 +593,17 @@ target_link_libraries(nextcloudCore
+@@ -620,10 +626,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -706,7 +706,7 @@ index c708f20e5e..3daf1197c1 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -854,3 +867,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -887,3 +900,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -852,7 +852,7 @@ index ca1026e419..9252c314fb 100644
  
                  onClicked: {
 diff --git a/src/gui/accountmanager.cpp b/src/gui/accountmanager.cpp
-index 75c1f6c6ce..e3019302e8 100644
+index ff5e964ca1..668db13d16 100644
 --- a/src/gui/accountmanager.cpp
 +++ b/src/gui/accountmanager.cpp
 @@ -12,6 +12,7 @@
@@ -863,7 +863,7 @@ index 75c1f6c6ce..e3019302e8 100644
  #include "libsync/clientsideencryption.h"
  #include "libsync/configfile.h"
  #include "libsync/cookiejar.h"
-@@ -859,12 +860,12 @@ void AccountManager::updateServerManagedSettings()
+@@ -877,12 +878,12 @@ void AccountManager::updateServerManagedSettings()
          }
          const auto accountSettings = account->account()->serverManagedSettings();
          merged.schemaVersion = qMax(merged.schemaVersion, accountSettings.schemaVersion);
@@ -916,7 +916,7 @@ index 2c7918b466..4deed23a93 100644
  #include <QSettings>
  #include <QTimer>
 diff --git a/src/gui/activity/activitydata.cpp b/src/gui/activity/activitydata.cpp
-index 8d41c85cdd..9f9395e84f 100644
+index 347f5f2865..7e7da48870 100644
 --- a/src/gui/activity/activitydata.cpp
 +++ b/src/gui/activity/activitydata.cpp
 @@ -8,6 +8,7 @@
@@ -1145,7 +1145,7 @@ index 015344b3eb..83548c7e8a 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index 0f1cfc2484..e9ee6c1009 100644
+index f3c4568077..20f3cd3d06 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -32,6 +32,7 @@
@@ -1156,7 +1156,7 @@ index 0f1cfc2484..e9ee6c1009 100644
  
  #include "config.h"
  #include "settings/migration.h"
-@@ -1268,7 +1269,7 @@ void Application::setupTranslations()
+@@ -1272,7 +1273,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -1555,7 +1555,7 @@ diff --git a/src/gui/integration/FileActionsWindow.qml b/src/gui/integration/Fil
 similarity index 98%
 rename from src/gui/integration/FileActionsWindow.qml
 rename to src/gui/integration/FileActionsWindow.qml.in
-index 5b8325647e..cb66b59028 100644
+index ca866e9d70..1a632e1953 100644
 --- a/src/gui/integration/FileActionsWindow.qml
 +++ b/src/gui/integration/FileActionsWindow.qml.in
 @@ -3,7 +3,7 @@
@@ -1567,7 +1567,7 @@ index 5b8325647e..cb66b59028 100644
  
  import QtQuick
  import QtQuick.Window
-@@ -150,7 +150,6 @@ ApplicationWindow {
+@@ -155,7 +155,6 @@ ApplicationWindow {
                          color: palette.windowText
                          width: Style.minimumActivityItemHeight
                          height: Style.minimumActivityItemHeight
@@ -2901,7 +2901,7 @@ index dc2cfe6022..9eb7a4ad9a 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index 31c628d752..607e73d8b3 100644
+index 548f873e1a..5efb7abf39 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -46,6 +46,8 @@
@@ -2921,7 +2921,7 @@ index 31c628d752..607e73d8b3 100644
      _trayEngine->addImageProvider("avatars", new ImageProvider);
      _trayEngine->addImageProvider(QLatin1String("svgimage-custom-color"), new OCC::Ui::SvgImageProvider);
      _trayEngine->addImageProvider(QLatin1String("tray-image-provider"), new TrayImageProvider);
-@@ -419,11 +422,11 @@ void Systray::showSearchWindow(int userIndex)
+@@ -423,11 +426,11 @@ void Systray::showSearchWindow(int userIndex)
          return;
      }
  
@@ -2937,7 +2937,7 @@ index 31c628d752..607e73d8b3 100644
          return;
      }
  
-@@ -435,7 +438,7 @@ void Systray::showSearchWindow(int userIndex)
+@@ -439,7 +442,7 @@ void Systray::showSearchWindow(int userIndex)
                      }},
          {"accountId", targetUserId},
      };
@@ -2946,7 +2946,7 @@ index 31c628d752..607e73d8b3 100644
      const auto window = qobject_cast<QQuickWindow *>(createdObject);
      if (!window) {
          qCWarning(lcSystray) << "Search window resulted in creation of object that was not a window!";
-@@ -885,14 +888,14 @@ void Systray::createUnifiedSharingDialog(const AccountPtr &account, const QStrin
+@@ -889,14 +892,14 @@ void Systray::createUnifiedSharingDialog(const AccountPtr &account, const QStrin
          {"remotePath", remotePath},
      };
  
@@ -3016,7 +3016,7 @@ index 522db8d7f9..c7b1aa6bf3 100644
  #ifdef BUILD_FILE_PROVIDER_MODULE
  #include "gui/macOS/fileprovider.h"
 diff --git a/src/gui/trayaccountpopup_qt.cpp b/src/gui/trayaccountpopup_qt.cpp
-index 449ca57a93..d19b7d5b76 100644
+index 8a352d5458..853bc7e5f9 100644
 --- a/src/gui/trayaccountpopup_qt.cpp
 +++ b/src/gui/trayaccountpopup_qt.cpp
 @@ -5,6 +5,8 @@
@@ -3041,7 +3041,7 @@ index bc14986d1f..0271059353 100644
  #include <QTimer>
  #include <QJsonDocument>
 diff --git a/src/gui/wizard/accountwizardcontroller.cpp b/src/gui/wizard/accountwizardcontroller.cpp
-index 292128ce96..f7e3d451eb 100644
+index 7739de43d0..8bc980d395 100644
 --- a/src/gui/wizard/accountwizardcontroller.cpp
 +++ b/src/gui/wizard/accountwizardcontroller.cpp
 @@ -5,6 +5,8 @@
@@ -3053,7 +3053,7 @@ index 292128ce96..f7e3d451eb 100644
  #include "account.h"
  #include "accountmanager.h"
  #include "clientproxy.h"
-@@ -2147,7 +2149,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
+@@ -2168,7 +2170,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
          break;
      }
  
@@ -3082,7 +3082,7 @@ diff --git a/src/gui/wizard/qml/WizardButton.qml b/src/gui/wizard/qml/WizardButt
 similarity index 93%
 rename from src/gui/wizard/qml/WizardButton.qml
 rename to src/gui/wizard/qml/WizardButton.qml.in
-index 9f2681b3f2..73183f07ae 100644
+index 5dcb572235..d8305aa2c0 100644
 --- a/src/gui/wizard/qml/WizardButton.qml
 +++ b/src/gui/wizard/qml/WizardButton.qml.in
 @@ -5,7 +5,7 @@
@@ -3094,7 +3094,7 @@ index 9f2681b3f2..73183f07ae 100644
  import QtQuick.Layouts
  import Style
  
-@@ -56,15 +56,7 @@ BasicControls.Button {
+@@ -60,15 +60,7 @@ BasicControls.Button {
                  Accessible.ignored: true
              }
  
@@ -3145,7 +3145,7 @@ index 4ac379ccbd..ad2a95095f 100644
              Accessible.ignored: true
          }
 diff --git a/src/libsync/CMakeLists.txt b/src/libsync/CMakeLists.txt
-index 0308c85393..25a1422345 100644
+index e43884a074..4f40ad0c48 100644
 --- a/src/libsync/CMakeLists.txt
 +++ b/src/libsync/CMakeLists.txt
 @@ -2,8 +2,9 @@
@@ -3168,7 +3168,7 @@ index 0308c85393..25a1422345 100644
  )
  
  if (WIN32)
-@@ -227,13 +230,14 @@ set(creds_HEADERS
+@@ -232,13 +235,14 @@ set(creds_HEADERS
      creds/httpcredentials.h
  )
  
@@ -3188,7 +3188,7 @@ index 0308c85393..25a1422345 100644
  message(STATUS "HAS_CLOCK_CAST: ${HAS_CLOCK_CAST}")
  
  if(HAS_CLOCK_CAST)
-@@ -271,7 +275,7 @@ target_link_libraries(nextcloudsync
+@@ -276,7 +280,7 @@ target_link_libraries(nextcloudsync
    Qt::Gui
    Qt::Svg
    Qt::Widgets
@@ -3197,7 +3197,7 @@ index 0308c85393..25a1422345 100644
    Qt::Core5Compat
  )
  
-@@ -288,6 +292,11 @@ if(TARGET OpenVFS::OpenVFS)
+@@ -293,6 +297,11 @@ if(TARGET OpenVFS::OpenVFS)
    )
  endif()
  
@@ -3210,7 +3210,7 @@ index 0308c85393..25a1422345 100644
      PRIVATE
          cxx_std_17
 diff --git a/src/libsync/abstractnetworkjob.cpp b/src/libsync/abstractnetworkjob.cpp
-index 85b38f7163..7dcb92bc7b 100644
+index 404b94c6a4..ad1a79c88a 100644
 --- a/src/libsync/abstractnetworkjob.cpp
 +++ b/src/libsync/abstractnetworkjob.cpp
 @@ -5,6 +5,7 @@
@@ -3221,7 +3221,7 @@ index 85b38f7163..7dcb92bc7b 100644
  #include "networkjobs.h"
  #include "account.h"
  #include "owncloudpropagator.h"
-@@ -291,9 +292,7 @@ void AbstractNetworkJob::slotFinished()
+@@ -290,9 +291,7 @@ void AbstractNetworkJob::slotFinished()
                          << " origin=" << requestedUrl.host() << ":" << requestedUrl.port()
                          << " target=" << redirectUrl.host() << ":" << redirectUrl.port();
  
@@ -3254,7 +3254,7 @@ index 6fb29e0a4f..8475cc8848 100644
                                    << reply->url().toString()
                                    << reply->request().rawHeader("X-Request-ID"_ba)
 diff --git a/src/libsync/account.cpp b/src/libsync/account.cpp
-index ab9a46adea..c44cddbbfc 100644
+index ab0647feb9..f1c4329ccf 100644
 --- a/src/libsync/account.cpp
 +++ b/src/libsync/account.cpp
 @@ -24,6 +24,7 @@
@@ -3265,7 +3265,7 @@ index ab9a46adea..c44cddbbfc 100644
  #include "clientsideencryption.h"
  #include "ocsuserstatusconnector.h"
  
-@@ -1315,7 +1316,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
+@@ -1314,7 +1315,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
              return;
          }
  
@@ -3761,7 +3761,7 @@ index c30564cfd3..ee25140553 100644
          if (policy != validKeys.cend() && policy->serverEnforceable && isServerKeyValueValid(key, value)) {
              serverSettings.enforced.insert(key, value);
 diff --git a/src/libsync/syncengine.cpp b/src/libsync/syncengine.cpp
-index 0a7aa38dd1..801111d959 100644
+index c053030180..878c892875 100644
 --- a/src/libsync/syncengine.cpp
 +++ b/src/libsync/syncengine.cpp
 @@ -18,6 +18,7 @@
@@ -3889,7 +3889,7 @@ index 4dae6e38cb..1c902ce37f 100644
      }
  
 diff --git a/test/syncenginetestutils.cpp b/test/syncenginetestutils.cpp
-index b0f774a948..87dc67d765 100644
+index f98b53ef06..18fdd08e99 100644
 --- a/test/syncenginetestutils.cpp
 +++ b/test/syncenginetestutils.cpp
 @@ -440,7 +440,7 @@ FakePropfindReply::FakePropfindReply(FileInfo &remoteRootFileInfo, QNetworkAcces
