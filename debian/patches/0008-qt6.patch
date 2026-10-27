@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 30f1d50973..266f0cfb34 100644
+index 86836a126a..c7555af5a8 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -30,7 +30,7 @@ set(BIN_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -11,7 +11,7 @@ index 30f1d50973..266f0cfb34 100644
  
  # CfAPI Shell Extensions
  set( CFAPI_SHELL_EXTENSIONS_LIB_NAME CfApiShellExtensions )
-@@ -81,13 +81,11 @@ endif()
+@@ -86,13 +86,11 @@ endif()
  
  set(APPLE_SUPPRESS_X11_WARNING ON)
  
@@ -26,7 +26,7 @@ index 30f1d50973..266f0cfb34 100644
  include(ECMMarkNonGuiExecutable)
  include(ECMSetupVersion)
  include(ECMQmlModule)
-@@ -153,7 +151,7 @@ if(APPLE AND BUILD_OWNCLOUD_OSX_BUNDLE)
+@@ -158,7 +156,7 @@ if(APPLE AND BUILD_OWNCLOUD_OSX_BUNDLE)
      add_definitions(-DBUILD_OWNCLOUD_OSX_BUNDLE)
  endif()
  
@@ -49,7 +49,7 @@ index e2669c5e56..f7d743c398 100644
  find_package(Qt${QT_MAJOR_VERSION}Core ${REQUIRED_QT_VERSION} CONFIG QUIET)
  set_package_properties(Qt${QT_MAJOR_VERSION}Core PROPERTIES
 diff --git a/src/cmd/cmd.cpp b/src/cmd/cmd.cpp
-index 45d7d1773e..3df1b398a0 100644
+index 2976fc9812..93bd8f8c36 100644
 --- a/src/cmd/cmd.cpp
 +++ b/src/cmd/cmd.cpp
 @@ -50,6 +50,8 @@
@@ -608,7 +608,7 @@ index 0000000000..5d6db9b79e
 +//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
 diff --git a/src/common/syncjournaldb.cpp b/src/common/syncjournaldb.cpp
-index acd97717c0..3249befd46 100644
+index 79986b053f..62f316ebcd 100644
 --- a/src/common/syncjournaldb.cpp
 +++ b/src/common/syncjournaldb.cpp
 @@ -28,6 +28,8 @@
@@ -620,7 +620,7 @@ index acd97717c0..3249befd46 100644
  // SQL expression to check whether path.startswith(prefix + '/')
  // Note: '/' + 1 == '0'
  #define IS_PREFIX_PATH_OF(prefix, path) \
-@@ -3354,4 +3356,4 @@ QDebug& operator<<(QDebug &stream, const SyncJournalFileRecord::EncryptionStatus
+@@ -3343,4 +3345,4 @@ QDebug& operator<<(QDebug &stream, const SyncJournalFileRecord::EncryptionStatus
  
  } // namespace OCC
  
@@ -662,7 +662,7 @@ index a48d341c2e..09577a4eee 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index b7b529b59b..9386bd12d7 100644
+index de2a5cfec7..c071276715 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -5,7 +5,7 @@ project(gui)
@@ -687,7 +687,7 @@ index b7b529b59b..9386bd12d7 100644
  add_subdirectory(search)
  add_subdirectory(sharing)
  include(assistant/CMakeLists.txt)
-@@ -620,10 +626,17 @@ target_link_libraries(nextcloudCore
+@@ -628,10 +634,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -706,7 +706,7 @@ index b7b529b59b..9386bd12d7 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -887,3 +900,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -895,3 +908,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -891,7 +891,7 @@ index de392fa47f..3a71dfe638 100644
  #include "theme.h"
  #include "foldercreationdialog.h"
 diff --git a/src/gui/accountsetupfromcommandlinejob.cpp b/src/gui/accountsetupfromcommandlinejob.cpp
-index 0ad321754d..3d80caa918 100644
+index 11a7ad087e..97d3053bbd 100644
 --- a/src/gui/accountsetupfromcommandlinejob.cpp
 +++ b/src/gui/accountsetupfromcommandlinejob.cpp
 @@ -5,6 +5,8 @@
@@ -928,7 +928,7 @@ index 347f5f2865..7e7da48870 100644
  using namespace Qt::StringLiterals;
  
 diff --git a/src/gui/activity/activitylistmodel.cpp b/src/gui/activity/activitylistmodel.cpp
-index 8a3285122c..2b865040dc 100644
+index 857fc0a88c..7c2a0af365 100644
 --- a/src/gui/activity/activitylistmodel.cpp
 +++ b/src/gui/activity/activitylistmodel.cpp
 @@ -19,6 +19,7 @@
@@ -1145,7 +1145,7 @@ index 015344b3eb..83548c7e8a 100644
  
  void AdvancedSettings::slotRemotePollIntervalChanged(int seconds)
 diff --git a/src/gui/application.cpp b/src/gui/application.cpp
-index e3cc5fd65f..46ddf4869a 100644
+index 6438a20c03..1f78aa4836 100644
 --- a/src/gui/application.cpp
 +++ b/src/gui/application.cpp
 @@ -32,6 +32,7 @@
@@ -1155,8 +1155,8 @@ index e3cc5fd65f..46ddf4869a 100644
 +#include "common/qtcompat.h"
  
  #include "config.h"
- #include "settings/migration.h"
-@@ -1272,7 +1273,7 @@ void Application::setupTranslations()
+ #include "settings/managedsettingsschema.h"
+@@ -1284,7 +1285,7 @@ void Application::setupTranslations()
      qCInfo(lcApplication) << "System UI languages are:" << QLocale::system().uiLanguages();
      auto choosenLanguage = enforcedLanguage();
      if (choosenLanguage.isEmpty()) {
@@ -3004,7 +3004,7 @@ index 53b9990609..49b3fe904b 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index 522db8d7f9..c7b1aa6bf3 100644
+index 4b7a47fdc2..99300b2504 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
 @@ -25,6 +25,7 @@
@@ -3016,7 +3016,7 @@ index 522db8d7f9..c7b1aa6bf3 100644
  #ifdef BUILD_FILE_PROVIDER_MODULE
  #include "gui/macOS/fileprovider.h"
 diff --git a/src/gui/trayaccountpopup_qt.cpp b/src/gui/trayaccountpopup_qt.cpp
-index 8a352d5458..853bc7e5f9 100644
+index c32e12f709..b6b3420b5e 100644
 --- a/src/gui/trayaccountpopup_qt.cpp
 +++ b/src/gui/trayaccountpopup_qt.cpp
 @@ -5,6 +5,8 @@
@@ -3041,7 +3041,7 @@ index bc14986d1f..0271059353 100644
  #include <QTimer>
  #include <QJsonDocument>
 diff --git a/src/gui/wizard/accountwizardcontroller.cpp b/src/gui/wizard/accountwizardcontroller.cpp
-index 7739de43d0..8bc980d395 100644
+index 6f705e1fea..2e8f02bd75 100644
 --- a/src/gui/wizard/accountwizardcontroller.cpp
 +++ b/src/gui/wizard/accountwizardcontroller.cpp
 @@ -5,6 +5,8 @@
@@ -3053,7 +3053,7 @@ index 7739de43d0..8bc980d395 100644
  #include "account.h"
  #include "accountmanager.h"
  #include "clientproxy.h"
-@@ -2168,7 +2170,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
+@@ -2184,7 +2186,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
          break;
      }
  
@@ -3210,7 +3210,7 @@ index e43884a074..4f40ad0c48 100644
      PRIVATE
          cxx_std_17
 diff --git a/src/libsync/abstractnetworkjob.cpp b/src/libsync/abstractnetworkjob.cpp
-index 85b38f7163..7dcb92bc7b 100644
+index 404b94c6a4..ad1a79c88a 100644
 --- a/src/libsync/abstractnetworkjob.cpp
 +++ b/src/libsync/abstractnetworkjob.cpp
 @@ -5,6 +5,7 @@
@@ -3221,7 +3221,7 @@ index 85b38f7163..7dcb92bc7b 100644
  #include "networkjobs.h"
  #include "account.h"
  #include "owncloudpropagator.h"
-@@ -291,9 +292,7 @@ void AbstractNetworkJob::slotFinished()
+@@ -290,9 +291,7 @@ void AbstractNetworkJob::slotFinished()
                          << " origin=" << requestedUrl.host() << ":" << requestedUrl.port()
                          << " target=" << redirectUrl.host() << ":" << redirectUrl.port();
  
@@ -3254,7 +3254,7 @@ index 6fb29e0a4f..8475cc8848 100644
                                    << reply->url().toString()
                                    << reply->request().rawHeader("X-Request-ID"_ba)
 diff --git a/src/libsync/account.cpp b/src/libsync/account.cpp
-index fdc7fdefb9..f5a634dd4d 100644
+index ab0647feb9..f1c4329ccf 100644
 --- a/src/libsync/account.cpp
 +++ b/src/libsync/account.cpp
 @@ -24,6 +24,7 @@
@@ -3265,7 +3265,7 @@ index fdc7fdefb9..f5a634dd4d 100644
  #include "clientsideencryption.h"
  #include "ocsuserstatusconnector.h"
  
-@@ -1315,7 +1316,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
+@@ -1314,7 +1315,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
              return;
          }
  
@@ -3362,7 +3362,7 @@ index 73a10d4eb2..f0cab6c0cb 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 53dd69b452..418fe55d88 100644
+index 8c44fb4cc8..89e2599690 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -3733,6 +3733,19 @@ index 4bc20fc37e..0a13d680c4 100644
      const auto jsonDoc = QJsonDocument::fromJson(fileIdsJson.toUtf8(), &parseError);
  
      if (parseError.error != QJsonParseError::NoError) {
+diff --git a/src/libsync/settings/managedsettingsschema.cpp b/src/libsync/settings/managedsettingsschema.cpp
+index 9109d1ba01..a66be1dfee 100644
+--- a/src/libsync/settings/managedsettingsschema.cpp
++++ b/src/libsync/settings/managedsettingsschema.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include "settings/managedsettingsschema.h"
+ 
++#include "common/qtcompat.h"
++
+ #include <QDir>
+ #include <QJsonArray>
+ #include <QJsonDocument>
 diff --git a/src/libsync/settings/servermanagedsettings.cpp b/src/libsync/settings/servermanagedsettings.cpp
 index c30564cfd3..ee25140553 100644
 --- a/src/libsync/settings/servermanagedsettings.cpp
@@ -3785,7 +3798,7 @@ index 45b24351ef..3bd3ee24b4 100644
  #include "filesystem.h"
  
 diff --git a/src/libsync/theme.cpp b/src/libsync/theme.cpp
-index 57286be498..4f643cdb77 100644
+index 2dbc450913..a062dab2e7 100644
 --- a/src/libsync/theme.cpp
 +++ b/src/libsync/theme.cpp
 @@ -9,6 +9,7 @@
@@ -3796,7 +3809,7 @@ index 57286be498..4f643cdb77 100644
  
  #include <QtCore>
  #ifndef TOKEN_AUTH_ONLY
-@@ -933,14 +934,12 @@ QString Theme::versionSwitchOutput() const
+@@ -964,14 +965,12 @@ QString Theme::versionSwitchOutput() const
  
  double Theme::getColorDarkness(const QColor &color)
  {
@@ -3813,7 +3826,7 @@ index 57286be498..4f643cdb77 100644
  }
  
  QColor Theme::settingsPanelColor(const QPalette &palette)
-@@ -1078,7 +1077,7 @@ QColor Theme::destructiveActionTextColor() const
+@@ -1109,7 +1108,7 @@ QColor Theme::destructiveActionTextColor() const
  void Theme::connectToPaletteSignal() const
  {
      if (const auto ptr = qobject_cast<QGuiApplication*>(qApp)) {
@@ -3822,7 +3835,7 @@ index 57286be498..4f643cdb77 100644
      }
  }
  
-@@ -1121,19 +1120,6 @@ QVariantMap Theme::systemPalette() const
+@@ -1152,19 +1151,6 @@ QVariantMap Theme::systemPalette() const
  bool Theme::darkMode() const
  {
      connectToPaletteSignal();
@@ -3842,7 +3855,7 @@ index 57286be498..4f643cdb77 100644
  
  #ifdef Q_OS_WIN
      static const auto darkModeSubkey = QStringLiteral("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
-@@ -1144,7 +1130,8 @@ bool Theme::darkMode() const
+@@ -1175,7 +1161,8 @@ bool Theme::darkMode() const
          }
      }
  #endif
@@ -3889,7 +3902,7 @@ index 4dae6e38cb..1c902ce37f 100644
      }
  
 diff --git a/test/syncenginetestutils.cpp b/test/syncenginetestutils.cpp
-index c7980aa814..e9db5b623e 100644
+index f98b53ef06..18fdd08e99 100644
 --- a/test/syncenginetestutils.cpp
 +++ b/test/syncenginetestutils.cpp
 @@ -440,7 +440,7 @@ FakePropfindReply::FakePropfindReply(FileInfo &remoteRootFileInfo, QNetworkAcces
@@ -3975,7 +3988,7 @@ index bb0d5c4e6c..6a91b0f7c0 100644
  
  #include "account.h"
 diff --git a/test/testfolderman.cpp b/test/testfolderman.cpp
-index cec7e7e361..248bb204b0 100644
+index fd460e0dcb..bae2aa6b18 100644
 --- a/test/testfolderman.cpp
 +++ b/test/testfolderman.cpp
 @@ -14,6 +14,7 @@
@@ -4040,7 +4053,7 @@ index ea7360cafc..be0d8dd02d 100644
  #include <QFile>
  #include <QtTest>
 diff --git a/test/testsyncjournaldb.cpp b/test/testsyncjournaldb.cpp
-index eea8802e03..74b54fddab 100644
+index 8590a22a11..97719a2166 100644
 --- a/test/testsyncjournaldb.cpp
 +++ b/test/testsyncjournaldb.cpp
 @@ -14,6 +14,7 @@
