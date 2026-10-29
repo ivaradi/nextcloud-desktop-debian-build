@@ -3362,7 +3362,7 @@ index 73a10d4eb2..f0cab6c0cb 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 8c44fb4cc8..89e2599690 100644
+index c69903220e..4dbc58b53f 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -3410,7 +3410,7 @@ index ac7b14ec71..f0592a3feb 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/libsync/filesystem.cpp b/src/libsync/filesystem.cpp
-index 0b1009b9d1..a09b7f4916 100644
+index dcb32a1339..c6df7617d1 100644
 --- a/src/libsync/filesystem.cpp
 +++ b/src/libsync/filesystem.cpp
 @@ -7,6 +7,7 @@
@@ -3902,10 +3902,10 @@ index 4dae6e38cb..1c902ce37f 100644
      }
  
 diff --git a/test/syncenginetestutils.cpp b/test/syncenginetestutils.cpp
-index f98b53ef06..18fdd08e99 100644
+index 9b2a3e16c1..9a9e7d8768 100644
 --- a/test/syncenginetestutils.cpp
 +++ b/test/syncenginetestutils.cpp
-@@ -440,7 +440,7 @@ FakePropfindReply::FakePropfindReply(FileInfo &remoteRootFileInfo, QNetworkAcces
+@@ -446,7 +446,7 @@ FakePropfindReply::FakePropfindReply(FileInfo &remoteRootFileInfo, QNetworkAcces
          xml.writeTextElement(davUri, QStringLiteral("getcontentlength"), QString::number(fileInfo.size));
          xml.writeTextElement(davUri, QStringLiteral("getetag"), QStringLiteral("\"%1\"").arg(QString::fromLatin1(fileInfo.etag)));
          xml.writeTextElement(ocUri, QStringLiteral("quota-available-bytes"), fileInfo.folderQuota.bytesAvailableString());
@@ -3964,17 +3964,17 @@ index a0c21bd2d1..ba603fb759 100644
  using namespace OCC;
  
 diff --git a/test/testfilesystem.cpp b/test/testfilesystem.cpp
-index 2df15c6b43..a1348042bf 100644
+index 460c6f70cb..c735fd9706 100644
 --- a/test/testfilesystem.cpp
 +++ b/test/testfilesystem.cpp
-@@ -12,6 +12,7 @@
- #include <QTemporaryFile>
+@@ -14,6 +14,7 @@
+ #include <functional>
  
  #include "common/filesystembase.h"
 +#include "common/qtcompat.h"
  #include "logger.h"
+ #include "syncenginetestutils.h"
  
- #include "libsync/filesystem.h"
 diff --git a/test/testfolder.cpp b/test/testfolder.cpp
 index bb0d5c4e6c..6a91b0f7c0 100644
 --- a/test/testfolder.cpp
@@ -4000,12 +4000,12 @@ index fd460e0dcb..bae2aa6b18 100644
  #include "account.h"
  #include "accountstate.h"
 diff --git a/test/testlocaldiscovery.cpp b/test/testlocaldiscovery.cpp
-index 894f72f03f..61be117c0f 100644
+index b99da86259..27e7fd3116 100644
 --- a/test/testlocaldiscovery.cpp
 +++ b/test/testlocaldiscovery.cpp
-@@ -18,6 +18,8 @@
- #include <QThreadPool>
- #include <QTemporaryDir>
+@@ -24,6 +24,8 @@
+ #include <functional>
+ #include <system_error>
  
 +#include "common/qtcompat.h"
 +
