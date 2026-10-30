@@ -608,7 +608,7 @@ index 0000000000..5d6db9b79e
 +//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
 diff --git a/src/common/syncjournaldb.cpp b/src/common/syncjournaldb.cpp
-index 79986b053f..62f316ebcd 100644
+index efb5e0e449..7b23848599 100644
 --- a/src/common/syncjournaldb.cpp
 +++ b/src/common/syncjournaldb.cpp
 @@ -28,6 +28,8 @@
@@ -620,13 +620,6 @@ index 79986b053f..62f316ebcd 100644
  // SQL expression to check whether path.startswith(prefix + '/')
  // Note: '/' + 1 == '0'
  #define IS_PREFIX_PATH_OF(prefix, path) \
-@@ -3343,4 +3345,4 @@ QDebug& operator<<(QDebug &stream, const SyncJournalFileRecord::EncryptionStatus
- 
- } // namespace OCC
- 
--#include "moc_syncjournaldb.cpp"
-\ No newline at end of file
-+#include "moc_syncjournaldb.cpp"
 diff --git a/src/csync/csync_exclude.cpp b/src/csync/csync_exclude.cpp
 index a48d341c2e..09577a4eee 100644
 --- a/src/csync/csync_exclude.cpp
@@ -3362,7 +3355,7 @@ index 73a10d4eb2..f0cab6c0cb 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index c69903220e..4dbc58b53f 100644
+index 792cc93464..e258cc1e8d 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -3988,7 +3981,7 @@ index bb0d5c4e6c..6a91b0f7c0 100644
  
  #include "account.h"
 diff --git a/test/testfolderman.cpp b/test/testfolderman.cpp
-index fd460e0dcb..bae2aa6b18 100644
+index cec7e7e361..248bb204b0 100644
 --- a/test/testfolderman.cpp
 +++ b/test/testfolderman.cpp
 @@ -14,6 +14,7 @@
@@ -4053,7 +4046,7 @@ index ea7360cafc..be0d8dd02d 100644
  #include <QFile>
  #include <QtTest>
 diff --git a/test/testsyncjournaldb.cpp b/test/testsyncjournaldb.cpp
-index 8590a22a11..97719a2166 100644
+index 5510d1e2cb..e391e4f052 100644
 --- a/test/testsyncjournaldb.cpp
 +++ b/test/testsyncjournaldb.cpp
 @@ -14,6 +14,7 @@
