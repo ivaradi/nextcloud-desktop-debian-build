@@ -608,7 +608,7 @@ index 0000000000..5d6db9b79e
 +//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
 diff --git a/src/common/syncjournaldb.cpp b/src/common/syncjournaldb.cpp
-index 79986b053f..62f316ebcd 100644
+index dfc9c3934d..a029f60707 100644
 --- a/src/common/syncjournaldb.cpp
 +++ b/src/common/syncjournaldb.cpp
 @@ -28,6 +28,8 @@
@@ -620,13 +620,6 @@ index 79986b053f..62f316ebcd 100644
  // SQL expression to check whether path.startswith(prefix + '/')
  // Note: '/' + 1 == '0'
  #define IS_PREFIX_PATH_OF(prefix, path) \
-@@ -3343,4 +3345,4 @@ QDebug& operator<<(QDebug &stream, const SyncJournalFileRecord::EncryptionStatus
- 
- } // namespace OCC
- 
--#include "moc_syncjournaldb.cpp"
-\ No newline at end of file
-+#include "moc_syncjournaldb.cpp"
 diff --git a/src/csync/csync_exclude.cpp b/src/csync/csync_exclude.cpp
 index a48d341c2e..09577a4eee 100644
 --- a/src/csync/csync_exclude.cpp
@@ -1092,7 +1085,7 @@ index bc21faee16..465ebb62a7 100644
  #include <QJsonDocument>
  #include <QJsonObject>
 diff --git a/src/gui/advancedsettings.cpp b/src/gui/advancedsettings.cpp
-index 015344b3eb..83548c7e8a 100644
+index 0600b200f9..841179138f 100644
 --- a/src/gui/advancedsettings.cpp
 +++ b/src/gui/advancedsettings.cpp
 @@ -28,7 +28,9 @@
@@ -1113,7 +1106,7 @@ index 015344b3eb..83548c7e8a 100644
  bool createDebugArchive(const QString &filename)
  {
      const auto entries = createDebugArchiveFileList();
-@@ -222,6 +225,8 @@ bool createDebugArchive(const QString &filename)
+@@ -225,6 +228,8 @@ bool createDebugArchive(const QString &filename)
      return true;
  }
  
@@ -1122,7 +1115,7 @@ index 015344b3eb..83548c7e8a 100644
  } // namespace
  
  namespace OCC {
-@@ -443,6 +448,7 @@ void AdvancedSettings::slotCreateDebugArchive()
+@@ -446,6 +451,7 @@ void AdvancedSettings::slotCreateDebugArchive()
          return;
      }
  
@@ -1130,7 +1123,7 @@ index 015344b3eb..83548c7e8a 100644
  #ifdef Q_OS_MACOS
      auto scopedAccess = Utility::MacSandboxSecurityScopedAccess::create(destination);
  
-@@ -463,6 +469,13 @@ void AdvancedSettings::slotCreateDebugArchive()
+@@ -466,6 +472,13 @@ void AdvancedSettings::slotCreateDebugArchive()
              tr("Redact information deemed sensitive before sharing! Debug archive created at %1").arg(destination.toLocalFile())
          );
      }
@@ -4053,7 +4046,7 @@ index ea7360cafc..be0d8dd02d 100644
  #include <QFile>
  #include <QtTest>
 diff --git a/test/testsyncjournaldb.cpp b/test/testsyncjournaldb.cpp
-index 8590a22a11..97719a2166 100644
+index 3ec050d0f5..e818d92238 100644
 --- a/test/testsyncjournaldb.cpp
 +++ b/test/testsyncjournaldb.cpp
 @@ -14,6 +14,7 @@
