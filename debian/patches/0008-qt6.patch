@@ -655,7 +655,7 @@ index a48d341c2e..09577a4eee 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index de2a5cfec7..c071276715 100644
+index 1b018ce19d..167b227007 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -5,7 +5,7 @@ project(gui)
@@ -680,7 +680,7 @@ index de2a5cfec7..c071276715 100644
  add_subdirectory(search)
  add_subdirectory(sharing)
  include(assistant/CMakeLists.txt)
-@@ -628,10 +634,17 @@ target_link_libraries(nextcloudCore
+@@ -629,10 +635,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -699,7 +699,7 @@ index de2a5cfec7..c071276715 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -895,3 +908,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -896,3 +909,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -2271,7 +2271,7 @@ diff --git a/src/gui/sharing/ShareListPage.qml b/src/gui/sharing/ShareListPage.q
 similarity index 98%
 rename from src/gui/sharing/ShareListPage.qml
 rename to src/gui/sharing/ShareListPage.qml.in
-index 47f884804d..548b6aeaea 100644
+index 93637d6c10..cf01298154 100644
 --- a/src/gui/sharing/ShareListPage.qml
 +++ b/src/gui/sharing/ShareListPage.qml.in
 @@ -3,13 +3,14 @@
@@ -2756,7 +2756,7 @@ index 3d29f46fbd..60d8e78fa4 100644
  
  }
 diff --git a/src/gui/sharing/sharingcontroller.cpp b/src/gui/sharing/sharingcontroller.cpp
-index cd89540c2a..3b944735f8 100644
+index d182072bd6..06378567bc 100644
 --- a/src/gui/sharing/sharingcontroller.cpp
 +++ b/src/gui/sharing/sharingcontroller.cpp
 @@ -5,6 +5,8 @@
@@ -2769,7 +2769,7 @@ index cd89540c2a..3b944735f8 100644
  #include <QJsonDocument>
  #include <QJsonObject>
 diff --git a/src/gui/sharing/sharingcontroller.h b/src/gui/sharing/sharingcontroller.h
-index 077531853f..e141cf0e62 100644
+index f2b22c55b9..88998738fc 100644
 --- a/src/gui/sharing/sharingcontroller.h
 +++ b/src/gui/sharing/sharingcontroller.h
 @@ -5,12 +5,14 @@
@@ -2861,7 +2861,7 @@ index d38831e584..6fa90d9bfa 100644
  namespace OCC::Gui::Sharing
  {
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index aa0f2218f0..1087dca3c0 100644
+index 1565e43cc1..93d18a949e 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
 @@ -17,6 +17,7 @@
@@ -2894,7 +2894,7 @@ index dc2cfe6022..9eb7a4ad9a 100644
          msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
      }
 diff --git a/src/gui/systray.cpp b/src/gui/systray.cpp
-index 548f873e1a..5efb7abf39 100644
+index b7d5208346..55d5f550c9 100644
 --- a/src/gui/systray.cpp
 +++ b/src/gui/systray.cpp
 @@ -46,6 +46,8 @@
@@ -2939,7 +2939,7 @@ index 548f873e1a..5efb7abf39 100644
      const auto window = qobject_cast<QQuickWindow *>(createdObject);
      if (!window) {
          qCWarning(lcSystray) << "Search window resulted in creation of object that was not a window!";
-@@ -889,14 +892,14 @@ void Systray::createUnifiedSharingDialog(const AccountPtr &account, const QStrin
+@@ -885,14 +888,14 @@ void Systray::createUnifiedSharingDialog(const AccountPtr &account, const QStrin
          {"remotePath", remotePath},
      };
  
@@ -2997,7 +2997,7 @@ index 53b9990609..49b3fe904b 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index 4b7a47fdc2..99300b2504 100644
+index 8f722efd17..ce545ce262 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
 @@ -25,6 +25,7 @@
@@ -3034,7 +3034,7 @@ index bc14986d1f..0271059353 100644
  #include <QTimer>
  #include <QJsonDocument>
 diff --git a/src/gui/wizard/accountwizardcontroller.cpp b/src/gui/wizard/accountwizardcontroller.cpp
-index 6f705e1fea..2e8f02bd75 100644
+index 080d21e7a5..5ed644a3ac 100644
 --- a/src/gui/wizard/accountwizardcontroller.cpp
 +++ b/src/gui/wizard/accountwizardcontroller.cpp
 @@ -5,6 +5,8 @@
@@ -3046,7 +3046,7 @@ index 6f705e1fea..2e8f02bd75 100644
  #include "account.h"
  #include "accountmanager.h"
  #include "clientproxy.h"
-@@ -2184,7 +2186,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
+@@ -2190,7 +2192,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
          break;
      }
  
@@ -3203,7 +3203,7 @@ index e43884a074..4f40ad0c48 100644
      PRIVATE
          cxx_std_17
 diff --git a/src/libsync/abstractnetworkjob.cpp b/src/libsync/abstractnetworkjob.cpp
-index 404b94c6a4..ad1a79c88a 100644
+index 6668e319a2..94eb6e6e16 100644
 --- a/src/libsync/abstractnetworkjob.cpp
 +++ b/src/libsync/abstractnetworkjob.cpp
 @@ -5,6 +5,7 @@
@@ -3214,7 +3214,7 @@ index 404b94c6a4..ad1a79c88a 100644
  #include "networkjobs.h"
  #include "account.h"
  #include "owncloudpropagator.h"
-@@ -290,9 +291,7 @@ void AbstractNetworkJob::slotFinished()
+@@ -292,9 +293,7 @@ void AbstractNetworkJob::slotFinished()
                          << " origin=" << requestedUrl.host() << ":" << requestedUrl.port()
                          << " target=" << redirectUrl.host() << ":" << redirectUrl.port();
  
@@ -3247,7 +3247,7 @@ index 6fb29e0a4f..8475cc8848 100644
                                    << reply->url().toString()
                                    << reply->request().rawHeader("X-Request-ID"_ba)
 diff --git a/src/libsync/account.cpp b/src/libsync/account.cpp
-index ab0647feb9..f1c4329ccf 100644
+index e1979bdd44..6f48564c47 100644
 --- a/src/libsync/account.cpp
 +++ b/src/libsync/account.cpp
 @@ -24,6 +24,7 @@
@@ -3258,7 +3258,7 @@ index ab0647feb9..f1c4329ccf 100644
  #include "clientsideencryption.h"
  #include "ocsuserstatusconnector.h"
  
-@@ -1314,7 +1315,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
+@@ -1329,7 +1330,8 @@ void Account::listRemoteFolder(QPromise<OCC::PlaceholderCreateInfo> *promise, co
              return;
          }
  
@@ -3269,7 +3269,7 @@ index ab0647feb9..f1c4329ccf 100644
  
      promise->start();
 diff --git a/src/libsync/capabilities.cpp b/src/libsync/capabilities.cpp
-index 80379d819a..6b73f41da4 100644
+index 0bd871d93b..059afd0a44 100644
 --- a/src/libsync/capabilities.cpp
 +++ b/src/libsync/capabilities.cpp
 @@ -14,6 +14,8 @@
@@ -3355,7 +3355,7 @@ index 73a10d4eb2..f0cab6c0cb 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index 792cc93464..e258cc1e8d 100644
+index c5fcdd6c85..9fd1e8a4f6 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -3634,7 +3634,7 @@ index 19370b0cd4..0074dc26fe 100644
  #include <QDir>
  #include <QRegularExpression>
 diff --git a/src/libsync/networkjobs.cpp b/src/libsync/networkjobs.cpp
-index ef511669a2..8266beedad 100644
+index c36b50fe28..f6aef9078c 100644
 --- a/src/libsync/networkjobs.cpp
 +++ b/src/libsync/networkjobs.cpp
 @@ -10,6 +10,7 @@
@@ -3727,7 +3727,7 @@ index 4bc20fc37e..0a13d680c4 100644
  
      if (parseError.error != QJsonParseError::NoError) {
 diff --git a/src/libsync/settings/managedsettingsschema.cpp b/src/libsync/settings/managedsettingsschema.cpp
-index 9109d1ba01..a66be1dfee 100644
+index 072d1194ea..486ecf5542 100644
 --- a/src/libsync/settings/managedsettingsschema.cpp
 +++ b/src/libsync/settings/managedsettingsschema.cpp
 @@ -5,6 +5,8 @@
@@ -3791,7 +3791,7 @@ index 45b24351ef..3bd3ee24b4 100644
  #include "filesystem.h"
  
 diff --git a/src/libsync/theme.cpp b/src/libsync/theme.cpp
-index 2dbc450913..a062dab2e7 100644
+index 936e95dca2..685e1941f7 100644
 --- a/src/libsync/theme.cpp
 +++ b/src/libsync/theme.cpp
 @@ -9,6 +9,7 @@
@@ -3895,7 +3895,7 @@ index 4dae6e38cb..1c902ce37f 100644
      }
  
 diff --git a/test/syncenginetestutils.cpp b/test/syncenginetestutils.cpp
-index 9b2a3e16c1..9a9e7d8768 100644
+index ff7756e23e..9741b2b355 100644
 --- a/test/syncenginetestutils.cpp
 +++ b/test/syncenginetestutils.cpp
 @@ -446,7 +446,7 @@ FakePropfindReply::FakePropfindReply(FileInfo &remoteRootFileInfo, QNetworkAcces
@@ -3908,7 +3908,7 @@ index 9b2a3e16c1..9a9e7d8768 100644
          if (fileInfo.isShared) {
              if (fileInfo.downloadForbidden) {
 diff --git a/test/testaccount.cpp b/test/testaccount.cpp
-index c127d38970..e7f24603ee 100644
+index 98a29d1234..647eddfe1c 100644
 --- a/test/testaccount.cpp
 +++ b/test/testaccount.cpp
 @@ -12,6 +12,7 @@
@@ -3981,10 +3981,10 @@ index bb0d5c4e6c..6a91b0f7c0 100644
  
  #include "account.h"
 diff --git a/test/testfolderman.cpp b/test/testfolderman.cpp
-index cec7e7e361..248bb204b0 100644
+index a895baeffe..bb0b84e83a 100644
 --- a/test/testfolderman.cpp
 +++ b/test/testfolderman.cpp
-@@ -14,6 +14,7 @@
+@@ -16,6 +16,7 @@
  
  #include "QtTest/qtestcase.h"
  #include "common/utility.h"
@@ -4006,12 +4006,12 @@ index b99da86259..27e7fd3116 100644
  using namespace Qt::StringLiterals;
  
 diff --git a/test/testnextcloudpropagator.cpp b/test/testnextcloudpropagator.cpp
-index ed1b30dde1..34414eff7e 100644
+index 6462e62be7..0d8fe2b389 100644
 --- a/test/testnextcloudpropagator.cpp
 +++ b/test/testnextcloudpropagator.cpp
-@@ -17,6 +17,8 @@
- #include "owncloudpropagator_p.h"
+@@ -18,6 +18,8 @@
  #include "syncenginetestutils.h"
+ #include "networkjobs.h"
  
 +#include "common/qtcompat.h"
 +
