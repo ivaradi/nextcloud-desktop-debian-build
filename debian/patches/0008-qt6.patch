@@ -3034,7 +3034,7 @@ index bc14986d1f..0271059353 100644
  #include <QTimer>
  #include <QJsonDocument>
 diff --git a/src/gui/wizard/accountwizardcontroller.cpp b/src/gui/wizard/accountwizardcontroller.cpp
-index 6f705e1fea..2e8f02bd75 100644
+index c7076a1d7b..f8a91e2afa 100644
 --- a/src/gui/wizard/accountwizardcontroller.cpp
 +++ b/src/gui/wizard/accountwizardcontroller.cpp
 @@ -5,6 +5,8 @@
@@ -3046,7 +3046,7 @@ index 6f705e1fea..2e8f02bd75 100644
  #include "account.h"
  #include "accountmanager.h"
  #include "clientproxy.h"
-@@ -2184,7 +2186,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
+@@ -2198,7 +2200,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
          break;
      }
  
