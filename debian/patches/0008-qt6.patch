@@ -655,7 +655,7 @@ index a48d341c2e..09577a4eee 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index 1b018ce19d..167b227007 100644
+index f2cc69c1b2..d4e5539002 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -5,7 +5,7 @@ project(gui)
@@ -680,7 +680,7 @@ index 1b018ce19d..167b227007 100644
  add_subdirectory(search)
  add_subdirectory(sharing)
  include(assistant/CMakeLists.txt)
-@@ -629,10 +635,17 @@ target_link_libraries(nextcloudCore
+@@ -635,10 +641,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -699,7 +699,7 @@ index 1b018ce19d..167b227007 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -896,3 +909,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -903,3 +916,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -1085,11 +1085,19 @@ index bc21faee16..465ebb62a7 100644
  #include <QJsonDocument>
  #include <QJsonObject>
 diff --git a/src/gui/advancedsettings.cpp b/src/gui/advancedsettings.cpp
-index 015344b3eb..83548c7e8a 100644
+index 6f764d938c..47f50f630b 100644
 --- a/src/gui/advancedsettings.cpp
 +++ b/src/gui/advancedsettings.cpp
-@@ -28,7 +28,9 @@
- #include "common/utility_mac_sandbox.h"
+@@ -10,6 +10,7 @@
+ #include "application.h"
+ #include "capabilities.h"
+ #include "common/utility.h"
++#include "common/qtcompat.h"
+ #include "configfile.h"
+ #include "folderman.h"
+ #include "folder.h"
+@@ -28,7 +29,9 @@
+ #include "macOS/macsandboxfilepicker.h"
  #endif
  
 +#ifdef HAVE_KARCHIVE
@@ -1098,15 +1106,15 @@ index 015344b3eb..83548c7e8a 100644
  
  #include <QDir>
  #include <QDirIterator>
-@@ -122,6 +124,7 @@ QVector<ZipEntry> createDebugArchiveFileList()
+@@ -124,6 +127,7 @@ QVector<ZipEntry> createDebugArchiveFileList()
      return list;
  }
  
 +#ifdef HAVE_KARCHIVE
  bool createDebugArchive(const QString &filename)
  {
-     const auto entries = createDebugArchiveFileList();
-@@ -222,6 +225,8 @@ bool createDebugArchive(const QString &filename)
+     auto entries = createDebugArchiveFileList();
+@@ -199,6 +203,8 @@ bool createDebugArchive(const QString &filename)
      return true;
  }
  
@@ -1115,18 +1123,18 @@ index 015344b3eb..83548c7e8a 100644
  } // namespace
  
  namespace OCC {
-@@ -443,6 +448,7 @@ void AdvancedSettings::slotCreateDebugArchive()
-         return;
-     }
+@@ -426,6 +432,7 @@ void AdvancedSettings::pickDebugArchiveLocation(std::function<void(const QString
  
+ void AdvancedSettings::slotCreateDebugArchive()
+ {
 +#ifdef HAVE_KARCHIVE
- #ifdef Q_OS_MACOS
-     auto scopedAccess = Utility::MacSandboxSecurityScopedAccess::create(destination);
- 
-@@ -463,6 +469,13 @@ void AdvancedSettings::slotCreateDebugArchive()
-             tr("Redact information deemed sensitive before sharing! Debug archive created at %1").arg(destination.toLocalFile())
-         );
-     }
+     const QPointer<AdvancedSettings> settings(this);
+     _debugArchiveLocationPicker([settings](const QString &destination) {
+         if (!settings || destination.isEmpty() || !createDebugArchive(destination)) {
+@@ -436,6 +443,13 @@ void AdvancedSettings::slotCreateDebugArchive()
+                                  tr("Debug Archive Created"),
+                                  tr("Redact information deemed sensitive before sharing! Debug archive created at %1").arg(destination));
+     });
 +#else
 +    QMessageBox::information(
 +        this,
@@ -2861,7 +2869,7 @@ index d38831e584..6fa90d9bfa 100644
  namespace OCC::Gui::Sharing
  {
 diff --git a/src/gui/socketapi/socketapi.cpp b/src/gui/socketapi/socketapi.cpp
-index 1565e43cc1..93d18a949e 100644
+index 2b6688a15e..284a59f5e5 100644
 --- a/src/gui/socketapi/socketapi.cpp
 +++ b/src/gui/socketapi/socketapi.cpp
 @@ -17,6 +17,7 @@
@@ -3034,7 +3042,7 @@ index bc14986d1f..0271059353 100644
  #include <QTimer>
  #include <QJsonDocument>
 diff --git a/src/gui/wizard/accountwizardcontroller.cpp b/src/gui/wizard/accountwizardcontroller.cpp
-index 920f26e5fb..34d51ddde1 100644
+index 5cc569a8cd..5c583df21d 100644
 --- a/src/gui/wizard/accountwizardcontroller.cpp
 +++ b/src/gui/wizard/accountwizardcontroller.cpp
 @@ -5,6 +5,8 @@
@@ -3046,7 +3054,7 @@ index 920f26e5fb..34d51ddde1 100644
  #include "account.h"
  #include "accountmanager.h"
  #include "clientproxy.h"
-@@ -2204,7 +2206,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
+@@ -2218,7 +2220,7 @@ bool AccountWizardController::checkDowngradeAdvised(QNetworkReply *reply) const
          break;
      }
  
@@ -3667,7 +3675,7 @@ index c3253ca31d..6bd2415f57 100644
  #include <networkjobs.h>
  
 diff --git a/src/libsync/propagateuploadng.cpp b/src/libsync/propagateuploadng.cpp
-index 4dcc3e8730..083f2df7ad 100644
+index a96ab8806a..7751123737 100644
 --- a/src/libsync/propagateuploadng.cpp
 +++ b/src/libsync/propagateuploadng.cpp
 @@ -18,6 +18,7 @@
