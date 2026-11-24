@@ -608,7 +608,7 @@ index 0000000000..5d6db9b79e
 +//-----------------------------------------------------------------------------
 +//-----------------------------------------------------------------------------
 diff --git a/src/common/syncjournaldb.cpp b/src/common/syncjournaldb.cpp
-index efb5e0e449..7b23848599 100644
+index 301d020215..f3323fe84c 100644
 --- a/src/common/syncjournaldb.cpp
 +++ b/src/common/syncjournaldb.cpp
 @@ -28,6 +28,8 @@
@@ -3375,13 +3375,13 @@ index c5fcdd6c85..9fd1e8a4f6 100644
  #include "csync.h"
  
 diff --git a/src/libsync/discoveryphase.cpp b/src/libsync/discoveryphase.cpp
-index 2ad6fb4bbb..d172f87168 100644
+index e63cc6332c..27d76f2fb1 100644
 --- a/src/libsync/discoveryphase.cpp
 +++ b/src/libsync/discoveryphase.cpp
-@@ -18,6 +18,7 @@
- #include "common/asserts.h"
+@@ -19,6 +19,7 @@
  #include "common/checksums.h"
  #include "common/filesystembase.h"
+ #include "common/syncjournaldb.h"
 +#include "common/qtcompat.h"
  
  #include <csync_exclude.h>
@@ -3423,17 +3423,24 @@ index dcb32a1339..c6df7617d1 100644
  #include "vio/csync_vio_local.h"
  #include "std/c_time.h"
 diff --git a/src/libsync/foldermetadata.cpp b/src/libsync/foldermetadata.cpp
-index a4b7c6fdbb..72c734b8bd 100644
+index 004e45547e..f8ae4c2dc8 100644
 --- a/src/libsync/foldermetadata.cpp
 +++ b/src/libsync/foldermetadata.cpp
-@@ -4,6 +4,7 @@
+@@ -3,6 +3,7 @@
+  * SPDX-License-Identifier: GPL-2.0-or-later
   */
  
- #include "account.h"
 +#include "common/qtcompat.h"
- #include "encryptedfoldermetadatahandler.h"
  #include "foldermetadata.h"
+ #include "account.h"
  #include "clientsideencryption.h"
+@@ -1290,4 +1291,4 @@ bool FolderMetadata::verifyMetadataKey(const QByteArray &metadataKey) const
+ }
+ }
+ 
+-#include "moc_foldermetadata.cpp"
+\ No newline at end of file
++#include "moc_foldermetadata.cpp"
 diff --git a/src/libsync/kfcompat.cpp b/src/libsync/kfcompat.cpp
 new file mode 100644
 index 0000000000..09a0552883
@@ -3775,7 +3782,7 @@ index c30564cfd3..ee25140553 100644
          if (policy != validKeys.cend() && policy->serverEnforceable && isServerKeyValueValid(key, value)) {
              serverSettings.enforced.insert(key, value);
 diff --git a/src/libsync/syncengine.cpp b/src/libsync/syncengine.cpp
-index c053030180..878c892875 100644
+index 64f0552721..5573b1a4c6 100644
 --- a/src/libsync/syncengine.cpp
 +++ b/src/libsync/syncengine.cpp
 @@ -18,6 +18,7 @@
@@ -3989,7 +3996,7 @@ index bb0d5c4e6c..6a91b0f7c0 100644
  
  #include "account.h"
 diff --git a/test/testfolderman.cpp b/test/testfolderman.cpp
-index a895baeffe..bb0b84e83a 100644
+index 4aaba4a0a4..1fea9521b0 100644
 --- a/test/testfolderman.cpp
 +++ b/test/testfolderman.cpp
 @@ -16,6 +16,7 @@
@@ -4054,7 +4061,7 @@ index ea7360cafc..be0d8dd02d 100644
  #include <QFile>
  #include <QtTest>
 diff --git a/test/testsyncjournaldb.cpp b/test/testsyncjournaldb.cpp
-index 5510d1e2cb..e391e4f052 100644
+index 9f09096c42..5d358d3f91 100644
 --- a/test/testsyncjournaldb.cpp
 +++ b/test/testsyncjournaldb.cpp
 @@ -14,6 +14,7 @@
