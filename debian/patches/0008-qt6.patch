@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 86836a126a..c7555af5a8 100644
+index 6e807cf618..ac3834da03 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -30,7 +30,7 @@ set(BIN_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -26,7 +26,7 @@ index 86836a126a..c7555af5a8 100644
  include(ECMMarkNonGuiExecutable)
  include(ECMSetupVersion)
  include(ECMQmlModule)
-@@ -158,7 +156,7 @@ if(APPLE AND BUILD_OWNCLOUD_OSX_BUNDLE)
+@@ -159,7 +157,7 @@ if(APPLE AND BUILD_OWNCLOUD_OSX_BUNDLE)
      add_definitions(-DBUILD_OWNCLOUD_OSX_BUNDLE)
  endif()
  
@@ -655,7 +655,7 @@ index a48d341c2e..09577a4eee 100644
              continue;
          }
 diff --git a/src/gui/CMakeLists.txt b/src/gui/CMakeLists.txt
-index 42c6afdca7..aee0f5f9e4 100644
+index f9e212eccd..19df5c1f73 100644
 --- a/src/gui/CMakeLists.txt
 +++ b/src/gui/CMakeLists.txt
 @@ -5,7 +5,7 @@ project(gui)
@@ -680,7 +680,7 @@ index 42c6afdca7..aee0f5f9e4 100644
  add_subdirectory(search)
  add_subdirectory(sharing)
  include(assistant/CMakeLists.txt)
-@@ -624,10 +630,17 @@ target_link_libraries(nextcloudCore
+@@ -625,10 +631,17 @@ target_link_libraries(nextcloudCore
    Qt::Quick
    Qt::QuickControls2
    Qt::QuickWidgets
@@ -699,7 +699,7 @@ index 42c6afdca7..aee0f5f9e4 100644
  if(KF6GuiAddons_FOUND)
    target_link_libraries(nextcloudCore
      PUBLIC
-@@ -890,3 +903,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
+@@ -891,3 +904,120 @@ if(NOT BUILD_OWNCLOUD_OSX_BUNDLE AND NOT WIN32)
  endif()
  
  configure_file(configgui.h.in ${CMAKE_CURRENT_BINARY_DIR}/configgui.h)
@@ -872,7 +872,7 @@ index ff5e964ca1..668db13d16 100644
                  merged.defaults.insert(key, value);
              }
 diff --git a/src/gui/accountsettings.cpp b/src/gui/accountsettings.cpp
-index 4d4aaf929a..c28eceef8c 100644
+index 9229b3a40b..68ca16ce08 100644
 --- a/src/gui/accountsettings.cpp
 +++ b/src/gui/accountsettings.cpp
 @@ -10,6 +10,7 @@
@@ -1085,7 +1085,7 @@ index bc21faee16..465ebb62a7 100644
  #include <QJsonDocument>
  #include <QJsonObject>
 diff --git a/src/gui/advancedsettings.cpp b/src/gui/advancedsettings.cpp
-index 506ec9494a..f59697de6e 100644
+index 3850cc0ee9..c54d81c438 100644
 --- a/src/gui/advancedsettings.cpp
 +++ b/src/gui/advancedsettings.cpp
 @@ -9,6 +9,7 @@
@@ -1094,9 +1094,9 @@ index 506ec9494a..f59697de6e 100644
  #include "capabilities.h"
 +#include "common/qtcompat.h"
  #include "common/utility.h"
+ #include "common/vfs.h"
  #include "configfile.h"
- #include "folderman.h"
-@@ -28,7 +29,9 @@
+@@ -29,7 +30,9 @@
  #include "macOS/macsandboxfilepicker.h"
  #endif
  
@@ -1106,7 +1106,7 @@ index 506ec9494a..f59697de6e 100644
  
  #include <QDir>
  #include <QDirIterator>
-@@ -124,6 +127,7 @@ QVector<ZipEntry> createDebugArchiveFileList()
+@@ -126,6 +129,7 @@ QVector<ZipEntry> createDebugArchiveFileList()
      return list;
  }
  
@@ -1114,7 +1114,7 @@ index 506ec9494a..f59697de6e 100644
  bool createDebugArchive(const QString &filename)
  {
      auto entries = createDebugArchiveFileList();
-@@ -202,6 +206,8 @@ bool createDebugArchive(const QString &filename)
+@@ -204,6 +208,8 @@ bool createDebugArchive(const QString &filename)
      return true;
  }
  
@@ -1123,7 +1123,7 @@ index 506ec9494a..f59697de6e 100644
  } // namespace
  
  namespace OCC {
-@@ -429,6 +435,7 @@ void AdvancedSettings::pickDebugArchiveLocation(std::function<void(const QString
+@@ -434,6 +440,7 @@ void AdvancedSettings::pickDebugArchiveLocation(std::function<void(const QString
  
  void AdvancedSettings::slotCreateDebugArchive()
  {
@@ -1131,7 +1131,7 @@ index 506ec9494a..f59697de6e 100644
      const QPointer<AdvancedSettings> settings(this);
      _debugArchiveLocationPicker([settings](const QString &destination) {
          if (!settings || destination.isEmpty() || !createDebugArchive(destination)) {
-@@ -439,6 +446,13 @@ void AdvancedSettings::slotCreateDebugArchive()
+@@ -444,6 +451,13 @@ void AdvancedSettings::slotCreateDebugArchive()
                                   tr("Debug Archive Created"),
                                   tr("Redact information deemed sensitive before sharing! Debug archive created at %1").arg(destination));
      });
@@ -3005,7 +3005,7 @@ index 53b9990609..49b3fe904b 100644
  
  using namespace Qt::StringLiterals;
 diff --git a/src/gui/tray/usermodel.cpp b/src/gui/tray/usermodel.cpp
-index 8f722efd17..ce545ce262 100644
+index fd0809815e..6486d8b9d8 100644
 --- a/src/gui/tray/usermodel.cpp
 +++ b/src/gui/tray/usermodel.cpp
 @@ -25,6 +25,7 @@
@@ -3146,7 +3146,7 @@ index 4ac379ccbd..ad2a95095f 100644
              Accessible.ignored: true
          }
 diff --git a/src/libsync/CMakeLists.txt b/src/libsync/CMakeLists.txt
-index e43884a074..4f40ad0c48 100644
+index c741f5c93e..c5b30a583c 100644
 --- a/src/libsync/CMakeLists.txt
 +++ b/src/libsync/CMakeLists.txt
 @@ -2,8 +2,9 @@
@@ -3189,7 +3189,7 @@ index e43884a074..4f40ad0c48 100644
  message(STATUS "HAS_CLOCK_CAST: ${HAS_CLOCK_CAST}")
  
  if(HAS_CLOCK_CAST)
-@@ -276,7 +280,7 @@ target_link_libraries(nextcloudsync
+@@ -277,7 +281,7 @@ target_link_libraries(nextcloudsync
    Qt::Gui
    Qt::Svg
    Qt::Widgets
@@ -3198,7 +3198,7 @@ index e43884a074..4f40ad0c48 100644
    Qt::Core5Compat
  )
  
-@@ -293,6 +297,11 @@ if(TARGET OpenVFS::OpenVFS)
+@@ -294,6 +298,11 @@ if(TARGET OpenVFS::OpenVFS)
    )
  endif()
  
@@ -3363,7 +3363,7 @@ index 73a10d4eb2..f0cab6c0cb 100644
      return decryptedAndUnGzipped;
  }
 diff --git a/src/libsync/discovery.cpp b/src/libsync/discovery.cpp
-index c5fcdd6c85..9fd1e8a4f6 100644
+index 133c4e0da1..3f6fc51773 100644
 --- a/src/libsync/discovery.cpp
 +++ b/src/libsync/discovery.cpp
 @@ -23,6 +23,7 @@
@@ -3375,7 +3375,7 @@ index c5fcdd6c85..9fd1e8a4f6 100644
  #include "csync.h"
  
 diff --git a/src/libsync/discoveryphase.cpp b/src/libsync/discoveryphase.cpp
-index e63cc6332c..27d76f2fb1 100644
+index afba267e03..e907aa0b27 100644
 --- a/src/libsync/discoveryphase.cpp
 +++ b/src/libsync/discoveryphase.cpp
 @@ -19,6 +19,7 @@
@@ -3794,7 +3794,7 @@ index 684f74db47..0f05c7e848 100644
  #include "discovery.h"
  #include "common/vfs.h"
 diff --git a/src/libsync/syncfileitem.cpp b/src/libsync/syncfileitem.cpp
-index 45b24351ef..3bd3ee24b4 100644
+index 05b9d55b8e..b546c525d5 100644
 --- a/src/libsync/syncfileitem.cpp
 +++ b/src/libsync/syncfileitem.cpp
 @@ -8,6 +8,7 @@
@@ -3984,7 +3984,7 @@ index 460c6f70cb..c735fd9706 100644
  #include "syncenginetestutils.h"
  
 diff --git a/test/testfolder.cpp b/test/testfolder.cpp
-index bb0d5c4e6c..6a91b0f7c0 100644
+index 8efa0fa87a..75cc923925 100644
 --- a/test/testfolder.cpp
 +++ b/test/testfolder.cpp
 @@ -12,6 +12,7 @@
@@ -4008,18 +4008,17 @@ index 4aaba4a0a4..1fea9521b0 100644
  #include "account.h"
  #include "accountstate.h"
 diff --git a/test/testlocaldiscovery.cpp b/test/testlocaldiscovery.cpp
-index b99da86259..27e7fd3116 100644
+index c6152ce729..0a5f28c47c 100644
 --- a/test/testlocaldiscovery.cpp
 +++ b/test/testlocaldiscovery.cpp
-@@ -24,6 +24,8 @@
- #include <functional>
- #include <system_error>
- 
+@@ -30,6 +30,7 @@
+ #include <QProcess>
+ #include <QScopeGuard>
+ #endif
 +#include "common/qtcompat.h"
-+
+ 
  using namespace OCC;
  using namespace Qt::StringLiterals;
- 
 diff --git a/test/testnextcloudpropagator.cpp b/test/testnextcloudpropagator.cpp
 index 6462e62be7..0d8fe2b389 100644
 --- a/test/testnextcloudpropagator.cpp
@@ -4073,7 +4072,7 @@ index 9f09096c42..5d358d3f91 100644
  
  using namespace OCC;
 diff --git a/test/testsyncvirtualfiles.cpp b/test/testsyncvirtualfiles.cpp
-index 1e0ef8308e..11e42ae627 100644
+index 11af434bcc..f1488260dd 100644
 --- a/test/testsyncvirtualfiles.cpp
 +++ b/test/testsyncvirtualfiles.cpp
 @@ -11,6 +11,7 @@
